@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "test": "cucumber-js",
+    "test:tag": "cucumber-js --tags",
+    "test:category": "cucumber-js --tags @quote",
+    "test:catalog": "cucumber-js --tags @getCatalogList",
+    "report:open": "node -e \"require('child_process').exec('start reports/cucumber-report/detailed-report.html', (err) => { if (err) console.log('Please open the report manually'); })\""
+  },
+  "dependencies": {
+    "@playwright/test": "^1.57.0"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.5.0",
+    "@types/chai": "^5.2.3",
+    "@types/node": "^25.0.9",
+    "chai": "^6.2.2",
+    "ts-node": "^10.9.2"
+  }
+}
