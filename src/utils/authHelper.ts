@@ -1,42 +1,40 @@
 import { request } from '@playwright/test';
 import { AuthService, TokenRequest, TokenResponse } from '../services/authService';
 import { ApiClient } from '../core/api/apiClient';
-import { TestDataHelper } from './testDataHelper';
 import { logger } from './logger';
-import { endpoints } from '../config/endpoints';
+import { keycloakEndpoints } from '../config/keycloak.endpoints';
 import { envConfig } from '../config/env.config';
 
 export class AuthHelper {
   private static tokenResponse: TokenResponse | null = null;
   private static authService: AuthService | null = null;
 
-  static async getCredentialsForUser(username: string): Promise<TokenRequest> {
-    logger.debug(`Getting credentials for user: ${username}`);
-    
-    try {
-      const usersData = TestDataHelper.getData<Record<string, { username: string; password: string; client_id: string }>>('users.json');
-      const userData = usersData[username];
-      
-      if (userData) {
-        logger.info(`User credentials loaded from test data for: ${username}`);
-        return {
-          grant_type: 'password',
-          client_id: userData.client_id || 'orbitant-ui-client',
-          username: userData.username,
-          password: userData.password
-        };
-      } else {
-        throw new Error(`User ${username} not found in test data`);
-      }
-    } catch {
-      logger.warn(`User ${username} not found in test data, using default credentials`);
-      return {
-        grant_type: 'password',
-        client_id: 'orbitant-ui-client',
-        username: username === 'orbitant' ? 'orbitant' : username,
-        password: username === 'orbitant' ? 'orbitant123' : 'password'
-      };
+  /**
+   * Credentials from the test-run UI via process env (set by backend before Cucumber starts).
+   * Requires API_TEST_USERNAME, API_TEST_PASSWORD, and optionally API_TEST_CLIENT_ID / API_KEYCLOAK_BASE_URL.
+   */
+  static getConfiguredCredentials(): TokenRequest {
+    const username = process.env.API_TEST_USERNAME?.trim();
+    const password = process.env.API_TEST_PASSWORD;
+
+    if (!username || !password) {
+      throw new Error(
+        'No API credentials in environment. Run tests from the Test Assistant UI with a Keycloak profile selected.',
+      );
     }
+
+    logger.info(`Using API credentials from test-run UI for user: ${username}`);
+    return {
+      grant_type: 'password',
+      client_id: process.env.API_TEST_CLIENT_ID?.trim() || 'orbitant-ui-client',
+      username,
+      password,
+    };
+  }
+
+  /** @deprecated Use getConfiguredCredentials(); kept for step text compatibility. */
+  static getCredentialsForUser(_username: string): TokenRequest {
+    return this.getConfiguredCredentials();
   }
 
   static getInvalidCredentials(): TokenRequest {
@@ -44,7 +42,7 @@ export class AuthHelper {
       grant_type: 'password',
       client_id: 'orbitant-ui-client',
       username: 'invalid_user',
-      password: 'invalid_password'
+      password: 'invalid_password',
     };
   }
 
@@ -53,7 +51,7 @@ export class AuthHelper {
       grant_type: 'password',
       client_id: 'orbitant-ui-client',
       username: '',
-      password: ''
+      password: '',
     };
   }
 
@@ -62,58 +60,53 @@ export class AuthHelper {
       const context = await request.newContext({
         baseURL: envConfig.baseUrl,
         extraHTTPHeaders: {
-          'accept': 'application/json, text/plain, */*',
-          'content-type': 'application/x-www-form-urlencoded'
-        }
+          accept: 'application/json, text/plain, */*',
+          'content-type': 'application/x-www-form-urlencoded',
+        },
       });
-      
+
       this.authService = new AuthService(new ApiClient(context));
       logger.debug('Auth service initialized');
     }
-    
+
     return this.authService;
   }
 
   static async getToken(credentials: TokenRequest): Promise<any> {
     const service = await this.initializeAuthService();
-    
-    logger.logRequest('POST', endpoints.keycloackAuth.token, undefined, {
+
+    logger.logRequest('POST', keycloakEndpoints.token, undefined, {
       grant_type: credentials.grant_type,
       client_id: credentials.client_id,
       username: credentials.username,
-      password: '***' // Don't log password
+      password: '***',
     });
-    
+
     const response = await service.getToken(credentials);
     (global as any).response = response;
-    
+
     const status = response.status();
     logger.logResponse(status, response.statusText(), response.headers());
-    
+
     if (status === 200) {
       const responseBody = await response.text();
       try {
         if (responseBody.trim().startsWith('<!DOCTYPE html>')) {
-           logger.warn('Received HTML response instead of JSON token. This might be due to SSO/Cloudflare Access.');
-           // Fallback to auth.json if available
-           try {
-             const authData = TestDataHelper.getData<{ token: string }>('auth.json');
-             if (authData && authData.token) {
-               logger.info('Using fallback token from auth.json');
-               this.tokenResponse = { access_token: authData.token } as any;
-             }
-           } catch (e) {
-             logger.error('Failed to load fallback token from auth.json', e);
-           }
+          logger.warn(
+            'Received HTML instead of JSON token (SSO/Cloudflare?). Check Keycloak URL in the UI profile.',
+          );
         } else {
           this.tokenResponse = JSON.parse(responseBody);
           logger.debug('Token response received and parsed');
         }
       } catch (error) {
-        logger.error(`Failed to parse token response as JSON. Status: ${status}, Body: ${responseBody}`, error);
+        logger.error(
+          `Failed to parse token response as JSON. Status: ${status}, Body: ${responseBody}`,
+          error,
+        );
       }
     }
-    
+
     return response;
   }
 

@@ -1,0 +1,3511 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Party Management",
+      "description": "Party Management",
+      "contact": {
+        "name": "PiA(people in action)",
+        "url": "http://www.pia-team.com/",
+        "email": "info@pia-team.com"
+      },
+      "license": {
+        "name": "PiA License",
+        "url": "http://www.pia-team.com"
+      },
+      "version": "Version ^dev.version^ (prepared with TMF Party REST Specification TMF632)"
+    },
+    "servers": [
+      {
+        "url": "https://dpam-api.pi.dev-gcu.com/api/partyManagement/v4",
+        "description": "Generated server url"
+      }
+    ],
+    "tags": [
+      {
+        "name": "individual",
+        "description": "the individual API"
+      },
+      {
+        "name": "organization",
+        "description": "the organization API"
+      },
+      {
+        "name": "events subscription",
+        "description": "the hub API"
+      }
+    ],
+    "paths": {
+      "/organization": {
+        "get": {
+          "tags": [
+            "organization"
+          ],
+          "summary": "List or find Organization objects",
+          "description": "This operation list or find Organization entities",
+          "operationId": "listOrganization",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Comma-separated properties to sort fields in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Organization"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "organization"
+          ],
+          "summary": "Creates a Organization",
+          "description": "This operation creates a Organization entity.",
+          "operationId": "createOrganization",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/individual": {
+        "get": {
+          "tags": [
+            "individual"
+          ],
+          "summary": "List or find Individual objects",
+          "description": "This operation list or find Individual entities",
+          "operationId": "listIndividual",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Comma-separated properties to sort fields in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Individual"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "individual"
+          ],
+          "summary": "Creates a Individual",
+          "description": "This operation creates a Individual entity.",
+          "operationId": "createIndividual",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndividualCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub": {
+        "post": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Register a listener",
+          "description": "Sets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "registerListener",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventSubscriptionInput"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Subscribed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EventSubscription"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/organization/{id}": {
+        "get": {
+          "tags": [
+            "organization"
+          ],
+          "summary": "Retrieves a Organization by ID",
+          "description": "This operation retrieves a Organization entity. Attribute selection is enabled for all first level attributes.",
+          "operationId": "retrieveOrganization",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Organization",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "organization"
+          ],
+          "summary": "Deletes a Organization",
+          "description": "This operation deletes a Organization entity.",
+          "operationId": "deleteOrganization",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Organization",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "organization"
+          ],
+          "summary": "Updates partially a Organization",
+          "description": "This operation updates partially a Organization entity.",
+          "operationId": "patchOrganization",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Organization",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/individual/{id}": {
+        "get": {
+          "tags": [
+            "individual"
+          ],
+          "summary": "Retrieves a Individual by ID",
+          "description": "This operation retrieves a Individual entity. Attribute selection is enabled for all first level attributes.",
+          "operationId": "retrieveIndividual",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Individual",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "individual"
+          ],
+          "summary": "Deletes a Individual",
+          "description": "This operation deletes a Individual entity.",
+          "operationId": "deleteIndividual",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Individual",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "individual"
+          ],
+          "summary": "Updates partially a Individual",
+          "description": "This operation updates partially a Individual entity.",
+          "operationId": "patchIndividual",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Individual",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndividualUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                },
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Individual"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub/{id}": {
+        "delete": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Unregister a listener",
+          "description": "Resets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "unregisterListener",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the registered listener",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Subscribed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EventSubscription"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AclRelatedParty": {
+          "type": "object",
+          "description": "Related Entity reference. A ACL related party defines party or party role linked to a specific entity.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "role": {
+              "type": "string",
+              "description": "Role played by the related party"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "@referredType",
+            "id"
+          ]
+        },
+        "AttachmentRefOrValue": {
+          "type": "object",
+          "description": "An attachment by value or by reference. An attachment complements the description of an element, for example through a document, a video, a picture.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a attachment."
+            },
+            "href": {
+              "type": "string",
+              "description": "URI for this Attachment"
+            },
+            "attachmentType": {
+              "type": "string",
+              "description": "Attachment type such as video, picture"
+            },
+            "content": {
+              "type": "string",
+              "description": "The actual contents of the attachment object, if embedded, encoded as base64"
+            },
+            "description": {
+              "type": "string",
+              "description": "A narrative text describing the content of the attachment"
+            },
+            "documentType": {
+              "type": "string",
+              "description": "The type of the document"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "Attachment mime type such as extension file for video, picture and document"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the attachment"
+            },
+            "url": {
+              "type": "string",
+              "description": "Uniform Resource Locator, is a web page address (a subset of URI)"
+            },
+            "size": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          }
+        },
+        "Characteristic": {
+          "type": "object",
+          "description": "Describes a given characteristic of an object or entity through a name/value pair.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the characteristic"
+            },
+            "valueType": {
+              "type": "string",
+              "description": "Data type of the value of the characteristic"
+            },
+            "value": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        },
+        "ContactMedium": {
+          "type": "object",
+          "description": "Indicates the contact medium that could be used to contact the party.",
+          "properties": {
+            "mediumType": {
+              "type": "string",
+              "description": "Type of the contact medium, such as: email address, telephone number, postal address"
+            },
+            "preferred": {
+              "type": "boolean",
+              "description": "If true, indicates that is the preferred contact medium"
+            },
+            "characteristic": {
+              "$ref": "#/components/schemas/MediumCharacteristic"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "ExternalReference": {
+          "type": "object",
+          "description": "External reference of the individual or reference in other system",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of an external reference."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "externalReferenceType": {
+              "type": "string",
+              "description": "Type of the external reference"
+            },
+            "name": {
+              "type": "string",
+              "description": "External reference name"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "externalReferenceType",
+            "id",
+            "name"
+          ]
+        },
+        "MarketSegmentRef": {
+          "type": "object",
+          "description": "A list of market segment references provides references to the corresponding market segment.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "name": {
+              "type": "string",
+              "description": "Market segment reference name"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          }
+        },
+        "MediumCharacteristic": {
+          "type": "object",
+          "description": "Describes the contact medium characteristics that could be used to contact a party (an individual or an organization)",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "The city"
+            },
+            "contactType": {
+              "type": "string",
+              "description": "The type of contact, for example: phone number such as mobile, fixed home, fixed office. postal address such as shipping instalation…"
+            },
+            "country": {
+              "type": "string",
+              "description": "The country"
+            },
+            "emailAddress": {
+              "type": "string",
+              "description": "Full email address in standard format"
+            },
+            "faxNumber": {
+              "type": "string",
+              "description": "The fax number of the contact"
+            },
+            "phoneNumber": {
+              "type": "string",
+              "description": "The primary phone number of the contact"
+            },
+            "place": {
+              "type": "array",
+              "description": "Related Entity reference. A related place defines a place described by reference or by value linked to a specific entity.",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRef"
+              }
+            },
+            "postCode": {
+              "type": "string",
+              "description": "Postcode"
+            },
+            "socialNetworkId": {
+              "type": "string",
+              "description": "Identifier as a member of a social network"
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "State or province"
+            },
+            "street1": {
+              "type": "string",
+              "description": "Describes the street"
+            },
+            "street2": {
+              "type": "string",
+              "description": "Complementary street description"
+            },
+            "town": {
+              "type": "string",
+              "description": "The town. A town is a compactly settled area usually larger than a village but smaller than a city (Turkey: Ilce) e.g. Pendik"
+            },
+            "locality": {
+              "type": "string",
+              "description": "Neighborhood, village or other locality. e.g. Gencosman Mah."
+            },
+            "buildingNumber": {
+              "type": "string",
+              "description": "The street number of the building. e.g. 25"
+            },
+            "unitNumber": {
+              "type": "string",
+              "description": "Number of the interior unit within a building, such as a flat, apartment or office number. e.g. Daire:8"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "Organization": {
+          "type": "object",
+          "description": "Organization represents a group of people identified by shared interests or purpose. Examples include business, department and enterprise. Because of the complex nature of many businesses, both organizations and organization units are represented by the same data.",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the individual"
+            },
+            "href": {
+              "type": "string",
+              "description": "Hyperlink to access the organization"
+            },
+            "isHeadOffice": {
+              "type": "boolean",
+              "description": "If value is true, the organization is the head office"
+            },
+            "isLegalEntity": {
+              "type": "boolean",
+              "description": "If value is true, the organization is a legal entity known by a national referential."
+            },
+            "name": {
+              "type": "string",
+              "description": "Organization name (department name for example)"
+            },
+            "nameType": {
+              "type": "string",
+              "description": "Type of the name : Co, Inc, Ltd,…"
+            },
+            "organizationType": {
+              "type": "string",
+              "description": "Type of Organization (company, department...)"
+            },
+            "tradingName": {
+              "type": "string",
+              "description": "Name that the organization (unit) trades under"
+            },
+            "industry": {
+              "type": "string",
+              "description": "Industry information for related entity."
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditRating": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyCreditProfile"
+              }
+            },
+            "existsDuring": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "organizationChildRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationChildRelationship"
+              }
+            },
+            "organizationIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationIdentification"
+              }
+            },
+            "organizationParentRelationship": {
+              "$ref": "#/components/schemas/OrganizationParentRelationship"
+            },
+            "otherName": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationOtherName"
+              }
+            },
+            "partyCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "taxExemptionCertificate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxExemptionCertificate"
+              }
+            },
+            "marketSegment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MarketSegmentRef"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "tradingName"
+          ]
+        },
+        "OrganizationChildRelationship": {
+          "type": "object",
+          "description": "Child references of an organization in a structure of organizations.",
+          "properties": {
+            "relationshipType": {
+              "type": "string",
+              "description": "Type of the relationship. Could be juridical, hierarchical, geographical, functional for example."
+            },
+            "organization": {
+              "$ref": "#/components/schemas/OrganizationRef"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "organization",
+            "relationshipType"
+          ]
+        },
+        "OrganizationIdentification": {
+          "type": "object",
+          "description": "Represents our registration of information used as proof of identity by an organization",
+          "properties": {
+            "identificationId": {
+              "type": "string",
+              "description": "Identifier"
+            },
+            "identificationType": {
+              "type": "string",
+              "description": "Type of identification information used to identify the company in a country or internationally"
+            },
+            "issuingAuthority": {
+              "type": "string",
+              "description": "Authority which has issued the identifier (chamber of commerce...)"
+            },
+            "issuingDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date at which the identifier was issued"
+            },
+            "attachment": {
+              "$ref": "#/components/schemas/AttachmentRefOrValue"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "documentNumber": {
+              "type": "string",
+              "description": "The identity card document number"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "identificationId",
+            "identificationType"
+          ]
+        },
+        "OrganizationOtherName": {
+          "type": "object",
+          "description": "Keeps track of other names, for example the old name of an organization.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Organization name (department name for example)"
+            },
+            "nameType": {
+              "type": "string",
+              "description": "Co. , Inc. , Ltd. , Pty Ltd. , Plc; , Gmbh"
+            },
+            "tradingName": {
+              "type": "string",
+              "description": "The name that the organization trades under"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "OrganizationParentRelationship": {
+          "type": "object",
+          "description": "Parent references of an organization in a structure of organizations.",
+          "properties": {
+            "relationshipType": {
+              "type": "string",
+              "description": "Type of the relationship. Could be juridical, hierarchical, geographical, functional for example."
+            },
+            "organization": {
+              "$ref": "#/components/schemas/OrganizationRef"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "organization",
+            "relationshipType"
+          ]
+        },
+        "OrganizationRef": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "PartyCreditProfile": {
+          "type": "object",
+          "description": "An individual might be evaluated for its worthiness and this evaluation might be based on a credit rating given by a credit agency.",
+          "properties": {
+            "creditAgencyName": {
+              "type": "string",
+              "description": "Name of the credit agency giving the score"
+            },
+            "creditAgencyType": {
+              "type": "string",
+              "description": "Type of the credit agency giving the score"
+            },
+            "ratingReference": {
+              "type": "string",
+              "description": "Reference corresponding to the credit rating"
+            },
+            "ratingScore": {
+              "type": "integer",
+              "format": "int32",
+              "description": "A measure of a party’s creditworthiness calculated on the basis of a combination of factors such as their income and credit history"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "creditAgencyName",
+            "ratingScore"
+          ]
+        },
+        "Quantity": {
+          "type": "object",
+          "description": "An amount in a given unit",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "float",
+              "description": "Numeric value in a given unit"
+            },
+            "units": {
+              "type": "string",
+              "description": "Unit"
+            }
+          }
+        },
+        "RelatedParty": {
+          "type": "object",
+          "description": "Organization Related Entity reference. A related party defines party or party role linked to a specific entity.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique Identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "role": {
+              "type": "string",
+              "description": "Role played by the related party"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "id",
+            "role"
+          ]
+        },
+        "RelatedPlaceRef": {
+          "type": "object",
+          "description": "Related Entity reference. A related place defines a place described by reference or by value linked to a specific entity. The polymorphic attributes @type, @schemaLocation & @referredType are related to the place entity and not the RelatedPlaceRef class itself",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "role": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "role"
+          ]
+        },
+        "TaxDefinition": {
+          "type": "object",
+          "description": "Reference of a tax definition. A tax is levied by an authorized tax jurisdiction. There are many different types of tax (Federal Tax levied by the US Government, State Tax levied by the State of California,…).",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the tax."
+            },
+            "name": {
+              "type": "string",
+              "description": "Tax name."
+            },
+            "taxType": {
+              "type": "string",
+              "description": "Type of  the tax."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "id",
+            "taxType"
+          ]
+        },
+        "TaxExemptionCertificate": {
+          "type": "object",
+          "description": "A tax exemption certificate represents a tax exemption granted to a party (individual or organization) by a tax jurisdiction which may be a city, state, country,... An exemption has a certificate identifier (received from the jurisdiction that levied the tax) and a validity period. An exemption is per tax types and determines for each type of tax what portion of the tax is exempted (partial by percentage or complete) via the tax definition.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the certificate of the tax exemption"
+            },
+            "attachment": {
+              "$ref": "#/components/schemas/AttachmentRefOrValue"
+            },
+            "taxDefinition": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxDefinition"
+              }
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "TimePeriod": {
+          "type": "object",
+          "description": "A period of time, either as a deadline (endDateTime only) a startDateTime only, or both",
+          "properties": {
+            "endDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End of the time period, using IETC-RFC-3339 format"
+            },
+            "startDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start of the time period, using IETC-RFC-3339 format. If you define a start, you must also define an end"
+            }
+          }
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "referenceError": {
+              "type": "string"
+            },
+            "baseType": {
+              "type": "string"
+            },
+            "schemaLocation": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "OrganizationCreate": {
+          "type": "object",
+          "description": "The Organization to be created",
+          "properties": {
+            "partyCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "taxExemptionCertificate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxExemptionCertificate"
+              }
+            },
+            "marketSegment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MarketSegmentRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditRating": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyCreditProfile"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            },
+            "isHeadOffice": {
+              "type": "boolean",
+              "description": "If value is true, the organization is the head office"
+            },
+            "isLegalEntity": {
+              "type": "boolean",
+              "description": "If value is true, the organization is a legal entity known by a national referential."
+            },
+            "name": {
+              "type": "string",
+              "description": "Organization name (department name for example)"
+            },
+            "nameType": {
+              "type": "string",
+              "description": "Type of the name : Co, Inc, Ltd,…"
+            },
+            "organizationType": {
+              "type": "string",
+              "description": "Type of Organization (company, department...)"
+            },
+            "industry": {
+              "type": "string",
+              "description": "Industry information for related entity."
+            },
+            "existsDuring": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "organizationChildRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationChildRelationship"
+              }
+            },
+            "organizationIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationIdentification"
+              }
+            },
+            "organizationParentRelationship": {
+              "$ref": "#/components/schemas/OrganizationParentRelationship"
+            },
+            "otherName": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationOtherName"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the organization"
+            },
+            "tradingName": {
+              "type": "string",
+              "description": "Name that the organization (unit) trades under"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "tradingName"
+          ]
+        },
+        "Disability": {
+          "type": "object",
+          "description": "Lack or inadequate strength or ability.",
+          "properties": {
+            "disabilityCode": {
+              "type": "string",
+              "description": "Code of the disability"
+            },
+            "disabilityName": {
+              "type": "string",
+              "description": "Name of the disability"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "disabilityCode",
+            "disabilityName"
+          ]
+        },
+        "Individual": {
+          "type": "object",
+          "description": "Individual represents a single human being (a man, woman or child). The individual can be a customer, an employee or any other person that the organization needs to store information about.",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the individual"
+            },
+            "href": {
+              "type": "string",
+              "description": "Hyperlink to access the individual"
+            },
+            "aristocraticTitle": {
+              "type": "string",
+              "description": "e.g. Baron, Graf, Earl,…"
+            },
+            "birthDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Birth date"
+            },
+            "countryOfBirth": {
+              "type": "string",
+              "description": "Country where the individual was born"
+            },
+            "deathDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of death"
+            },
+            "familyName": {
+              "type": "string",
+              "description": "Contains the non-chosen or inherited name. Also known as last name in the Western context"
+            },
+            "familyNamePrefix": {
+              "type": "string",
+              "description": "Family name prefix"
+            },
+            "formattedName": {
+              "type": "string",
+              "description": "A fully formatted name in one string with all of its pieces in their proper place and all of the necessary punctuation. Useful for specific contexts (Chinese, Japanese, Korean,…)"
+            },
+            "fullName": {
+              "type": "string",
+              "description": "Full name flatten (first, middle, and last names)"
+            },
+            "gender": {
+              "type": "string",
+              "description": "Gender"
+            },
+            "generation": {
+              "type": "string",
+              "description": "e.g.. Sr, Jr, III (the third),…"
+            },
+            "givenName": {
+              "type": "string",
+              "description": "First name of the individual"
+            },
+            "legalName": {
+              "type": "string",
+              "description": "Legal name or birth name (name one has for official purposes)"
+            },
+            "location": {
+              "type": "string",
+              "description": "Temporary current location od the individual (may be used if the individual has approved its sharing)"
+            },
+            "maritalStatus": {
+              "type": "string",
+              "description": "Marital status (married, divorced, widow ...)"
+            },
+            "middleName": {
+              "type": "string",
+              "description": "Middles name or initial"
+            },
+            "nationality": {
+              "type": "string",
+              "description": "Nationality"
+            },
+            "placeOfBirth": {
+              "type": "string",
+              "description": "Reference to the place where the individual was born"
+            },
+            "preferredGivenName": {
+              "type": "string",
+              "description": "Contains the chosen name by which the individual prefers to be addressed. Note: This name may be a name other than a given name, such as a nickname"
+            },
+            "title": {
+              "type": "string",
+              "description": "Useful for titles (aristocratic, social,...) Pr, Dr, Sir, ..."
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditRating": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyCreditProfile"
+              }
+            },
+            "disability": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Disability"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "individualIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/IndividualIdentification"
+              }
+            },
+            "languageAbility": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LanguageAbility"
+              }
+            },
+            "otherName": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/IndividualOtherName"
+              }
+            },
+            "partyCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "skill": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Skill"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "taxExemptionCertificate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxExemptionCertificate"
+              }
+            },
+            "marketSegment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MarketSegmentRef"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "IndividualIdentification": {
+          "type": "object",
+          "description": "Represents our registration of information used as proof of identity by an individual (passport, national identity card, drivers license, social security number, birth certificate)",
+          "properties": {
+            "identificationId": {
+              "type": "string",
+              "description": "Identifier"
+            },
+            "identificationType": {
+              "type": "string",
+              "description": "Identification type (passport, national identity card, drivers license, social security number, birth certificate)"
+            },
+            "issuingAuthority": {
+              "type": "string",
+              "description": "Authority which has issued the identifier, such as: social security, town hall"
+            },
+            "issuingDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date at which the identifier was issued"
+            },
+            "attachment": {
+              "$ref": "#/components/schemas/AttachmentRefOrValue"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "documentNumber": {
+              "type": "string",
+              "description": "The identity card document number"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "issuingCountry": {
+              "type": "string",
+              "description": "Country which has issued the identifier"
+            }
+          },
+          "required": [
+            "identificationId",
+            "identificationType"
+          ]
+        },
+        "IndividualOtherName": {
+          "type": "object",
+          "description": "Keeps track of other names, for example the old name of a woman before marriage or an artist name.",
+          "properties": {
+            "aristocraticTitle": {
+              "type": "string",
+              "description": "e.g. Baron, Graf, Earl,…"
+            },
+            "familyName": {
+              "type": "string",
+              "description": "Contains the non-chosen or inherited name. Also known as last name in the Western context"
+            },
+            "familyNamePrefix": {
+              "type": "string",
+              "description": "Family name prefix"
+            },
+            "formattedName": {
+              "type": "string",
+              "description": ". A fully formatted name in one string with all of its pieces in their proper place and all of the necessary punctuation. Useful for specific contexts (Chinese, Japanese, Korean,…)"
+            },
+            "fullName": {
+              "type": "string",
+              "description": "Full name flatten (first, middle, and last names)"
+            },
+            "generation": {
+              "type": "string",
+              "description": "e.g. Sr, Jr…"
+            },
+            "givenName": {
+              "type": "string",
+              "description": "First name"
+            },
+            "legalName": {
+              "type": "string",
+              "description": "Legal name or birth name (name one has for official purposes)"
+            },
+            "middleName": {
+              "type": "string",
+              "description": "Middle name or initial"
+            },
+            "preferredGivenName": {
+              "type": "string",
+              "description": "Contains the chosen name by which the person prefers to be addressed. Note: This name may be a name other than a given name, such as a nickname"
+            },
+            "title": {
+              "type": "string",
+              "description": "Use for titles (aristrocatic, social, ...): Pr, Dr, Sir,...."
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "LanguageAbility": {
+          "type": "object",
+          "description": "Ability of an individual to understand or converse in a language.",
+          "properties": {
+            "isFavouriteLanguage": {
+              "type": "boolean",
+              "description": "A “true” value specifies whether the language is considered by the individual as his favourite one"
+            },
+            "languageCode": {
+              "type": "string",
+              "description": "Language code (RFC 5646)"
+            },
+            "languageName": {
+              "type": "string",
+              "description": "Language name"
+            },
+            "listeningProficiency": {
+              "type": "string",
+              "description": "Listening proficiency evaluated for this language"
+            },
+            "readingProficiency": {
+              "type": "string",
+              "description": "Reading proficiency evaluated for this language"
+            },
+            "speakingProficiency": {
+              "type": "string",
+              "description": "Speaking proficiency evaluated for this language"
+            },
+            "writingProficiency": {
+              "type": "string",
+              "description": "Writing proficiency evaluated for this language"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "languageCode",
+            "languageName"
+          ]
+        },
+        "Skill": {
+          "type": "object",
+          "description": "Skills evaluated for an individual with a level and possibly with a limited validity when an obsolescence is defined (Ex: the first-aid certificate first level is limited to one year and an update training is required each year to keep the level).",
+          "properties": {
+            "comment": {
+              "type": "string",
+              "description": "A free text comment linked to the evaluation done"
+            },
+            "evaluatedLevel": {
+              "type": "string",
+              "description": "Level of expertise in a skill evaluated for an individual"
+            },
+            "skillCode": {
+              "type": "string",
+              "description": "Code of the skill"
+            },
+            "skillName": {
+              "type": "string",
+              "description": "Name of the skill such as Java language,…"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "skillCode",
+            "skillName"
+          ]
+        },
+        "IndividualCreate": {
+          "type": "object",
+          "description": "The Individual to be created",
+          "properties": {
+            "partyCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "taxExemptionCertificate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxExemptionCertificate"
+              }
+            },
+            "marketSegment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MarketSegmentRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditRating": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyCreditProfile"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            },
+            "aristocraticTitle": {
+              "type": "string",
+              "description": "e.g. Baron, Graf, Earl,…"
+            },
+            "birthDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Birth date"
+            },
+            "countryOfBirth": {
+              "type": "string",
+              "description": "Country where the individual was born"
+            },
+            "deathDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of death"
+            },
+            "familyNamePrefix": {
+              "type": "string",
+              "description": "Family name prefix"
+            },
+            "formattedName": {
+              "type": "string",
+              "description": "A fully formatted name in one string with all of its pieces in their proper place and all of the necessary punctuation. Useful for specific contexts (Chinese, Japanese, Korean,…)"
+            },
+            "fullName": {
+              "type": "string",
+              "description": "Full name flatten (first, middle, and last names)"
+            },
+            "gender": {
+              "type": "string",
+              "description": "Gender"
+            },
+            "generation": {
+              "type": "string",
+              "description": "e.g.. Sr, Jr, III (the third),…"
+            },
+            "legalName": {
+              "type": "string",
+              "description": "Legal name or birth name (name one has for official purposes)"
+            },
+            "location": {
+              "type": "string",
+              "description": "Temporary current location od the individual (may be used if the individual has approved its sharing)"
+            },
+            "maritalStatus": {
+              "type": "string",
+              "description": "Marital status (married, divorced, widow ...)"
+            },
+            "middleName": {
+              "type": "string",
+              "description": "Middles name or initial"
+            },
+            "nationality": {
+              "type": "string",
+              "description": "Nationality"
+            },
+            "placeOfBirth": {
+              "type": "string",
+              "description": "Reference to the place where the individual was born"
+            },
+            "preferredGivenName": {
+              "type": "string",
+              "description": "Contains the chosen name by which the individual prefers to be addressed. Note: This name may be a name other than a given name, such as a nickname"
+            },
+            "title": {
+              "type": "string",
+              "description": "Useful for titles (aristocratic, social,...) Pr, Dr, Sir, ..."
+            },
+            "disability": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Disability"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "individualIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/IndividualIdentification"
+              }
+            },
+            "languageAbility": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LanguageAbility"
+              }
+            },
+            "otherName": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/IndividualOtherName"
+              }
+            },
+            "skill": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Skill"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the individual"
+            },
+            "familyName": {
+              "type": "string",
+              "description": "Contains the non-chosen or inherited name. Also known as last name in the Western context"
+            },
+            "givenName": {
+              "type": "string",
+              "description": "First name of the individual"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "familyName",
+            "givenName"
+          ]
+        },
+        "EventSubscription": {
+          "type": "object",
+          "description": "Sets the communication endpoint address the service instance must use to deliver notification information",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Id of the listener",
+              "minLength": 1
+            },
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback",
+            "id"
+          ]
+        },
+        "EventSubscriptionInput": {
+          "type": "object",
+          "description": "Data containing the callback endpoint to deliver the information",
+          "properties": {
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback"
+          ]
+        },
+        "OrganizationUpdate": {
+          "type": "object",
+          "description": "The Organization to be updated",
+          "properties": {
+            "partyCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "taxExemptionCertificate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxExemptionCertificate"
+              }
+            },
+            "marketSegment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MarketSegmentRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditRating": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyCreditProfile"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            },
+            "isHeadOffice": {
+              "type": "boolean",
+              "description": "If value is true, the organization is the head office"
+            },
+            "isLegalEntity": {
+              "type": "boolean",
+              "description": "If value is true, the organization is a legal entity known by a national referential."
+            },
+            "name": {
+              "type": "string",
+              "description": "Organization name (department name for example)"
+            },
+            "nameType": {
+              "type": "string",
+              "description": "Type of the name : Co, Inc, Ltd,…"
+            },
+            "organizationType": {
+              "type": "string",
+              "description": "Type of Organization (company, department...)"
+            },
+            "industry": {
+              "type": "string",
+              "description": "Industry information for related entity."
+            },
+            "existsDuring": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "organizationChildRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationChildRelationship"
+              }
+            },
+            "organizationIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationIdentification"
+              }
+            },
+            "organizationParentRelationship": {
+              "$ref": "#/components/schemas/OrganizationParentRelationship"
+            },
+            "otherName": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrganizationOtherName"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "tradingName": {
+              "type": "string",
+              "description": "Name that the organization (unit) trades under"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "JsonPatch": {
+          "description": "The Individual to be updated"
+        },
+        "IndividualUpdate": {
+          "type": "object",
+          "description": "The Individual to be updated",
+          "properties": {
+            "partyCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "taxExemptionCertificate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TaxExemptionCertificate"
+              }
+            },
+            "marketSegment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MarketSegmentRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditRating": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PartyCreditProfile"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            },
+            "aristocraticTitle": {
+              "type": "string",
+              "description": "e.g. Baron, Graf, Earl,…"
+            },
+            "birthDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Birth date"
+            },
+            "countryOfBirth": {
+              "type": "string",
+              "description": "Country where the individual was born"
+            },
+            "deathDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of death"
+            },
+            "familyNamePrefix": {
+              "type": "string",
+              "description": "Family name prefix"
+            },
+            "formattedName": {
+              "type": "string",
+              "description": "A fully formatted name in one string with all of its pieces in their proper place and all of the necessary punctuation. Useful for specific contexts (Chinese, Japanese, Korean,…)"
+            },
+            "fullName": {
+              "type": "string",
+              "description": "Full name flatten (first, middle, and last names)"
+            },
+            "gender": {
+              "type": "string",
+              "description": "Gender"
+            },
+            "generation": {
+              "type": "string",
+              "description": "e.g.. Sr, Jr, III (the third),…"
+            },
+            "legalName": {
+              "type": "string",
+              "description": "Legal name or birth name (name one has for official purposes)"
+            },
+            "location": {
+              "type": "string",
+              "description": "Temporary current location od the individual (may be used if the individual has approved its sharing)"
+            },
+            "maritalStatus": {
+              "type": "string",
+              "description": "Marital status (married, divorced, widow ...)"
+            },
+            "middleName": {
+              "type": "string",
+              "description": "Middles name or initial"
+            },
+            "nationality": {
+              "type": "string",
+              "description": "Nationality"
+            },
+            "placeOfBirth": {
+              "type": "string",
+              "description": "Reference to the place where the individual was born"
+            },
+            "preferredGivenName": {
+              "type": "string",
+              "description": "Contains the chosen name by which the individual prefers to be addressed. Note: This name may be a name other than a given name, such as a nickname"
+            },
+            "title": {
+              "type": "string",
+              "description": "Useful for titles (aristocratic, social,...) Pr, Dr, Sir, ..."
+            },
+            "disability": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Disability"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "individualIdentification": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/IndividualIdentification"
+              }
+            },
+            "languageAbility": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LanguageAbility"
+              }
+            },
+            "otherName": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/IndividualOtherName"
+              }
+            },
+            "skill": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Skill"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "familyName": {
+              "type": "string",
+              "description": "Contains the non-chosen or inherited name. Also known as last name in the Western context"
+            },
+            "givenName": {
+              "type": "string",
+              "description": "First name of the individual"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        }
+      }
+    }
+  }

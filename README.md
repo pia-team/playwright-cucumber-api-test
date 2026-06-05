@@ -64,7 +64,6 @@ api-test-framework/
 │   ├── utils/           # Reusable helpers & utilities
 │   └── types/           # Custom TypeScript types
 │
-├── test-data/           # Static test data (JSON)
 ├── reports/             # Test execution reports
 ├── cucumber.js          # Cucumber configuration
 ├── tsconfig.json        # TypeScript configuration

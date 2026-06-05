@@ -1,0 +1,3454 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Quote Management API",
+      "description": "**TMF API Reference : TMF 648 - Quote Management**  **Release : 19.0 - June 2019**  The Quote API provides a standardized mechanism for placing a quote with all of the necessary parameters. The API consists of a simple set of operations that interact with CRM/Quote/Pricing Negotiation systems in a consistent manner. A Quote is created based on product offering(s) that is(are) defined in a catalog. The quote identifies the product or set of products that are available to a customer for pricing request, and includes product characteristics.  The Quote references the product offer(s) which (future) customer request pricing. Quote resource features authorization subclass to manage special pricing UC requiring authorization tracking management  **Quote resource** A Quote can be used to request pricing between a customer and a service provider or between a service provider and a partner and vice versa. Main quote attributes are its identifier, state, priority, related dates (requested, expected, valid, completion, etc.), related parties and quote items. Main Quote Items attributes are the discribed offering and product characteristics with the related action to be performed (e.g. add, change or delete the products), location information, and product characteristics.  Quote API performs the following operations on Quote :  - Retrieval of a quote or a collection of quotes depending on filter criteria - Partial update of a quote (including updating rules) - Creation of a quote (including default values and creation rules) - Deletion of quote (for administration purposes) - Notification of events on quote.  Copyright © TM Forum 2019. All Rights Reserved  ",
+      "contact": {
+        "name": "PiA(people in action)",
+        "url": "http://www.pia-team.com/",
+        "email": "info@pia-team.com"
+      },
+      "license": {
+        "name": "PiA License",
+        "url": "http://www.pia-team.com"
+      },
+      "version": "4.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://quote-api.pi.dev-gcu.com/api/quoteManagement/v4",
+        "description": "Generated server url"
+      }
+    ],
+    "security": [
+      {
+        "BearerAuthentication": []
+      }
+    ],
+    "tags": [
+      {
+        "name": "quote",
+        "description": "Quote API"
+      },
+      {
+        "name": "hub",
+        "description": "the hub API"
+      }
+    ],
+    "paths": {
+      "/quote": {
+        "get": {
+          "tags": [
+            "quote"
+          ],
+          "summary": "List or find Quote objects",
+          "description": "This operation list or find Quote entities",
+          "operationId": "listQuote",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort parameter",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Quote"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "quote"
+          ],
+          "summary": "Creates a Quote",
+          "description": "This operation creates a Quote entity.",
+          "operationId": "createQuote",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Quote"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub": {
+        "get": {
+          "tags": [
+            "hub"
+          ],
+          "summary": "List listeners",
+          "description": "Resets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "listListener",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort param of Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/EventSubscription"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "hub"
+          ],
+          "summary": "Register a listener",
+          "description": "Sets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "registerListener",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventSubscriptionInput"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Subscribed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EventSubscription"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/quote/{id}": {
+        "get": {
+          "tags": [
+            "quote"
+          ],
+          "summary": "Retrieve a Quote",
+          "description": "This operation Retrieve a Quote entity.",
+          "operationId": "retrieveQuote",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Quote",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Quote"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "quote"
+          ],
+          "summary": "Delete a quote",
+          "description": "This operation delete a quote entity.",
+          "operationId": "deleteQuote",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Quote",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "quote"
+          ],
+          "summary": "Patch a Quote",
+          "description": "This operation patch a Quote entity.",
+          "operationId": "patchQuote",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Quote",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuoteUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Quote"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub/{id}": {
+        "delete": {
+          "tags": [
+            "hub"
+          ],
+          "summary": "Unregister a listener",
+          "description": "Resets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "unregisterListener",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the registered listener",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AgreementItemRef": {
+          "type": "object",
+          "description": "Agreement reference. An agreement represents a contract or arrangement, either written or verbal and sometimes enforceable by law, such as a service level agreement or a customer price agreement. An agreement involves a number of other business entities, such as products, services, and resources and/or their specifications.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "7b572b35-9747-4312-9c94-40f5a49294c4"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/7b572b35-9747-4312-9c94-40f5a49294c4"
+            },
+            "agreementItemId": {
+              "type": "string",
+              "description": "Identifier of the agreement",
+              "example": "28902b2c-7793-4596-bb49-cc67475a5be7"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "AggrementItemName"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "AgreementItemRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/agreementitemref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "AgreementItemRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "AgreementItemRef"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "AgreementRef": {
+          "type": "object",
+          "description": "Agreement reference. An agreement represents a contract or arrangement, either written or verbal and sometimes enforceable by law, such as a service level agreement or a customer price agreement. An agreement involves a number of other business entities, such as products, services, and resources and/or their specifications.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "5fa153dc-ded3-44ce-bc27-24aed7cf196f"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the agreement",
+              "example": "AggrementName"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Aggrement"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/agreementref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Aggrement"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "Aggrement"
+            }
+          },
+          "required": [
+            "href",
+            "id",
+            "version"
+          ]
+        },
+        "AppointmentRef": {
+          "type": "object",
+          "description": "Refers an appointment, such as a Customer presentation or internal meeting or site visit",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The identifier of the referred appointment",
+              "example": "02e8afd4-7a40-4631-8bfb-f8b1f2bcd299"
+            },
+            "href": {
+              "type": "string",
+              "description": "The reference of the appointment",
+              "example": "http://localhost:9055/api/quoteManagement/v4/02e8afd4-7a40-4631-8bfb-f8b1f2bcd299"
+            },
+            "description": {
+              "type": "string",
+              "description": "An explanatory text regarding the appointment made with a party",
+              "example": "AppointmentRef description"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "AppointmentRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/appointmentref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "AppointmentRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation",
+              "example": "AppointmentRef"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "AttachmentRefOrValue": {
+          "type": "object",
+          "description": "An attachment by value or by reference. For AttachmentRefOrValue, the attribute type,schemaLocation and referredType are related to the contained entity and not to AttchmentRefOrValue itself",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier for this particular attachment",
+              "example": "2862cca6-2210-422b-a10b-400b0042a8c5"
+            },
+            "href": {
+              "type": "string",
+              "description": "URI for this Attachment",
+              "example": "http://localhost:9055/api/quoteManagement/v4/2862cca6-2210-422b-a10b-400b0042a8c5"
+            },
+            "attachmentType": {
+              "type": "string",
+              "description": "Attachment type such as video, picture",
+              "example": "pdf"
+            },
+            "content": {
+              "type": "string",
+              "description": "The actual contents of the attachment object, if embedded, encoded as base64",
+              "example": "U2FtcGxlIHRlc3QgY29udGVudA=="
+            },
+            "description": {
+              "type": "string",
+              "description": "A narrative text describing the content of the attachment",
+              "example": "Attachment description"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "Attachment mime type such as extension file for video, picture and document",
+              "example": "application/pdf"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the attachment",
+              "example": "sample"
+            },
+            "url": {
+              "type": "string",
+              "description": "Uniform Resource Locator, is a web page address (a subset of URI)",
+              "example": "http://localhost:9055/sample.pdf"
+            },
+            "size": {
+              "$ref": "#/components/schemas/Quantity",
+              "description": "The size of the attachment."
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period of time for which the attachment is valid"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Attachment"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "AttachmentRefOrValue"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "AttachmentRefOrValue"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/attachmentreforvalue.json"
+            }
+          }
+        },
+        "Authorization": {
+          "type": "object",
+          "description": "If special discount or special product offering price or specific condition need an approval for ISP sale representative it is described here.",
+          "properties": {
+            "givenDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date when the authorization (approved or declined) was done",
+              "example": "2021-02-17T13:21:38.031Z"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the required authorization",
+              "example": "admin"
+            },
+            "requestedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date when the authorization is requested for",
+              "example": "2021-02-17T13:21:38.031Z"
+            },
+            "signatureRepresentation": {
+              "type": "string",
+              "description": "To describe a digital or manual signature",
+              "example": "Signature represantation"
+            },
+            "state": {
+              "type": "string",
+              "description": "State of the authorization, such as: approved or declined",
+              "example": "approved"
+            },
+            "approver": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Authorization"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/authorization.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Authorization"
+            }
+          },
+          "required": [
+            "state"
+          ]
+        },
+        "BillingAccountRef": {
+          "type": "object",
+          "description": "BillingAccount reference. A BillingAccount is a detailed description of a bill structure.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the billing account",
+              "example": "a9930037-fbb4-4dbb-b359-0f2f1f36b650"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the billing account",
+              "example": "http://localhost:9055/api/quoteManagement/v4/a9930037-fbb4-4dbb-b359-0f2f1f36b650"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the billing account",
+              "example": "Paradise Account"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "BillingAccount"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/billingaccountref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "BillingAccountRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "BillingAccountRef"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "Characteristic": {
+          "type": "object",
+          "description": "Describes a given characteristic of an object or entity through a name/value pair.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a Characteristic entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the characteristic",
+              "example": "TEL_MSISDN"
+            },
+            "valueType": {
+              "type": "string",
+              "description": "Data type of the value of the characteristic",
+              "example": "string"
+            },
+            "value": {
+              "type": "string",
+              "description": "The value of the characteristic",
+              "example": 415
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Characteristic"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/billingaccountref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Characteristic"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        },
+        "ContactMedium": {
+          "type": "object",
+          "description": "Indicates the contact medium that could be used to contact the party.",
+          "properties": {
+            "mediumType": {
+              "type": "string",
+              "description": "Type of the contact medium, such as: email address, telephone number, postal address",
+              "example": "email address"
+            },
+            "preferred": {
+              "type": "boolean",
+              "description": "If true, indicates that is the preferred contact medium",
+              "example": true
+            },
+            "characteristic": {
+              "$ref": "#/components/schemas/MediumCharacteristic",
+              "description": "Any additional characteristic(s) of this contact medium"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The time period that the contact medium is valid for"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ContactMedium"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/billingaccountref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ContactMedium"
+            }
+          },
+          "required": [
+            "characteristic",
+            "mediumType"
+          ]
+        },
+        "MediumCharacteristic": {
+          "type": "object",
+          "description": "Describes the contact medium characteristics that could be used to contact a party (an individual or an organization)",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "The city",
+              "example": "Istanbul"
+            },
+            "contactType": {
+              "type": "string",
+              "description": "The type of contact, for example: phone number such as mobile, fixed home, fixed office. postal address such as shipping instalation…",
+              "example": "mobile"
+            },
+            "country": {
+              "type": "string",
+              "description": "The country",
+              "example": "Turkey"
+            },
+            "emailAddress": {
+              "type": "string",
+              "description": "Full email address in standard format",
+              "example": "pia@mail.com"
+            },
+            "faxNumber": {
+              "type": "string",
+              "description": "The fax number of the contact",
+              "example": "+902124445566"
+            },
+            "phoneNumber": {
+              "type": "string",
+              "description": "The primary phone number of the contact",
+              "example": "+905554443322"
+            },
+            "postCode": {
+              "type": "string",
+              "description": "Postcode",
+              "example": 34000
+            },
+            "socialNetworkId": {
+              "type": "string",
+              "description": "Identifier as a member of a social network",
+              "example": 456789
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "State or province",
+              "example": "Kurtkoy"
+            },
+            "street1": {
+              "type": "string",
+              "description": "Describes the street",
+              "example": "Teknopark"
+            },
+            "street2": {
+              "type": "string",
+              "description": "Complementary street description",
+              "example": "Teknopark"
+            },
+            "place": {
+              "type": "array",
+              "description": "A list of related place ref or values for how to contact with customer",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRefOrValue"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "MediumCharacteristic"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/mediumcharacteristic.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "MediumCharacteristic"
+            }
+          }
+        },
+        "Money": {
+          "type": "object",
+          "description": "A base / value business entity used to represent money",
+          "properties": {
+            "unit": {
+              "type": "string",
+              "description": "Currency (ISO4217 norm uses 3 letters to define the currency)",
+              "example": "$"
+            },
+            "value": {
+              "type": "number",
+              "format": "float",
+              "description": "A positive floating point number",
+              "example": 3.45
+            }
+          }
+        },
+        "Note": {
+          "type": "object",
+          "description": "Extra information about a given entity",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identifier of the note within its containing entity (may or may not be globally unique, depending on provider implementation)",
+              "example": "095dc458-4966-4d86-bd48-a360a34f152a"
+            },
+            "author": {
+              "type": "string",
+              "description": "Author of the note",
+              "example": "Bulut"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of the note"
+            },
+            "text": {
+              "type": "string",
+              "description": "Text of the note",
+              "example": "Sample text of the note"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Note"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/note.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Note"
+            }
+          },
+          "required": [
+            "text"
+          ]
+        },
+        "PaymentRef": {
+          "type": "object",
+          "description": "If an immediate payment has been done at the product order submission, the payment information are captured and stored (as a reference) in the quote and mapped to the order.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity"
+            },
+            "name": {
+              "type": "string",
+              "description": "A name for the payment A name for the payment"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "PaymentRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "PaymentRef"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "PaymentRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/PaymentRef.json"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "Price": {
+          "type": "object",
+          "description": "Provides all amounts (tax included, duty free, tax rate), used currency and percentage to apply for Price Alteration.",
+          "properties": {
+            "percentage": {
+              "type": "number",
+              "format": "float",
+              "description": "Percentage to apply for ProdOfferPriceAlteration",
+              "example": 0.5
+            },
+            "taxRate": {
+              "type": "number",
+              "format": "float",
+              "description": "Tax rate",
+              "example": 0.18
+            },
+            "dutyFreeAmount": {
+              "$ref": "#/components/schemas/Money",
+              "description": "All taxes excluded amount (expressed in the given currency)"
+            },
+            "taxIncludedAmount": {
+              "$ref": "#/components/schemas/Money",
+              "description": "All taxes included amount (expressed in the given currency)"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Price"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/price.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Price"
+            }
+          }
+        },
+        "PriceAlteration": {
+          "type": "object",
+          "description": "Is an amount, usually of money, that modifies the price charged for an order item.",
+          "properties": {
+            "applicationDuration": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Duration during which the alteration applies on the order item price (for instance 2 months free of charge for the recurring charge)",
+              "example": 2
+            },
+            "description": {
+              "type": "string",
+              "description": "A narrative that explains in detail the semantics of this order item price alteration",
+              "example": "Price alternation description"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the order item price alteration"
+            },
+            "priceType": {
+              "type": "string",
+              "description": "A category that describes the price such as recurring, one time and usage."
+            },
+            "priority": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Priority level for applying this alteration among all the defined alterations on the order item price"
+            },
+            "alterationType": {
+              "type": "string",
+              "description": "type of alteration such as Discount"
+            },
+            "recurringChargePeriod": {
+              "type": "string",
+              "description": "Could be month, week..."
+            },
+            "unitOfMeasure": {
+              "type": "string",
+              "description": "Could be minutes, GB..."
+            },
+            "price": {
+              "$ref": "#/components/schemas/Price"
+            },
+            "productOfferingPrice": {
+              "$ref": "#/components/schemas/ProductOfferingPriceRef"
+            },
+            "pricingCategory": {
+              "type": "string",
+              "description": "Could be Charge, Penalty, Cost, Fee, Discount etc."
+            },
+            "recurringChargePeriodLength": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Could be Natural number like 1, 2, 3, … etc."
+            },
+            "recurringChargePeriodCount": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Could be Natural number like 1, 2, 3, … etc."
+            },
+            "salesTime": {
+              "type": "string",
+              "description": "Could be Upfront, Billing"
+            },
+            "advancedPricingMethod": {
+              "type": "string",
+              "description": "Could be Fixed-Flat, Fixed-Cumulative",
+              "example": "Period like [11-15]"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "alterationType",
+            "price",
+            "priceType"
+          ]
+        },
+        "ProductOfferingPriceRef": {
+          "type": "object",
+          "description": "ProductPriceOffering reference. An amount, usually of money, that is asked for or allowed when a ProductOffering is bought, rented, or leased",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "c43a1e9d-7e68-4aa4-a2ef-629c8e8bd7bb"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "POP"
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of the related entity."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductOfferingPrice"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productofferingpriveref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductOfferingPriceRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ProductOfferingPriceRef"
+            }
+          },
+          "required": [
+            "id",
+            "version"
+          ]
+        },
+        "ProductOfferingQualificationItemRef": {
+          "type": "object",
+          "description": "It's a productOfferingQualification item that has been executed previously.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Id of an item of a product offering qualification",
+              "example": "60ef2bc0-d574-4360-82ae-d097d013e5c9"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/60ef2bc0-d574-4360-82ae-d097d013e5c9"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "POQIR"
+            },
+            "productOfferingQualificationHref": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/60ef2bc0-d574-4360-82ae-d097d013e5c9"
+            },
+            "productOfferingQualificationId": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "60ef2bc0-d574-4360-82ae-d097d013e5c9"
+            },
+            "productOfferingQualificationName": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "POQIR"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductOfferingQualificationItemRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "example = \"http://localhost:9055/api/quoteManagement/v4/static/productOfferingqualificationitemref.json\""
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductOfferingQualificationItemRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ProductOfferingQualificationItemRef"
+            }
+          },
+          "required": [
+            "id",
+            "productOfferingQualificationId"
+          ]
+        },
+        "ProductOfferingQualificationRef": {
+          "type": "object",
+          "description": "It's a productOfferingQualification that has been executed previously",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "b5c33b73-4f4f-4505-a0e6-68e8984830e8"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/b5c33b73-4f4f-4505-a0e6-68e8984830e8"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "POQR"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductOfferingQualificationRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productofferingqualificationref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductOfferingQualificationRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ProductOfferingQualificationRef"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "ProductOfferingRef": {
+          "type": "object",
+          "description": "ProductOffering reference. A product offering represents entities that are orderable from the provider of the catalog, this resource includes pricing information.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "4b27f6c3-1de4-423c-b4df-98e1ab653d7f"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductOfferingRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productofferingref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductOfferingRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ProductOfferingRef"
+            }
+          },
+          "required": [
+            "href",
+            "id",
+            "version"
+          ]
+        },
+        "ProductPrice": {
+          "type": "object",
+          "description": "An amount, usually of money, that represents the actual price paid by a Customer for a purchase, a rent or a lease of a Product. The price is valid for a defined period of time.",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "A narrative that explains in detail the semantics of this product price."
+            },
+            "name": {
+              "type": "string",
+              "description": "A short descriptive name such as \"Subscription price\".",
+              "example": "Subscription price"
+            },
+            "priceType": {
+              "type": "string",
+              "description": "A category that describes the price, such as recurring, discount, allowance, penalty, and so forth.",
+              "example": "recurring"
+            },
+            "recurringChargePeriod": {
+              "type": "string",
+              "description": "Could be month, week...",
+              "example": "month"
+            },
+            "unitOfMeasure": {
+              "type": "string",
+              "description": "Could be minutes, GB...",
+              "example": "GB"
+            },
+            "billingAccount": {
+              "$ref": "#/components/schemas/BillingAccountRef"
+            },
+            "price": {
+              "$ref": "#/components/schemas/Price"
+            },
+            "productOfferingPrice": {
+              "$ref": "#/components/schemas/ProductOfferingPriceRef"
+            },
+            "productPriceAlteration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PriceAlteration"
+              }
+            },
+            "pricingCategory": {
+              "type": "string",
+              "description": "Could be Charge, Penalty, Cost, Fee, Discount etc."
+            },
+            "recurringChargePeriodLength": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Could be Natural number like 1, 2, 3, … etc."
+            },
+            "recurringChargePeriodCount": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Could be Natural number like 1, 2, 3, … etc."
+            },
+            "salesTime": {
+              "type": "string",
+              "description": "Could be Upfront, Billing"
+            },
+            "advancedPricingMethod": {
+              "type": "string",
+              "description": "Could be Fixed-Flat, Fixed-Cumulative",
+              "example": "Period like [11-15]"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductPrice"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productprice.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductPrice"
+            }
+          },
+          "required": [
+            "price",
+            "priceType"
+          ]
+        },
+        "ProductRefOrValue": {
+          "type": "object",
+          "description": "A product to be created defined by value or existing defined by reference. The polymorphic attributes @type, @schemaLocation & @referredType are related to the product entity and not the RelatedProductRefOrValue class itself",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the product",
+              "example": "e7dc3d63-4cd7-49b5-b08a-e53c2bc6d747"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the product",
+              "example": "http://localhost:9055/api/quoteManagement/v4/e7dc3d63-4cd7-49b5-b08a-e53c2bc6d747"
+            },
+            "description": {
+              "type": "string",
+              "description": "Is the description of the product. It could be copied from the description of the Product Offering.",
+              "example": "ProductRefOrValue description"
+            },
+            "isBundle": {
+              "type": "boolean",
+              "description": "If true, the product is a ProductBundle which is an instantiation of a BundledProductOffering. If false, the product is a ProductComponent which is an instantiation of a SimpleProductOffering.",
+              "example": false
+            },
+            "isCustomerVisible": {
+              "type": "boolean",
+              "description": "If true, the product is visible by the customer.",
+              "example": true
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the product. It could be the same as the name of the product offering",
+              "example": "PROV"
+            },
+            "orderDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was ordered"
+            },
+            "productSerialNumber": {
+              "type": "string",
+              "description": "Is the serial number for the product. This is typically applicable to tangible products e.g. Broadband Router.",
+              "example": 8798127382173198
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date from which the product starts"
+            },
+            "terminationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was terminated"
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementItemRef"
+              }
+            },
+            "billingAccount": {
+              "$ref": "#/components/schemas/BillingAccountRef"
+            },
+            "place": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRefOrValue"
+              }
+            },
+            "product": {
+              "type": "array",
+              "items": {
+                "description": "A product to be created defined by value or existing defined by reference. The polymorphic attributes @type, @schemaLocation & @referredType are related to the product entity and not the RelatedProductRefOrValue class itself"
+              }
+            },
+            "productCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "productOffering": {
+              "$ref": "#/components/schemas/ProductOfferingRef"
+            },
+            "productOrderItem": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedProductOrderItem"
+              }
+            },
+            "productPrice": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductPrice"
+              }
+            },
+            "productRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRelationship"
+              }
+            },
+            "productSpecification": {
+              "$ref": "#/components/schemas/ProductSpecificationRef"
+            },
+            "productTerm": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductTerm"
+              }
+            },
+            "realizingResource": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ResourceRef"
+              }
+            },
+            "realizingService": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ServiceRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "status": {
+              "type": "string",
+              "description": "Is the lifecycle status of the product.",
+              "enum": [
+                "created",
+                "pendingActive",
+                "cancelled",
+                "active",
+                "pendingTerminate",
+                "terminated suspended",
+                "aborted"
+              ],
+              "example": "created"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductRefOrValue"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productreforvalue.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductRefOrValue"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ProductRefOrValue"
+            }
+          }
+        },
+        "ProductRelationship": {
+          "type": "object",
+          "description": "Linked products to the one instantiate, such as [bundled] if the product is a bundle and you want to describe the bundled products inside this bundle; [reliesOn] if the product needs another already owned product to rely on (e.g. an option on an already owned mobile access product) [targets] or [isTargeted] (depending on the way of expressing the link) for any other kind of links that may be useful",
+          "properties": {
+            "relationshipType": {
+              "type": "string",
+              "description": "Type of the product relationship, such as [bundled] if the product is a bundle and you want to describe the bundled products inside this bundle; [reliesOn] if the product needs another already owned product to rely on (e.g. an option on an already owned mobile access product) [targets] or [isTargeted] (depending on the way of expressing the link) for any other kind of links that may be useful",
+              "example": "isTargeted"
+            },
+            "product": {
+              "$ref": "#/components/schemas/ProductRefOrValue",
+              "description": "A referred or valued product must be present",
+              "example": "product"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductRelationship"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productrelationship.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductRelationship"
+            }
+          },
+          "required": [
+            "product",
+            "relationshipType"
+          ]
+        },
+        "ProductSpecificationRef": {
+          "type": "object",
+          "description": "Product specification reference: A ProductSpecification is a detailed description of a tangible or intangible object made available externally in the form of a ProductOffering to customers or other parties playing a party role.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "1141e36c-4255-40e4-8714-3f375dc87ed7"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "PSR"
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of the product specification"
+            },
+            "targetProductSchema": {
+              "$ref": "#/components/schemas/TargetProductSchema",
+              "description": "A target product schema reference. The reference object to the schema and type of target product which is described by product specification."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ProductSpecificationRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productspecificationref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductSpecificationRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ProductSpecificationRef"
+            }
+          },
+          "required": [
+            "href",
+            "id",
+            "version"
+          ]
+        },
+        "ProductTerm": {
+          "type": "object",
+          "description": "Description of a productTerm linked to this product. This represent a commitment with a duration",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Description of the productTerm",
+              "example": "Product term description"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the productTerm",
+              "example": "PT"
+            },
+            "duration": {
+              "$ref": "#/components/schemas/Quantity",
+              "description": "Duration of the productTerm"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "productTerm validity period"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/productterm.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ProductTerm"
+            }
+          }
+        },
+        "Quantity": {
+          "type": "object",
+          "description": "An amount in a given unit",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "float",
+              "description": "Numeric value in a given unit",
+              "example": 1
+            },
+            "units": {
+              "type": "string",
+              "description": "Unit",
+              "example": 1
+            }
+          }
+        },
+        "QuoteCreate": {
+          "type": "object",
+          "description": "The Quote to be created",
+          "properties": {
+            "id": {
+              "description": "Identifier for quote"
+            },
+            "version": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string",
+              "description": "Used to categorize the quote from a business perspective that can be useful for the CRM system (e.g. \"enterprise\", \"residential\", ...)",
+              "example": "enterprise"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the quote",
+              "example": "Quote description"
+            },
+            "expectedFulfillmentStartDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "this is the date wished by the requester to have the requested quote item delivered"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "ID given by the consumer and only understandable by him (to facilitate his searches afterwards)",
+              "example": "7848fcfd-ba5a-4759-ad47-7ef951c70696"
+            },
+            "instantSyncQuote": {
+              "type": "boolean",
+              "description": "An indicator which when the value is \"true\" means that requester expects to get quoting result immediately in the response. If the indicator is true then the response code of 200 indicates the operation is successful otherwise a task is created with a response 201. "
+            },
+            "requestedQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "This is requested date - from quote requester - to get a complete response for this quote"
+            },
+            "expectedQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "This is expected date - from quote supplier - to be able to send back  a response for this quote"
+            },
+            "agreement": {
+              "type": "array",
+              "description": "A reference to an agreement defining the context of the quote",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "billingAccount": {
+              "type": "array",
+              "description": "A reference to a billing account to provide quote context information ",
+              "items": {
+                "$ref": "#/components/schemas/BillingAccountRef"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "description": "Information contact related to the quote requester",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "note": {
+              "type": "array",
+              "description": "Free form text associated with the quote",
+              "items": {
+                "$ref": "#/components/schemas/Note"
+              }
+            },
+            "productOfferingQualification": {
+              "type": "array",
+              "description": "A reference to a previously done product offering qualification",
+              "items": {
+                "$ref": "#/components/schemas/ProductOfferingQualificationRef"
+              }
+            },
+            "quoteItem": {
+              "type": "array",
+              "description": "An item of the quote - it is used to describe an operation on a product to be quoted",
+              "items": {
+                "$ref": "#/components/schemas/QuoteItem"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "description": "A reference to a party playing a role in this quote (customer, seller, requester, etc.)",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "QuoteCreate"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/quotecreate.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "QuoteCreate"
+            },
+            "channel": {
+              "type": "array",
+              "description": "A list of channels Could be Online or Offline store",
+              "items": {
+                "$ref": "#/components/schemas/RelatedChannel"
+              }
+            },
+            "payment": {
+              "type": "array",
+              "description": "A list of payment references",
+              "items": {
+                "$ref": "#/components/schemas/PaymentRef"
+              }
+            },
+            "expectedFulfillmentCompletionDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "attachment": {
+              "type": "array",
+              "description": "A list of attachments",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "priceAlteration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PriceAlteration"
+              }
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "Quote validity period"
+            },
+            "quoteCharacteristic": {
+              "type": "array",
+              "description": "Characteristic of the given quote",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            }
+          }
+        },
+        "QuoteItem": {
+          "type": "object",
+          "description": "A quote items describe an action to be performed on a productOffering or a product in order to get pricing elements and condition.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identifier of the quote item (generally it is a sequence number 01, 02, 03, ...)",
+              "example": "01"
+            },
+            "action": {
+              "type": "string",
+              "description": "Action to be performed on this quote item (add, modify, remove, etc.)",
+              "example": "add"
+            },
+            "quantity": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Quantity asked for this quote item",
+              "example": 1
+            },
+            "state": {
+              "type": "string",
+              "description": "State of the quote item : described in the state machine diagram",
+              "example": "active"
+            },
+            "appointment": {
+              "type": "array",
+              "description": "A reference to appointment(s) associated with this quote item",
+              "items": {
+                "$ref": "#/components/schemas/AppointmentRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "description": "A reference to attachment(s) associated with this quote item",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "note": {
+              "type": "array",
+              "description": "Free form text associated with the quote item",
+              "items": {
+                "$ref": "#/components/schemas/Note"
+              }
+            },
+            "product": {
+              "$ref": "#/components/schemas/ProductRefOrValue"
+            },
+            "productOffering": {
+              "$ref": "#/components/schemas/ProductOfferingRef"
+            },
+            "productOfferingQualificationItem": {
+              "$ref": "#/components/schemas/ProductOfferingQualificationItemRef",
+              "description": "A reference to a previously done POQ with item specified"
+            },
+            "quoteItem": {
+              "description": "A structure to embedded quote item within quote item"
+            },
+            "quoteItemAuthorization": {
+              "type": "array",
+              "description": "Authorization related to this quote item",
+              "items": {
+                "$ref": "#/components/schemas/Authorization"
+              }
+            },
+            "quoteItemPrice": {
+              "type": "array",
+              "description": "Price for this quote item",
+              "items": {
+                "$ref": "#/components/schemas/QuotePrice"
+              }
+            },
+            "quoteItemRelationship": {
+              "type": "array",
+              "description": "A relationship from item within a quote",
+              "items": {
+                "$ref": "#/components/schemas/QuoteItemRelationship"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "description": "A reference to a party playing a role in this quote item",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "itemTotalPrice": {
+              "type": "array",
+              "description": "A list of quote prices",
+              "items": {
+                "$ref": "#/components/schemas/QuotePrice"
+              }
+            },
+            "quoteItemCharacteristic": {
+              "type": "array",
+              "description": "Characteristic of the given quote",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "QuoteItem"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/quoteitem.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "QuoteItem"
+            }
+          },
+          "required": [
+            "action",
+            "id"
+          ]
+        },
+        "QuoteItemRelationship": {
+          "type": "object",
+          "description": "Used to describe relationship between quote item. These relationship could have an impact on pricing and conditions",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "ID of the related order item (must be in the same quote)"
+            },
+            "relationshipType": {
+              "type": "string",
+              "description": "Relationship type as relies on, bundles, etc...",
+              "example": "relies on"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "QuoteItemRelationship"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/quoteitemrelationship.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "QuoteItemRelationship"
+            }
+          }
+        },
+        "QuotePrice": {
+          "type": "object",
+          "description": "Description of price and discount awarded",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Description of the quote/quote item price",
+              "example": "Quote price description"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the quote /quote item price",
+              "example": "quotePrice"
+            },
+            "priceType": {
+              "type": "string",
+              "description": "indicate if the price is for recurrent or no-recurrent charge",
+              "example": "recurrent"
+            },
+            "recurringChargePeriod": {
+              "type": "string",
+              "description": "Used for recurring charge to indicate period (month, week, etc..)",
+              "example": "month"
+            },
+            "unitOfMeasure": {
+              "type": "string",
+              "description": "Unit of Measure if price depending on it (Gb, SMS volume, etc..)",
+              "example": "SMS Volume"
+            },
+            "price": {
+              "$ref": "#/components/schemas/Price"
+            },
+            "priceAlteration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PriceAlteration"
+              }
+            },
+            "productOfferingPrice": {
+              "$ref": "#/components/schemas/ProductOfferingPriceRef",
+              "description": "An amount, usually of money, that is asked for or allowed when a ProductOffering is bought, rented, or leased. The price is valid for a defined period of time."
+            },
+            "pricingCategory": {
+              "type": "string",
+              "description": "Could be Charge, Penalty, Cost, Fee, Discount etc."
+            },
+            "recurringChargePeriodLength": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Could be Natural number like 1, 2, 3, … etc."
+            },
+            "recurringChargePeriodCount": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Could be Natural number like 1, 2, 3, … etc."
+            },
+            "salesTime": {
+              "type": "string",
+              "description": "Could be Upfront, Billing"
+            },
+            "advancedPricingMethod": {
+              "type": "string",
+              "description": "Could be Fixed-Flat, Fixed-Cumulative",
+              "example": "Period like [11-15]"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "QuotePrice"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/quoteprice.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "QuotePrice"
+            }
+          }
+        },
+        "RelatedChannel": {
+          "type": "object",
+          "description": "Related channel to another entity. May be online web, mobile app, social ,etc.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the channel."
+            },
+            "role": {
+              "type": "string",
+              "description": "Role playing by the channel."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "RelatedChannel"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "RelatedChannel"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "RelatedChannel"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/RelatedChannel.json"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "RelatedParty": {
+          "type": "object",
+          "description": "Related Entity reference. A related party defines party or party role linked to a specific entity.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "af509484-3805-48c0-a53e-5ae53910afc9"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/af509484-3805-48c0-a53e-5ae53910afc9"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "product"
+            },
+            "role": {
+              "type": "string",
+              "description": "Role played by the related party",
+              "example": "role"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "RelatedParty"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/relatedparty.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "RelatedParty"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "RelatedParty"
+            }
+          },
+          "required": [
+            "@referredType",
+            "id"
+          ]
+        },
+        "RelatedPlaceRefOrValue": {
+          "type": "object",
+          "description": "Related Entity reference. A related place defines a place described by reference or by value linked to a specific entity. The polymorphic attributes @type, @schemaLocation & @referredType are related to the place entity and not the RelatedPlaceRefOrValue class itself",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the place",
+              "example": "480cb2ec-25d0-4488-a8ae-b454a5db318a"
+            },
+            "href": {
+              "type": "string",
+              "description": "Unique reference of the place",
+              "example": "http://localhost:9055/api/quoteManagement/v4/480cb2ec-25d0-4488-a8ae-b454a5db318a"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]",
+              "example": "Istanbul Store"
+            },
+            "role": {
+              "type": "string",
+              "example": "role"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "RelatedPlaceRefOrValue"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/relatedplacereforvalue.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "RelatedPlaceRefOrValue"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "RelatedPlaceRefOrValue"
+            }
+          },
+          "required": [
+            "role"
+          ]
+        },
+        "RelatedProductOrderItem": {
+          "type": "object",
+          "description": "RelatedProductOrderItem (ProductOrder item) .The product order item which triggered product creation/change/termination.",
+          "properties": {
+            "orderItemAction": {
+              "type": "string",
+              "description": "Action of the order item for this product",
+              "example": "RelatedProductOrderItem"
+            },
+            "orderItemId": {
+              "type": "string",
+              "description": "Identifier of the order item where the product was managed",
+              "example": "b4aa17fc-9de9-4dab-ac28-7ae0b794b10d"
+            },
+            "productOrderHref": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/b4aa17fc-9de9-4dab-ac28-7ae0b794b10d"
+            },
+            "productOrderId": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "b4aa17fc-9de9-4dab-ac28-7ae0b794b10d"
+            },
+            "role": {
+              "type": "string",
+              "description": "role of the product order item for this product",
+              "example": "role"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "RelatedProductOrderItem"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/relatedproductorderitem.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "RelatedProductOrderItem"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "RelatedProductOrderItem"
+            }
+          },
+          "required": [
+            "orderItemId",
+            "productOrderId"
+          ]
+        },
+        "ResourceRef": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "21521b8c-179e-4156-8f19-5c9ec79ee0f6"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/21521b8c-179e-4156-8f19-5c9ec79ee0f6"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the resource",
+              "example": "resource"
+            },
+            "value": {
+              "type": "string",
+              "description": "The resource value that can be used to identify a resource with a public key (e.g.: a tel nr, an msisdn)"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ResourceRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/resourceref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ResourceRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ResourceRef"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "ServiceRef": {
+          "type": "object",
+          "description": "Service reference, for when Service is used by other entities",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "e8596c09-b0ae-433f-bfcb-d189aa6674b5"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "http://localhost:9055/api/quoteManagement/v4/e8596c09-b0ae-433f-bfcb-d189aa6674b5"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "serviceName"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "ServiceRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/serviceref.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "ServiceRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "ServiceRef"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "TargetProductSchema": {
+          "type": "object",
+          "description": "The reference object to the schema and type of target product which is described by product specification",
+          "properties": {
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "TargetProductSchema"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "This field provides a link to the schema describing the target product",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/targetprouctschema.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "Class type of the target product",
+              "example": "TargetProductSchema"
+            }
+          },
+          "required": [
+            "@schemaLocation",
+            "@type"
+          ]
+        },
+        "TimePeriod": {
+          "type": "object",
+          "description": "A period of time, either as a deadline (endDateTime only) a startDateTime only, or both",
+          "properties": {
+            "endDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End of the time period, using IETC-RFC-3339 format"
+            },
+            "startDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start of the time period, using IETC-RFC-3339 format. If you define a start, you must also define an end"
+            }
+          }
+        },
+        "Quote": {
+          "type": "object",
+          "description": "Quote can be used to negotiate service and product acquisition or modification between a customer and a service provider. Quote contain list of quote items, a reference to customer (partyRole), a list of productOffering and attached prices and conditions.",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the entity"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of this entity"
+            },
+            "state": {
+              "type": "string",
+              "description": "State of the quote : described in the state-machine diagram",
+              "example": "accepted"
+            },
+            "lastUpdate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date and time of the last update"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period for which the entity is valid"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "Indicates the base type of this entity"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "This field provides a link to the schema describing extended entity REST resource"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "category": {
+              "type": "string",
+              "description": "Used to categorize the quote from a business perspective that can be useful for the CRM system (e.g. \"enterprise\", \"residential\", ...)",
+              "example": "enterprise"
+            },
+            "effectiveQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date when the quote has been completed"
+            },
+            "expectedFulfillmentStartDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "this is the date wished by the requester to have the requested quote item delivered"
+            },
+            "expectedQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "This is expected date - from quote supplier - to be able to send back  a response for this quote"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "ID given by the consumer and only understandable by him (to facilitate his searches afterwards)",
+              "example": "7848fcfd-ba5a-4759-ad47-7ef951c70696"
+            },
+            "instantSyncQuote": {
+              "type": "boolean",
+              "description": "An indicator which when the value is \"true\" means that requester expects to get quoting result immediately in the response. If the indicator is true then the response code of 200 indicates the operation is successful otherwise a task is created with a response 201. ",
+              "example": false
+            },
+            "quoteDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date and time when the quote was created"
+            },
+            "requestedQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "This is requested date - from quote requester - to get a complete response for this quote"
+            },
+            "agreement": {
+              "type": "array",
+              "description": "A reference to an agreement defining the context of the quote",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "authorization": {
+              "type": "array",
+              "description": "An authorization provided for the quote",
+              "items": {
+                "$ref": "#/components/schemas/Authorization"
+              }
+            },
+            "billingAccount": {
+              "type": "array",
+              "description": "A reference to a billing account to provide quote context information ",
+              "items": {
+                "$ref": "#/components/schemas/BillingAccountRef"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "description": "Information contact related to the quote requester",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "note": {
+              "type": "array",
+              "description": "Free form text associated with the quote",
+              "items": {
+                "$ref": "#/components/schemas/Note"
+              }
+            },
+            "productOfferingQualification": {
+              "type": "array",
+              "description": "A reference to a previously done product offering qualification",
+              "items": {
+                "$ref": "#/components/schemas/ProductOfferingQualificationRef"
+              }
+            },
+            "quoteItem": {
+              "type": "array",
+              "description": "An item of the quote - it is used to descirbe an operation on a product to be quoted",
+              "items": {
+                "$ref": "#/components/schemas/QuoteItem"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "description": "A reference to a party playing a role in this quote (customer, seller, requester, etc.)",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "priceAlteration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PriceAlteration"
+              }
+            },
+            "quoteTotalPrice": {
+              "type": "array",
+              "description": "Total amount of the quote, usually of money, that represents the actual price paid by the Customer for quote (considering only \"Active\" quote items)",
+              "items": {
+                "$ref": "#/components/schemas/QuotePrice"
+              }
+            },
+            "channel": {
+              "type": "array",
+              "description": "A list of channels Could be Online or Offline store",
+              "items": {
+                "$ref": "#/components/schemas/RelatedChannel"
+              }
+            },
+            "payment": {
+              "type": "array",
+              "description": "A list of payment references",
+              "items": {
+                "$ref": "#/components/schemas/PaymentRef"
+              }
+            },
+            "expectedFulfillmentCompletionDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "attachment": {
+              "type": "array",
+              "description": "A list of attachments",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "quoteCharacteristic": {
+              "type": "array",
+              "description": "Characteristic of the given quote",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            }
+          },
+          "required": [
+            "quoteItem"
+          ]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "referenceError": {
+              "type": "string"
+            },
+            "baseType": {
+              "type": "string"
+            },
+            "schemaLocation": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "EventSubscriptionInput": {
+          "type": "object",
+          "description": "Data containing the callback endpoint to deliver the information",
+          "properties": {
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback"
+          ]
+        },
+        "EventSubscription": {
+          "type": "object",
+          "description": "Sets the communication endpoint address the service instance must use to deliver notification information",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Id of the listener",
+              "minLength": 1
+            },
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback",
+            "id"
+          ]
+        },
+        "QuoteUpdate": {
+          "type": "object",
+          "description": "The Quote to be updated",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Used to categorize the quote from a business perspective that can be useful for the CRM system (e.g. \"enterprise\", \"residential\", ...)",
+              "example": "enterprise"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the quote",
+              "example": "Quote description"
+            },
+            "expectedFulfillmentStartDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "this is the date wished by the requester to have the requested quote item delivered"
+            },
+            "externalId": {
+              "type": "string",
+              "description": "ID given by the consumer and only understandable by him (to facilitate his searches afterwards)",
+              "example": "7848fcfd-ba5a-4759-ad47-7ef951c70696"
+            },
+            "instantSyncQuote": {
+              "type": "boolean",
+              "description": "An indicator which when the value is \"true\" means that requester expects to get quoting result immediately in the response. If the indicator is true then the response code of 200 indicates the operation is successful otherwise a task is created with a response 201. "
+            },
+            "requestedQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "This is requested date - from quote requester - to get a complete response for this quote"
+            },
+            "expectedQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "This is expected date - from quote supplier - to be able to send back  a response for this quote"
+            },
+            "agreement": {
+              "type": "array",
+              "description": "A reference to an agreement defining the context of the quote",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "billingAccount": {
+              "type": "array",
+              "description": "A reference to a billing account to provide quote context information ",
+              "items": {
+                "$ref": "#/components/schemas/BillingAccountRef"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "description": "Information contact related to the quote requester",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "note": {
+              "type": "array",
+              "description": "Free form text associated with the quote",
+              "items": {
+                "$ref": "#/components/schemas/Note"
+              }
+            },
+            "productOfferingQualification": {
+              "type": "array",
+              "description": "A reference to a previously done product offering qualification",
+              "items": {
+                "$ref": "#/components/schemas/ProductOfferingQualificationRef"
+              }
+            },
+            "quoteItem": {
+              "type": "array",
+              "description": "An item of the quote - it is used to describe an operation on a product to be quoted",
+              "items": {
+                "$ref": "#/components/schemas/QuoteItem"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "description": "A reference to a party playing a role in this quote (customer, seller, requester, etc.)",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "QuoteCreate"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "http://localhost:9055/api/quoteManagement/v4/static/quotecreate.json"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "QuoteCreate"
+            },
+            "channel": {
+              "type": "array",
+              "description": "A list of channels Could be Online or Offline store",
+              "items": {
+                "$ref": "#/components/schemas/RelatedChannel"
+              }
+            },
+            "payment": {
+              "type": "array",
+              "description": "A list of payment references",
+              "items": {
+                "$ref": "#/components/schemas/PaymentRef"
+              }
+            },
+            "expectedFulfillmentCompletionDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "attachment": {
+              "type": "array",
+              "description": "A list of attachments",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "priceAlteration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PriceAlteration"
+              }
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "Quote validity period"
+            },
+            "quoteCharacteristic": {
+              "type": "array",
+              "description": "Characteristic of the given quote",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "effectiveQuoteCompletionDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date when the quote has been completed"
+            },
+            "state": {
+              "type": "string",
+              "description": "State of the quote: described in the state-machine diagram. ",
+              "enum": [
+                "inProgress",
+                "pending",
+                "cancelled",
+                "approved",
+                "accepted",
+                "rejected"
+              ],
+              "example": "accepted"
+            },
+            "authorization": {
+              "type": "array",
+              "description": "An authorization provided for the quote",
+              "items": {
+                "$ref": "#/components/schemas/Authorization"
+              }
+            }
+          }
+        },
+        "JsonPatch": {
+          "description": "The Quote to be updated"
+        }
+      },
+      "securitySchemes": {
+        "BearerAuthentication": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }

@@ -1,0 +1,2447 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "OpenAPI definition",
+      "version": "v0"
+    },
+    "servers": [
+      {
+        "url": "https://dpr-api.pi.dev-gcu.com/api/partyRoleManagement/v4",
+        "description": "Generated server url"
+      }
+    ],
+    "paths": {
+      "/roleType": {
+        "get": {
+          "tags": [
+            "roleType"
+          ],
+          "summary": "List or find RoleType objects",
+          "description": "This operation list or find RoleType entities",
+          "operationId": "listRoleType",
+          "parameters": [
+            {
+              "name": "Comma-separated properties to be provided in response",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "Requested index for start of resources to be provided in response",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "Requested number of resources to be provided in response",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "Sort parameter",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RoleType"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "roleType"
+          ],
+          "summary": "Creates a RoleType",
+          "description": "This operation creates a RoleType entity.",
+          "operationId": "createRoleType",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleTypeCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RoleType"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/partyRole": {
+        "get": {
+          "tags": [
+            "partyRole"
+          ],
+          "summary": "List or find PartyRole objects",
+          "description": "This operation list or find PartyRole entities",
+          "operationId": "listPartyRole",
+          "parameters": [
+            {
+              "name": "Comma-separated properties to be provided in response",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "Requested index for start of resources to be provided in response",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "Requested number of resources to be provided in response",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "Sort parameter",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PartyRole"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "partyRole"
+          ],
+          "summary": "Creates a PartyRole",
+          "description": "This operation creates a PartyRole entity.",
+          "operationId": "createPartyRole",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyRoleCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PartyRole"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub": {
+        "post": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Register a listener",
+          "description": "Sets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "registerListener",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventSubscriptionInput"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Subscribed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EventSubscription"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/roleType/{id}": {
+        "get": {
+          "tags": [
+            "roleType"
+          ],
+          "summary": "Retrieves a RoleType by ID",
+          "description": "This operation retrieves a RoleType entity. Attribute selection is enabled for all first level attributes.",
+          "operationId": "retrieveRoleType",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RoleType"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "roleType"
+          ],
+          "summary": "Deletes a RoleType",
+          "description": "This operation deletes a RoleType entity.",
+          "operationId": "deleteRoleType",
+          "parameters": [],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "roleType"
+          ],
+          "summary": "Partially updates a RoleType",
+          "description": "This operation partially updates a RoleType entity.",
+          "operationId": "patchRoleType",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleTypeUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RoleType"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/partyRole/{id}": {
+        "get": {
+          "tags": [
+            "partyRole"
+          ],
+          "summary": "Retrieves a PartyRole by ID",
+          "description": "This operation retrieves a PartyRole entity. Attribute selection is enabled for all first level attributes.",
+          "operationId": "retrievePartyRole",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PartyRole"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "partyRole"
+          ],
+          "summary": "Deletes a PartyRole",
+          "description": "This operation deletes a PartyRole entity.",
+          "operationId": "deletePartyRole",
+          "parameters": [],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "partyRole"
+          ],
+          "summary": "Partially updates a PartyRole",
+          "description": "This operation partially updates a PartyRole entity.",
+          "operationId": "patchPartyRole",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyRoleUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PartyRole"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub/{id}": {
+        "delete": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Unregister a listener",
+          "description": "Resets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "unregisterListener",
+          "parameters": [],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AclRelatedParty": {
+          "type": "object",
+          "description": "Related Entity reference. A related party defines party or party role linked to a specific entity.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "role": {
+              "type": "string",
+              "description": "Role played by the related party"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "@referredType"
+          ]
+        },
+        "AgreementRef": {
+          "type": "object",
+          "description": "Agreement reference. An agreement represents a contract or arrangement, either written or verbal and sometimes enforceable by law, such as a service level agreement or a customer price agreement. An agreement involves a number of other business entities, such as products, services, and resources and/or their specifications.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the agreement"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          }
+        },
+        "RoleTypeCreate": {
+          "type": "object",
+          "description": "A RoleType represents the type of a PartyRole, defined in the context of a given type of partnership, such as Buyer, Seller.",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "An explanatory text documenting the role type"
+            },
+            "requiresBilling": {
+              "type": "boolean",
+              "description": "Indicates whether billing operations will be associated to parties playing the role"
+            },
+            "requiresSettlement": {
+              "type": "boolean",
+              "description": "Indicates whether settlement operations will be associated to parties playing the role"
+            },
+            "agreement": {
+              "type": "array",
+              "description": "Agreement reference. An agreement represents a contract or arrangement, either written or verbal and sometimes enforceable by law, such as a service level agreement or a customer price agreement. An agreement involves a number of other business entities, such as products, services, and resources and/or their specifications.",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the role type"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the role type."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "RoleType": {
+          "type": "object",
+          "description": "A RoleType represents the type of a PartyRole, defined in the context of a given type of partnership, such as Buyer, Seller.",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the role type"
+            },
+            "href": {
+              "type": "string",
+              "description": "Url used to reference the role type."
+            },
+            "description": {
+              "type": "string",
+              "description": "An explanatory text documenting the role type"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the role type."
+            },
+            "requiresBilling": {
+              "type": "boolean",
+              "description": "Indicates whether billing operations will be associated to parties playing the role"
+            },
+            "requiresSettlement": {
+              "type": "boolean",
+              "description": "Indicates whether settlement operations will be associated to parties playing the role"
+            },
+            "agreement": {
+              "type": "array",
+              "description": "Agreement reference. An agreement represents a contract or arrangement, either written or verbal and sometimes enforceable by law, such as a service level agreement or a customer price agreement. An agreement involves a number of other business entities, such as products, services, and resources and/or their specifications.",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "referenceError": {
+              "type": "string"
+            },
+            "baseType": {
+              "type": "string"
+            },
+            "schemaLocation": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "AccountRef": {
+          "type": "object",
+          "description": "Account reference. A account may be a party account or a financial account.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "description": {
+              "type": "string",
+              "description": "Detailed description of the account"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the account"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "AttachmentRefOrValue": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a attachment."
+            },
+            "href": {
+              "type": "string",
+              "description": "URI for this Attachment"
+            },
+            "attachmentType": {
+              "type": "string",
+              "description": "Attachment type such as video, picture"
+            },
+            "content": {
+              "type": "string",
+              "description": "The actual contents of the attachment object, if embedded, encoded as base64"
+            },
+            "description": {
+              "type": "string",
+              "description": "A narrative text describing the content of the attachment"
+            },
+            "documentType": {
+              "type": "string",
+              "description": "The type of the document"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "Attachment mime type such as extension file for video, picture and document"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the attachment"
+            },
+            "url": {
+              "type": "string",
+              "description": "Uniform Resource Locator, is a web page address (a subset of URI)"
+            },
+            "size": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          }
+        },
+        "Characteristic": {
+          "type": "object",
+          "description": "Describes a given characteristic of an object or entity through a name/value pair.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the characteristic"
+            },
+            "valueType": {
+              "type": "string",
+              "description": "Data type of the value of the characteristic"
+            },
+            "value": {
+              "type": "string",
+              "description": "The value of the characteristic"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        },
+        "ContactMedium": {
+          "type": "object",
+          "description": "Indicates the contact medium that could be used to contact the party.",
+          "properties": {
+            "mediumType": {
+              "type": "string",
+              "description": "Type of the contact medium, such as: email address, telephone number, postal address"
+            },
+            "preferred": {
+              "type": "boolean",
+              "description": "If true, indicates that is the preferred contact medium"
+            },
+            "characteristic": {
+              "$ref": "#/components/schemas/MediumCharacteristic",
+              "description": "Any additional characteristic(s) of this contact medium"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The time period that the contact medium is valid for"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "characteristic"
+          ]
+        },
+        "CreditProfile": {
+          "type": "object",
+          "description": "Credit profile for the party (containing credit scoring, ...). By default only the current credit profile  is retrieved. It can be used as a list to give the party credit profiles history, the first one in the list will be the current one.",
+          "properties": {
+            "creditProfileDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The date the profile was established"
+            },
+            "creditRiskRating": {
+              "type": "integer",
+              "format": "int32",
+              "description": "This is an integer whose value is used to rate the risk"
+            },
+            "creditScore": {
+              "type": "integer",
+              "format": "int32",
+              "description": "A measure of a person or organizations creditworthiness calculated on the basis of a combination of factors such as their income and credit history"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period for which the profile is valid"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "creditProfileDate",
+            "validFor"
+          ]
+        },
+        "ExternalReference": {
+          "type": "object",
+          "description": "External reference of the individual or reference in other system",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of an external reference."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "externalReferenceType": {
+              "type": "string",
+              "description": "Type of the external reference"
+            },
+            "name": {
+              "type": "string",
+              "description": "External reference name"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "externalReferenceType",
+            "id",
+            "name"
+          ]
+        },
+        "MediumCharacteristic": {
+          "type": "object",
+          "description": "Describes the contact medium characteristics that could be used to contact a party (an individual or an organization)",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "The city"
+            },
+            "contactType": {
+              "type": "string",
+              "description": "The type of contact, for example: phone number such as mobile, fixed home, fixed office. postal address such as shipping instalation…"
+            },
+            "country": {
+              "type": "string",
+              "description": "The country"
+            },
+            "emailAddress": {
+              "type": "string",
+              "description": "Full email address in standard format"
+            },
+            "faxNumber": {
+              "type": "string",
+              "description": "The fax number of the contact"
+            },
+            "phoneNumber": {
+              "type": "string",
+              "description": "The primary phone number of the contact"
+            },
+            "postCode": {
+              "type": "string",
+              "description": "Postcode"
+            },
+            "socialNetworkId": {
+              "type": "string",
+              "description": "Identifier as a member of a social network"
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "State or province"
+            },
+            "street1": {
+              "type": "string",
+              "description": "Describes the street"
+            },
+            "street2": {
+              "type": "string",
+              "description": "Complementary street description"
+            },
+            "town": {
+              "type": "string",
+              "description": "The town. A town is a compactly settled area usually larger than a village but smaller than a city (Turkey: Ilce) e.g. Pendik"
+            },
+            "locality": {
+              "type": "string",
+              "description": "Neighborhood, village or other locality. e.g. Gencosman Mah."
+            },
+            "buildingNumber": {
+              "type": "string",
+              "description": "The street number of the building. e.g. 25"
+            },
+            "unitNumber": {
+              "type": "string",
+              "description": "Number of the interior unit within a building, such as a flat, apartment or office number. e.g. Daire:8"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "place": {
+              "type": "array",
+              "description": "Related Entity reference. A related place defines a place described by reference or by value linked to a specific entity.",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRef"
+              }
+            }
+          }
+        },
+        "PartyRef": {
+          "type": "object",
+          "description": "Party reference.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "name": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string"
+            },
+            "@schemaLocation": {
+              "type": "string"
+            },
+            "@type": {
+              "type": "string"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "@referredType"
+          ]
+        },
+        "PartyRoleCreate": {
+          "type": "object",
+          "description": "The part played by a party in a given context. Skipped properties: id,href",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Used to track the lifecycle status of the party role."
+            },
+            "statusReason": {
+              "type": "string",
+              "description": "A string providing an explanation on the value of the status lifecycle. For instance if the status is Rejected, statusReason will provide the reason for rejection."
+            },
+            "account": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AccountRef"
+              }
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "characteristic": {
+              "type": "array",
+              "description": "Describes the characteristic of a party role.",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditProfile": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CreditProfile"
+              }
+            },
+            "paymentMethod": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PaymentMethodRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The time period that the PartyRole is valid for."
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the party role"
+            },
+            "name": {
+              "type": "string",
+              "description": "A word, term, or phrase by which the PartyRole is known and distinguished from other PartyRoles."
+            },
+            "roleType": {
+              "$ref": "#/components/schemas/RoleTypeRef",
+              "description": "Role type reference. A RoleType represents the type of a PartyRole, defined in the context of a given type of partnership, such as Buyer, Seller."
+            },
+            "engagedParty": {
+              "$ref": "#/components/schemas/PartyRef",
+              "description": "Party reference. A party ref defines the real world party (organization or individual) linked to a specific entity (such as a customer or a party role entity)."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          },
+          "required": [
+            "engagedParty",
+            "name",
+            "roleType"
+          ]
+        },
+        "PaymentMethodRef": {
+          "type": "object",
+          "description": "PaymentMethod reference. A payment method defines a specific mean of payment (e.g direct debit).",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the payment mean"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          }
+        },
+        "Quantity": {
+          "type": "object",
+          "description": "An amount in a given unit",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "float",
+              "description": "Numeric value in a given unit"
+            },
+            "units": {
+              "type": "string",
+              "description": "Unit"
+            }
+          }
+        },
+        "RelatedParty": {
+          "type": "object",
+          "description": "Related Entity reference. A related party defines party or party role linked to a specific entity.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "role": {
+              "type": "string",
+              "description": "Role played by the related party"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "@referredType"
+          ]
+        },
+        "RelatedPlaceRef": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "role": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "role"
+          ]
+        },
+        "RoleTypeRef": {
+          "type": "object",
+          "description": "Role type reference. A RoleType represents the type of a PartyRole, defined in the context of a given type of partnership, such as Buyer, Seller.",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the resource"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the role type"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          }
+        },
+        "TimePeriod": {
+          "type": "object",
+          "description": "A period of time, either as a deadline (endDateTime only) a startDateTime only, or both",
+          "properties": {
+            "endDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End of the time period, using IETC-RFC-3339 format"
+            },
+            "startDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start of the time period, using IETC-RFC-3339 format. If you define a start, you must also define an end"
+            }
+          }
+        },
+        "PartyRole": {
+          "type": "object",
+          "description": "The part played by a party in a given context.",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the party role"
+            },
+            "href": {
+              "type": "string",
+              "description": "Url used to reference the party role."
+            },
+            "name": {
+              "type": "string",
+              "description": "A word, term, or phrase by which the PartyRole is known and distinguished from other PartyRoles."
+            },
+            "status": {
+              "type": "string",
+              "description": "Used to track the lifecycle status of the party role."
+            },
+            "statusReason": {
+              "type": "string",
+              "description": "A string providing an explanation on the value of the status lifecycle. For instance if the status is Rejected, statusReason will provide the reason for rejection."
+            },
+            "roleType": {
+              "$ref": "#/components/schemas/RoleTypeRef",
+              "description": "Role type reference. A RoleType represents the type of a PartyRole, defined in the context of a given type of partnership, such as Buyer, Seller."
+            },
+            "account": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AccountRef"
+              }
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "characteristic": {
+              "type": "array",
+              "description": "Describes the characteristic of a party role.",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditProfile": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CreditProfile"
+              }
+            },
+            "engagedParty": {
+              "$ref": "#/components/schemas/PartyRef"
+            },
+            "paymentMethod": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PaymentMethodRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The time period that the PartyRole is valid for."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "EventSubscriptionInput": {
+          "type": "object",
+          "description": "Sets the communication endpoint address the service instance must use to deliver notification information",
+          "properties": {
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback"
+          ]
+        },
+        "EventSubscription": {
+          "type": "object",
+          "description": "Sets the communication endpoint address the service instance must use to deliver notification information",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Id of the listener",
+              "minLength": 1
+            },
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback",
+            "id"
+          ]
+        },
+        "RoleTypeUpdate": {
+          "type": "object",
+          "description": "A RoleType represents the type of a PartyRole, defined in the context of a given type of partnership, such as Buyer, Seller.",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "An explanatory text documenting the role type"
+            },
+            "requiresBilling": {
+              "type": "boolean",
+              "description": "Indicates whether billing operations will be associated to parties playing the role"
+            },
+            "requiresSettlement": {
+              "type": "boolean",
+              "description": "Indicates whether settlement operations will be associated to parties playing the role"
+            },
+            "agreement": {
+              "type": "array",
+              "description": "Agreement reference. An agreement represents a contract or arrangement, either written or verbal and sometimes enforceable by law, such as a service level agreement or a customer price agreement. An agreement involves a number of other business entities, such as products, services, and resources and/or their specifications.",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the role type."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          }
+        },
+        "JsonPatch": {
+  
+        },
+        "PartyRoleUpdate": {
+          "type": "object",
+          "description": "The part played by a party in a given context. Skipped properties: id,href",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Used to track the lifecycle status of the party role."
+            },
+            "statusReason": {
+              "type": "string",
+              "description": "A string providing an explanation on the value of the status lifecycle. For instance if the status is Rejected, statusReason will provide the reason for rejection."
+            },
+            "account": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AccountRef"
+              }
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementRef"
+              }
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "characteristic": {
+              "type": "array",
+              "description": "Describes the characteristic of a party role.",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "contactMedium": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactMedium"
+              }
+            },
+            "creditProfile": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CreditProfile"
+              }
+            },
+            "paymentMethod": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PaymentMethodRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The time period that the PartyRole is valid for."
+            },
+            "name": {
+              "type": "string",
+              "description": "A word, term, or phrase by which the PartyRole is known and distinguished from other PartyRoles."
+            },
+            "roleType": {
+              "$ref": "#/components/schemas/RoleTypeRef",
+              "description": "Role type reference. A RoleType represents the type of a PartyRole, defined in the context of a given type of partnership, such as Buyer, Seller."
+            },
+            "engagedParty": {
+              "$ref": "#/components/schemas/PartyRef"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AclRelatedParty"
+              }
+            }
+          }
+        }
+      }
+    }
+  }

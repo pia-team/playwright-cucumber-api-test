@@ -17,6 +17,8 @@ playwright/.cache/
 
 # Environment and backups
 .env
+test-data/
+config/api-auth.runtime.json
 .backup/
 .DS_Store
 Thumbs.db

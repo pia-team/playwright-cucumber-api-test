@@ -1,7 +1,5 @@
 import { Given, Then, BeforeStep, AfterStep } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import { ApiContext } from '../../../core/api/apiContext';
-import { ApiClient } from '../../../core/api/apiClient';
 import { getAccessToken } from '../auth/auth.step';
 import { logger } from '../../../utils/logger';
 import { ReportHelper } from '../../../utils/reportHelper';
@@ -61,4 +59,71 @@ Then('the response status should be {int}', async (status: number) => {
   
   expect(response.status()).toBe(status);
   logger.info(`Response status verified: ${status}`);
+});
+
+/** GET list/retrieve: GCU APIs may return 200 or 206 depending on resource. */
+Then('the response status should be 200 or 206', async () => {
+  logger.logStep('Then', 'the response status should be 200 or 206');
+
+  const response = (global as any).response || (global as any).currentResponse;
+
+  if (!response) {
+    throw new Error('Response not found. Make sure a request was made in previous steps.');
+  }
+
+  const status = response.status();
+  expect([200, 206]).toContain(status);
+  logger.info(`Response status verified: ${status} (accepted 200 or 206)`);
+});
+
+Then('the response should contain an error message', async () => {
+  logger.logStep('Then', 'the response should contain an error message');
+
+  const response = (global as any).response || (global as any).currentResponse;
+  if (!response) {
+    throw new Error('Response not found. Make sure a request was made in previous steps.');
+  }
+
+  const body = await response.json();
+  expect(body.reason || body.message || body.code || body.error).toBeTruthy();
+  logger.info('Error message verified in response');
+});
+
+Then('the response body should contain an error message', async () => {
+  logger.logStep('Then', 'the response body should contain an error message');
+
+  const response = (global as any).response || (global as any).currentResponse;
+  if (!response) {
+    throw new Error('Response not found. Make sure a request was made in previous steps.');
+  }
+
+  const body = await response.json();
+  expect(body.reason || body.message || body.code || body.error).toBeTruthy();
+  logger.info('Error message verified in response body');
+});
+
+Then('the response body should be a JSON array', async () => {
+  logger.logStep('Then', 'the response body should be a JSON array');
+
+  const response = (global as any).response || (global as any).currentResponse;
+  if (!response) {
+    throw new Error('Response not found. Make sure a request was made in previous steps.');
+  }
+
+  const json = await response.json();
+  expect(Array.isArray(json)).toBe(true);
+  logger.info('Response body verified as JSON array');
+});
+
+Then('the response body should be an array', async () => {
+  logger.logStep('Then', 'the response body should be an array');
+
+  const response = (global as any).response || (global as any).currentResponse;
+  if (!response) {
+    throw new Error('Response not found. Make sure a request was made in previous steps.');
+  }
+
+  const json = await response.json();
+  expect(Array.isArray(json)).toBe(true);
+  logger.info('Response body verified as array');
 });

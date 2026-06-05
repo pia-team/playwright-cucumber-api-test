@@ -1,0 +1,2313 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Orbitant Geographicc Address Management API",
+      "description": "## TMF API Reference :  TMF673 -    Geographic Address Management API   Version 4.0.0.+\n\"The Geographic Address Management API provides a standardized \" +\nclient interface to an Address management system. It allows looking for worldwide addresses.\nIt can also be used to validate geographic address data, to be sure that it corresponds to a real address.\n### Resources - GeographicAddress - GeographicSubAddress - GeographicAddressValidation - Hub\n### Operations Geographic Address Management API performs the following operations :\n- Create a geographic address\n- List a collection of geographic addresses\n- Retrieve, update and delete a geographic address\n- Retrieve a geographic sub-address\n- Create a geographic address validation\n- Retrieve, update and delete an existing  geographic address validation\n- Notify events on these resources",
+      "contact": {
+        "name": "PiA(people in action)",
+        "url": "http://www.pia-team.com/",
+        "email": "info@pia-team.com"
+      },
+      "license": {
+        "name": "PiA License",
+        "url": "http://www.pia-team.com"
+      },
+      "version": "Version null (prepared with Geographicc Address Management API REST Specification TMF638)"
+    },
+    "servers": [
+      {
+        "url": "https://dgeo-api.pi.dev-gcu.com/api/geographicAddressManagement/v4",
+        "description": "Generated server url"
+      }
+    ],
+    "paths": {
+      "/hub": {
+        "post": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Register a listener",
+          "operationId": "registerListener",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventSubscriptionInput"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Subscribed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EventSubscription"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/geographicAddress": {
+        "get": {
+          "tags": [
+            "geographicAddress"
+          ],
+          "summary": "List GeographicAddress objects",
+          "operationId": "listGeographicAddress",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Comma-separated properties to sort fields in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddress"
+                  }
+                }
+              }
+            },
+            "206": {
+              "description": "Partial Content",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddress"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "geographicAddress"
+          ],
+          "summary": "Creates a GeographicAddress",
+          "operationId": "createGeographicAddress",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeographicAddressCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddress"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/geographicAddressValidation": {
+        "get": {
+          "tags": [
+            "geographicAddressValidation"
+          ],
+          "summary": "List GeographicAddressValidation objects",
+          "operationId": "listGeographicAddressValidation",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Comma-separated properties to sort fields in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddressValidation"
+                  }
+                }
+              }
+            },
+            "206": {
+              "description": "Partial Content",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddressValidation"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "geographicAddressValidation"
+          ],
+          "summary": "Creates a GeographicAddressValidation",
+          "operationId": "createGeographicAddressValidation",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeographicAddressValidationCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddressValidation"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/geographicAddressValidation/{id}": {
+        "get": {
+          "tags": [
+            "geographicAddressValidation"
+          ],
+          "summary": "Retrieves a GeographicAddressValidation by ID",
+          "operationId": "retrieveGeographicAddressValidation",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the GeographicAddressValidation",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddressValidation"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "geographicAddressValidation"
+          ],
+          "summary": "Deletes a GeographicAddressValidation",
+          "operationId": "deleteGeographicAddressValidation",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the GeographicAddressValidation",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "geographicAddressValidation"
+          ],
+          "summary": "Partially updates a GeographicAddressValidation",
+          "operationId": "patchGeographicAddressValidation",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the GeographicAddressValidation",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeographicAddressValidationUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddressValidation"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/geographicAddress/{id}": {
+        "get": {
+          "tags": [
+            "geographicAddress"
+          ],
+          "summary": "Retrieves a GeographicAddress by ID",
+          "operationId": "retrieveGeographicAddress",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the GeographicAddress",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddress"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "geographicAddress"
+          ],
+          "summary": "Deletes a GeographicAddress",
+          "operationId": "deleteGeographicAddress",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the GeographicAddress",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "geographicAddress"
+          ],
+          "summary": "Partially updates a GeographicAddress",
+          "operationId": "patchGeographicAddress",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the GeographicAddress",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeographicAddressUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicAddress"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/geographicAddress/{geographicAddressId}/geographicSubAddress": {
+        "get": {
+          "tags": [
+            "geographicSubAddress"
+          ],
+          "summary": "List GeographicSubAddress objects",
+          "operationId": "listGeographicSubAddress",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Comma-separated properties to sort fields in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "geographicAddressId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "List",
+                    "$ref": "#/components/schemas/GeographicSubAddress"
+                  }
+                }
+              }
+            },
+            "206": {
+              "description": "Partial Content",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "List",
+                    "$ref": "#/components/schemas/GeographicSubAddress"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/geographicAddress/{geographicAddressId}/geographicSubAddress/{id}": {
+        "get": {
+          "tags": [
+            "geographicSubAddress"
+          ],
+          "summary": "Retrieves a GeographicSubAddress by ID",
+          "operationId": "retrieveGeographicSubAddress",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the GeographicSubAddress",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "geographicAddressId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GeographicSubAddress"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub/{id}": {
+        "delete": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Unregister a listener",
+          "operationId": "unregisterListener",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the registered listener",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "EventSubscriptionInput": {
+          "type": "object",
+          "description": "Data containing the callback endpoint to deliver the information",
+          "properties": {
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback"
+          ]
+        },
+        "EventSubscription": {
+          "type": "object",
+          "description": "Sets the communication endpoint address the service instance must use to deliver notification information",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Id of the listener",
+              "minLength": 1
+            },
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback",
+            "id"
+          ]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "referenceError": {
+              "type": "string"
+            },
+            "baseType": {
+              "type": "string"
+            },
+            "schemaLocation": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "ExternalReference": {
+          "type": "object",
+          "description": "External reference of the individual or reference in other system",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of an external reference."
+            },
+            "href": {
+              "type": "string",
+              "description": "Hyperlink reference."
+            },
+            "externalReferenceType": {
+              "type": "string",
+              "description": "Type of the external reference"
+            },
+            "name": {
+              "type": "string",
+              "description": "External reference name"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "externalReferenceType",
+            "id",
+            "name"
+          ]
+        },
+        "GeographicAddressCreate": {
+          "type": "object",
+          "description": "The GeographicAddress to be created",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City that the address is in"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country that the address is in"
+            },
+            "locality": {
+              "type": "string",
+              "description": "An area of defined or undefined boundaries within a local authority or other legislatively defined area, usually rural or semi rural in nature. [ANZLIC-STREET], or a suburb, a bounded locality within a city, town or shire principally of urban character [ANZLICSTREET]"
+            },
+            "postcode": {
+              "type": "string",
+              "description": "descriptor for a postal delivery area, used to speed and simplify the delivery of mail (also know as zipcode)"
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "the State or Province that the address is in"
+            },
+            "streetName": {
+              "type": "string",
+              "description": "Name of the street or other street type"
+            },
+            "streetNr": {
+              "type": "string",
+              "description": "Number identifying a specific property on a public street. It may be combined with streetNrLast for ranged addresses"
+            },
+            "streetNrLast": {
+              "type": "string",
+              "description": "Last number in a range of street numbers allocated to a property"
+            },
+            "streetNrLastSuffix": {
+              "type": "string",
+              "description": "Last street number suffix for a ranged address"
+            },
+            "streetNrSuffix": {
+              "type": "string",
+              "description": "the first street number suffix"
+            },
+            "streetSuffix": {
+              "type": "string",
+              "description": "A modifier denoting a relative direction"
+            },
+            "streetType": {
+              "type": "string",
+              "description": "alley, avenue, boulevard, brae, crescent, drive, highway, lane, terrace, parade, place, tarn, way, wharf "
+            },
+            "geographicLocation": {
+              "$ref": "#/components/schemas/GeographicLocationRefOrValue"
+            },
+            "geographicSubAddress": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GeographicSubAddress"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "@type": {
+              "type": "string",
+              "description": "Type of payment method (e.g.: bank card, cash, voucher, etc). The details field type depends on the value assigned to this one."
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the place"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "href": {
+              "type": "string",
+              "description": "Unique reference of the place"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            }
+          },
+          "required": [
+            "@type",
+            "name"
+          ]
+        },
+        "GeographicLocationRefOrValue": {
+          "type": "object",
+          "description": "A GeographicLocation is a pure-virtual super-class to the GeoJSON-aligned geometries of Point (addresses and locations), MultiPoint, LineString (streets, highways and boundaries), MultiLineString and Polygon (countries, provinces, tracts of land). Use the @type attribute to specify which of these is being specified by the geometry attribute.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the place"
+            },
+            "href": {
+              "type": "string",
+              "description": "Unique reference of the place"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "bbox": {
+              "type": "array",
+              "description": "A bounding box array that contains the geometry. The axes order follows the axes order of the geometry",
+              "items": {
+                "type": "number"
+              }
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "enum": [
+                "GeoJsonPoint",
+                "GeoJsonMultiPoint",
+                "GeoJsonLineString",
+                "GeoJsonMultiLineString",
+                "GeoJsonPolygon"
+              ]
+            }
+          },
+          "required": [
+            "@type"
+          ]
+        },
+        "GeographicSubAddress": {
+          "type": "object",
+          "description": "Representation of a GeographicSubAddress  It is used for addressing within a property in an urban area (country properties are often defined differently). It may refer to a building, a building cluster, or a floor of a multistory building.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique Identifier of the subAddress"
+            },
+            "href": {
+              "type": "string",
+              "description": "Link to the subAddress"
+            },
+            "buildingName": {
+              "type": "string",
+              "description": "allows for buildings that have well-known names"
+            },
+            "levelNumber": {
+              "type": "string",
+              "description": "used where a level type may be repeated e.g. BASEMENT 1, BASEMENT 2"
+            },
+            "levelType": {
+              "type": "string",
+              "description": "describes level types within a building"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the subAddress to identify it with a meaningful identification"
+            },
+            "privateStreetName": {
+              "type": "string",
+              "description": "private streets internal to a property (e.g. a university) may have internal names that are not recorded by the land title office."
+            },
+            "privateStreetNumber": {
+              "type": "string",
+              "description": "private streets numbers internal to a private street"
+            },
+            "subAddressType": {
+              "type": "string",
+              "description": "Type of subAddress : it can be a subunit or a private street"
+            },
+            "subUnitNumber": {
+              "type": "string",
+              "description": "the discriminator used for the subunit often just a simple number e.g. FLAT 5, may also be a range"
+            },
+            "subUnitType": {
+              "type": "string",
+              "description": "the type of subunit e.g.BERTH, FLAT, PIER, SUITE, SHOP, TOWER, UNIT, WHARF"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "GeographicAddress": {
+          "type": "object",
+          "description": "Structured textual way of describing how to find a Property in an urban area (country properties are often defined differently). Note : Address corresponds to SID UrbanPropertyAddress",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the place"
+            },
+            "href": {
+              "type": "string",
+              "description": "Unique reference of the place"
+            },
+            "city": {
+              "type": "string",
+              "description": "City that the address is in"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country that the address is in"
+            },
+            "locality": {
+              "type": "string",
+              "description": "An area of defined or undefined boundaries within a local authority or other legislatively defined area, usually rural or semi rural in nature. [ANZLIC-STREET], or a suburb, a bounded locality within a city, town or shire principally of urban character [ANZLICSTREET]"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "postcode": {
+              "type": "string",
+              "description": "descriptor for a postal delivery area, used to speed and simplify the delivery of mail (also know as zipcode)"
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "the State or Province that the address is in"
+            },
+            "streetName": {
+              "type": "string",
+              "description": "Name of the street or other street type"
+            },
+            "streetNr": {
+              "type": "string",
+              "description": "Number identifying a specific property on a public street. It may be combined with streetNrLast for ranged addresses"
+            },
+            "streetNrLast": {
+              "type": "string",
+              "description": "Last number in a range of street numbers allocated to a property"
+            },
+            "streetNrLastSuffix": {
+              "type": "string",
+              "description": "Last street number suffix for a ranged address"
+            },
+            "streetNrSuffix": {
+              "type": "string",
+              "description": "the first street number suffix"
+            },
+            "streetSuffix": {
+              "type": "string",
+              "description": "A modifier denoting a relative direction"
+            },
+            "streetType": {
+              "type": "string",
+              "description": "alley, avenue, boulevard, brae, crescent, drive, highway, lane, terrace, parade, place, tarn, way, wharf "
+            },
+            "geographicLocation": {
+              "$ref": "#/components/schemas/GeographicLocationRefOrValue"
+            },
+            "geographicSubAddress": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GeographicSubAddress"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "state": {
+              "type": "string",
+              "description": "Geographic address update request state",
+              "enum": [
+                "accepted",
+                "terminatedWithError",
+                "inProgress",
+                "done"
+              ]
+            }
+          }
+        },
+        "GeographicAddressValidationCreate": {
+          "type": "object",
+          "description": "The GeographicAddressValidation to be created",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the Address Validation"
+            },
+            "provideAlternative": {
+              "type": "boolean",
+              "description": "Indicator provided by the requester to specify if alternate addresses must be provided in case of partial or fail result."
+            },
+            "submittedGeographicAddress": {
+              "$ref": "#/components/schemas/GeographicAddress",
+              "description": "the address as submitted to validation"
+            }
+          },
+          "required": [
+            "provideAlternative",
+            "submittedGeographicAddress"
+          ]
+        },
+        "GeographicAddressValidation": {
+          "type": "object",
+          "description": "This resource is used to manage address validation request and response",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the Address Validation"
+            },
+            "href": {
+              "type": "string",
+              "description": "An URI used to access to the address validation resource"
+            },
+            "provideAlternative": {
+              "type": "boolean",
+              "description": "Indicator provided by the requester to specify if alternate addresses must be provided in case of partial or fail result."
+            },
+            "validationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date when the address validation is performed"
+            },
+            "validationResult": {
+              "type": "string",
+              "description": "Result of the address validation (success, partial, fails)"
+            },
+            "alternateGeographicAddress": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GeographicAddress"
+              }
+            },
+            "state": {
+              "type": "string",
+              "description": "Geographic address validation update request state",
+              "enum": [
+                "accepted",
+                "terminatedWithError",
+                "inProgress",
+                "done"
+              ]
+            },
+            "submittedGeographicAddress": {
+              "$ref": "#/components/schemas/GeographicAddress",
+              "description": "the address as submitted to validation"
+            },
+            "validGeographicAddress": {
+              "$ref": "#/components/schemas/GeographicAddress",
+              "description": "the correct form of the validated address in case of validation success"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "provideAlternative",
+            "submittedGeographicAddress"
+          ]
+        },
+        "GeographicAddressValidationUpdate": {
+          "type": "object",
+          "description": "The GeographicAddressValidation to be updated",
+          "properties": {
+            "provideAlternative": {
+              "type": "boolean",
+              "description": "Indicator provided by the requester to specify if alternate addresses must be provided in case of partial or fail result."
+            },
+            "validationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date when the address validation is performed"
+            },
+            "validationResult": {
+              "type": "string",
+              "description": "Result of the address validation (success, partial, fails)"
+            },
+            "alternateGeographicAddress": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GeographicAddress"
+              }
+            },
+            "state": {
+              "type": "string",
+              "description": "Geographic address validation update request state",
+              "enum": [
+                "accepted",
+                "terminatedWithError",
+                "inProgress",
+                "done"
+              ],
+              "example": "accepted"
+            },
+            "submittedGeographicAddress": {
+              "$ref": "#/components/schemas/GeographicAddress",
+              "description": "the address as submitted to validation"
+            },
+            "validGeographicAddress": {
+              "$ref": "#/components/schemas/GeographicAddress",
+              "description": "the correct form of the validated address in case of validation success"
+            }
+          }
+        },
+        "JsonPatch": {
+          "description": "The GeographicAddress to be updated"
+        },
+        "GeographicAddressUpdate": {
+          "type": "object",
+          "description": "The GeographicAddress to be updated",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City that the address is in"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country that the address is in"
+            },
+            "locality": {
+              "type": "string",
+              "description": "An area of defined or undefined boundaries within a local authority or other legislatively defined area, usually rural or semi rural in nature. [ANZLIC-STREET], or a suburb, a bounded locality within a city, town or shire principally of urban character [ANZLICSTREET]"
+            },
+            "postcode": {
+              "type": "string",
+              "description": "descriptor for a postal delivery area, used to speed and simplify the delivery of mail (also know as zipcode)"
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "the State or Province that the address is in"
+            },
+            "streetName": {
+              "type": "string",
+              "description": "Name of the street or other street type"
+            },
+            "streetNr": {
+              "type": "string",
+              "description": "Number identifying a specific property on a public street. It may be combined with streetNrLast for ranged addresses"
+            },
+            "streetNrLast": {
+              "type": "string",
+              "description": "Last number in a range of street numbers allocated to a property"
+            },
+            "streetNrLastSuffix": {
+              "type": "string",
+              "description": "Last street number suffix for a ranged address"
+            },
+            "streetNrSuffix": {
+              "type": "string",
+              "description": "the first street number suffix"
+            },
+            "streetSuffix": {
+              "type": "string",
+              "description": "A modifier denoting a relative direction"
+            },
+            "streetType": {
+              "type": "string",
+              "description": "alley, avenue, boulevard, brae, crescent, drive, highway, lane, terrace, parade, place, tarn, way, wharf "
+            },
+            "geographicLocation": {
+              "$ref": "#/components/schemas/GeographicLocationRefOrValue"
+            },
+            "geographicSubAddress": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GeographicSubAddress"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "@type": {
+              "type": "string",
+              "description": "Type of payment method (e.g.: bank card, cash, voucher, etc). The details field type depends on the value assigned to this one."
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "state": {
+              "type": "string",
+              "description": "Geographic address update request state",
+              "enum": [
+                "accepted",
+                "terminatedWithError",
+                "inProgress",
+                "done"
+              ],
+              "example": "accepted"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            }
+          },
+          "required": [
+            "@type"
+          ]
+        }
+      }
+    }
+  }

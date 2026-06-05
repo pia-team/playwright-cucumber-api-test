@@ -6,9 +6,15 @@ import { ResponseHelper } from '../../../utils/responseHelper';
 let tokenRequest: any;
 let response: any;
 
+Given('I have authentication credentials for the configured test user', async () => {
+  logger.logStep('Given', 'I have authentication credentials for the configured test user');
+  tokenRequest = AuthHelper.getConfiguredCredentials();
+  await AuthHelper.initializeAuthService();
+});
+
 Given('I have authentication credentials for user {string}', async (username: string) => {
   logger.logStep('Given', `I have authentication credentials for user "${username}"`);
-  tokenRequest = await AuthHelper.getCredentialsForUser(username);
+  tokenRequest = AuthHelper.getConfiguredCredentials();
   await AuthHelper.initializeAuthService();
 });
 

@@ -1,5 +1,5 @@
 import { ApiClient } from '../core/api/apiClient';
-import { endpoints } from '../config/endpoints';
+import { keycloakEndpoints } from '../config/keycloak.endpoints';
 
 export interface TokenRequest {
   grant_type: string;
@@ -23,7 +23,9 @@ export class AuthService {
   constructor(private api: ApiClient) {}
 
   getToken(credentials: TokenRequest) {
-    const fullUrl = `${endpoints.keycloackAuth.baseURI}${endpoints.keycloackAuth.token}`;
+    const keycloakBase =
+      process.env.API_KEYCLOAK_BASE_URL?.trim() || keycloakEndpoints.defaultBaseURI;
+    const fullUrl = `${keycloakBase}${keycloakEndpoints.token}`;
     
     return this.api.post(fullUrl, credentials, {
       headers: {

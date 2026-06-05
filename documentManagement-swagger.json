@@ -1,0 +1,2451 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Document Management",
+      "description": "Document Management Api",
+      "contact": {
+        "name": "PiA(people in action)",
+        "url": "http://www.pia-team.com/",
+        "email": "info@pia-team.com"
+      },
+      "license": {
+        "name": "PiA License",
+        "url": "http://www.pia-team.com"
+      },
+      "version": "Version 2.27.0 (prepared with TMF Document Management REST Specification TMF667 Release 19.0)"
+    },
+    "servers": [
+      {
+        "url": "https://ddms-api.pi.dev-gcu.com/api/documentManagement/v4",
+        "description": "Generated server url"
+      }
+    ],
+    "paths": {
+      "/hub": {
+        "post": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Register a listener",
+          "description": "Sets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "registerListener",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventSubscriptionInput"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Subscribed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EventSubscription"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/document": {
+        "get": {
+          "tags": [
+            "document"
+          ],
+          "summary": "List or find Document objects",
+          "description": "This operation list or find Document entities",
+          "operationId": "listDocument",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort field of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Document"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "document"
+          ],
+          "summary": "Creates a Document",
+          "description": "This operation creates a Document entity.",
+          "operationId": "createDocument",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document_Create"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Document"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/attachment": {
+        "get": {
+          "tags": [
+            "attachment"
+          ],
+          "summary": "List or find Attachment objects",
+          "description": "This operation list or find Attachment entities",
+          "operationId": "listAttachment",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort field of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "attachment"
+          ],
+          "summary": "Creates a Attachment",
+          "description": "This operation creates a Attachment entity.",
+          "operationId": "createAttachment",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment_Create"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/document/{id}": {
+        "get": {
+          "tags": [
+            "document"
+          ],
+          "summary": "Retrieves a Document by ID",
+          "description": "This operation retrieves a Document entity. Attribute selection is enabled for all first level attributes.",
+          "operationId": "retrieveDocument",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Document",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Document"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "document"
+          ],
+          "summary": "Deletes a Document",
+          "description": "This operation deletes a Document entity.",
+          "operationId": "deleteDocument",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Document",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "document"
+          ],
+          "summary": "Partially updates a Document",
+          "description": "This operation partially updates a Document entity.",
+          "operationId": "patchDocument",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Document",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document_Update"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Document"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/attachment/{id}": {
+        "get": {
+          "tags": [
+            "attachment"
+          ],
+          "summary": "Retrieves a Attachment by ID",
+          "description": "This operation retrieves a Attachment entity. Attribute selection is enabled for all first level attributes.",
+          "operationId": "retrieveAttachment",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Attachment",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "attachment"
+          ],
+          "summary": "Deletes a Attachment",
+          "description": "This operation deletes a Attachment entity.",
+          "operationId": "deleteAttachment",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Attachment",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "attachment"
+          ],
+          "summary": "Partially updates an Attachment",
+          "description": "This operation partially updates an Attachment entity.",
+          "operationId": "patchAttachment",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Attachment",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attachment_Update"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Attachment"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub/{id}": {
+        "delete": {
+          "tags": [
+            "events subscription"
+          ],
+          "summary": "Unregister a listener",
+          "description": "Resets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "unregisterListener",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the registered listener",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method not allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "EventSubscriptionInput": {
+          "type": "object",
+          "description": "Data containing the callback endpoint to deliver the information",
+          "properties": {
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback"
+          ]
+        },
+        "EventSubscription": {
+          "type": "object",
+          "description": "Sets the communication endpoint address the service instance must use to deliver notification information",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Id of the listener",
+              "minLength": 1
+            },
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback",
+            "id"
+          ]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "referenceError": {
+              "type": "string"
+            },
+            "baseType": {
+              "type": "string"
+            },
+            "schemaLocation": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        },
+        "AttachmentRefOrValue": {
+          "type": "object",
+          "description": "An attachment by value or by reference. For AttachmentRefOrValue, the attribute type,schemaLocation and referredType are related to the contained entity and not to AttchmentRefOrValue itself",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier for this particular attachment",
+              "example": "3a2203b8-0d79-4e02-bc51-3deaf0afa684"
+            },
+            "href": {
+              "type": "string",
+              "description": "URI for this Attachment",
+              "example": "https://serverRoot/api/documentManagement/v4/attach1.mp4"
+            },
+            "attachmentType": {
+              "type": "string",
+              "description": "Attachment type such as video, picture",
+              "example": "video"
+            },
+            "description": {
+              "type": "string",
+              "description": "A narrative text describing the content of the attachment",
+              "example": "This is test mp4 file"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "Attachment mime type such as extension file for video, picture and document",
+              "example": "mp4"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the attachment",
+              "example": "attach1"
+            },
+            "url": {
+              "type": "string",
+              "description": "Uniform Resource Locator, is a web page address (a subset of URI)",
+              "example": "https://serverRoot/api/documentManagement/v4/attachment"
+            },
+            "size": {
+              "$ref": "#/components/schemas/Quantity",
+              "description": "The size of the attachment."
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period of time for which the attachment is valid"
+            },
+            "category": {
+              "type": "array",
+              "description": "Reference to the category. A set of classifications for the attachment types.",
+              "items": {
+                "$ref": "#/components/schemas/CategoryRef"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Attachment"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/attachmentRefOrValue"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "AttachmentRefOrValue"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "https://serverRoot/api/documentManagement/v4/attachmentRefOrValue"
+            }
+          }
+        },
+        "CategoryRef": {
+          "type": "object",
+          "description": "The category for grouping recommendations",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "d43cf304-b8a3-4657-a269-11370a0d311c"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "https://serverRoot/api/documentManagement/v4/categoryRef"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "CategoryRef"
+            },
+            "version": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Document"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/categoryRef"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "CategoryRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "Document"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "Characteristic": {
+          "type": "object",
+          "description": "Describes a given characteristic of an object or entity through a name/value pair.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the characteristic",
+              "example": "112ddb43-6db9-471b-882e-78475a604b28"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the characteristic",
+              "example": "DocumentCharacteristic"
+            },
+            "valueType": {
+              "type": "string",
+              "description": "Data type of the value of the characteristic",
+              "example": "string"
+            },
+            "characteristicRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CharacteristicRelationship"
+              }
+            },
+            "value": {
+              "type": "string",
+              "description": "The value of the characteristic",
+              "example": "analytics"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Document"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/characteristic"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Characteristic"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        },
+        "CharacteristicRelationship": {
+          "type": "object",
+          "description": "Another Characteristic that is related to the current Characteristic;",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the characteristic",
+              "example": "043fbf08-739d-4b71-982f-4d52d58d2b58"
+            },
+            "relationshipType": {
+              "type": "string",
+              "description": "The type of relationship",
+              "example": "dependency"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Characteristic"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/characteristicRelationship"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "CharacteristicRelationship"
+            }
+          }
+        },
+        "DocumentRef": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identifier of the document",
+              "example": "3ee1de3c-3c7c-4d29-9ece-c07178c837b6"
+            },
+            "href": {
+              "type": "string",
+              "description": "The URI for the object itself.",
+              "example": "https://serverRoot/api/documentManagement/v4/documentRef"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "DocumentRef"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "DocumentRef"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/documentRef"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "DocumentRef"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "Document"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "DocumentSpecification": {
+          "type": "object",
+          "description": "A document specification reference",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Indentifier of the DocumentSpecification",
+              "example": "1476ec4d-faa7-43fe-b165-1d644e55fb46"
+            },
+            "href": {
+              "type": "string",
+              "description": "The URI for the object itself.",
+              "example": "https://serverRoot/api/documentManagement/v4/documentSpecification"
+            },
+            "URL": {
+              "type": "string",
+              "description": "URL of the Document Specification",
+              "example": "https://serverRoot/api/documentManagement/v4/documentSpecification"
+            },
+            "name": {
+              "type": "string",
+              "description": "a String. Name of the DocumentSpecification",
+              "example": "DocumentSpecification"
+            },
+            "version": {
+              "type": "string",
+              "description": "A string, a version of the DocumentSpecification.",
+              "example": "v1"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "DocumentSpecification"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/documentSpecification"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "DocumentSpecification"
+            }
+          }
+        },
+        "Document_Create": {
+          "type": "object",
+          "description": "The Document to be created",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identifier of an instance of the document. Required to be unique within the document type.  Used in URIs as the identifier for specific instances of a type."
+            },
+            "description": {
+              "type": "string",
+              "description": "free-text description of the document",
+              "example": "This is document description"
+            },
+            "documentType": {
+              "type": "string",
+              "description": "Name of the document type",
+              "example": "video"
+            },
+            "lifecycleState": {
+              "type": "string",
+              "description": "The life cycle state of the document.",
+              "example": "Start"
+            },
+            "name": {
+              "type": "string",
+              "description": "A string used to give a name to the document",
+              "example": "doc1"
+            },
+            "version": {
+              "type": "string",
+              "description": "A particular form or variety of an artefact that is different from others or from the original. The form represents differences in properties that characterize an artefact, that are not enough to warrant creating a new artefact",
+              "example": "v1.0"
+            },
+            "binaryAttachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "category": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CategoryRef"
+              }
+            },
+            "characteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "documentRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentRef"
+              }
+            },
+            "documentSpecification": {
+              "$ref": "#/components/schemas/DocumentSpecification"
+            },
+            "relatedEntity": {
+              "$ref": "#/components/schemas/RelatedEntity"
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Object"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/document"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Document"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "ExternalReference": {
+          "type": "object",
+          "description": "External reference of the individual or reference in other system",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of an external reference."
+            },
+            "externalReferenceType": {
+              "type": "string",
+              "description": "Type of the external reference"
+            },
+            "name": {
+              "type": "string",
+              "description": "External reference name"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "externalReferenceType",
+            "id",
+            "name"
+          ]
+        },
+        "Quantity": {
+          "type": "object",
+          "description": "An amount in a given unit",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "float",
+              "description": "Numeric value in a given unit",
+              "example": 1
+            },
+            "units": {
+              "type": "string",
+              "description": "Unit"
+            }
+          }
+        },
+        "RelatedEntity": {
+          "type": "object",
+          "description": "A reference to an entity, where the type of the entity is not known in advance.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "77e6e3cb-ac0b-4b8c-a581-4066ac83f2c2"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "https://serverRoot/api/documentManagement/v4/relatedEntity"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "RelatedEntity"
+            },
+            "role": {
+              "type": "string",
+              "description": "The role of an entity.",
+              "example": "customer"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "RelatedEntity"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/relatedEntity"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "RelatedEntity"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "Document"
+            }
+          },
+          "required": [
+            "@referredType",
+            "id",
+            "role"
+          ]
+        },
+        "RelatedParty": {
+          "type": "object",
+          "description": "Related Entity reference. A related party defines party or party role linked to a specific entity.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity.",
+              "example": "91e58d7c-02b0-4e56-bea2-bb36ef7e5c99"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity.",
+              "example": "https://serverRoot/api/documentManagement/v4/relatedParty"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity.",
+              "example": "RelatedParty"
+            },
+            "role": {
+              "type": "string",
+              "description": "Role played by the related party",
+              "example": "customer"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "RelatedParty"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/relatedParty"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "RelatedParty"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation.",
+              "example": "Document"
+            }
+          },
+          "required": [
+            "@referredType",
+            "id"
+          ]
+        },
+        "TimePeriod": {
+          "type": "object",
+          "description": "A period of time, either as a deadline (endDateTime only) a startDateTime only, or both",
+          "properties": {
+            "endDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End of the time period, using IETC-RFC-3339 format"
+            },
+            "startDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start of the time period, using IETC-RFC-3339 format. If you define a start, you must also define an end"
+            }
+          }
+        },
+        "Document": {
+          "type": "object",
+          "description": "Document is a tangible output from an activity. It is an attachment for other API’s. The document itself can\nbe provided as a message payload or attachment, or as a location reference (URL).",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Identifier of an instance of the document. Required to be unique within the document type.  Used in URIs as the identifier for specific instances of a type."
+            },
+            "href": {
+              "type": "string",
+              "description": "The URI for the object itself.",
+              "example": "https://serverRoot/api/documentManagement/v4/document"
+            },
+            "description": {
+              "type": "string",
+              "description": "free-text description of the document",
+              "example": "This is document description"
+            },
+            "documentType": {
+              "type": "string",
+              "description": "Name of the document type",
+              "example": "video"
+            },
+            "lifecycleState": {
+              "type": "string",
+              "description": "The life cycle state of the document.",
+              "example": "Start"
+            },
+            "name": {
+              "type": "string",
+              "description": "A string used to give a name to the document",
+              "example": "doc1"
+            },
+            "version": {
+              "type": "string",
+              "description": "A particular form or variety of an artefact that is different from others or from the original. The form represents differences in properties that characterize an artefact, that are not enough to warrant creating a new artefact",
+              "example": "v1.0"
+            },
+            "binaryAttachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "category": {
+              "type": "array",
+              "description": "Reference to the category. A set of classifications for the document types.",
+              "items": {
+                "$ref": "#/components/schemas/CategoryRef"
+              }
+            },
+            "characteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "documentRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentRef"
+              }
+            },
+            "documentSpecification": {
+              "$ref": "#/components/schemas/DocumentSpecification"
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "relatedEntity": {
+              "$ref": "#/components/schemas/RelatedEntity"
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Object"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/document"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Document"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "Attachment_Create": {
+          "type": "object",
+          "description": "The Attachment to be created",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier for this particular attachment"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the attachment.",
+              "example": "This is test mp4 file"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "The mimeType of the attachment.",
+              "example": "mp4"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the attachment",
+              "example": "attach1"
+            },
+            "size": {
+              "$ref": "#/components/schemas/Quantity",
+              "description": "The size in Bytes of the document or attachment. If this component\ncontains the embedded data then the size is the size of the embedded data; if\nit is a reference without the data then it is the size of the referenced document."
+            },
+            "attachmentType": {
+              "type": "string",
+              "description": " Attachment type such as video, picture ",
+              "example": "video"
+            },
+            "url": {
+              "type": "string",
+              "description": "The URL of the attachment.",
+              "example": "https://serverRoot/api/documentManagement/v4/attach1.mp4"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period for which the Attachment is valid."
+            },
+            "category": {
+              "type": "array",
+              "description": "Reference to the category. A set of classifications for the attachment types.",
+              "items": {
+                "$ref": "#/components/schemas/CategoryRef"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Document"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/attachment"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Attachment"
+            }
+          },
+          "required": [
+            "attachmentType",
+            "mimeType"
+          ]
+        },
+        "Attachment": {
+          "type": "object",
+          "description": "Complements the description of an element (for instance a product) through video, pictures...",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier for this particular attachment"
+            },
+            "href": {
+              "type": "string",
+              "description": "URI for this Attachment",
+              "example": "https://serverRoot/api/documentManagement/v4/attach1.mp4"
+            },
+            "attachmentType": {
+              "type": "string",
+              "description": "Attachment type such as video, picture",
+              "example": "video"
+            },
+            "description": {
+              "type": "string",
+              "description": "A narrative text describing the content of the attachment",
+              "example": "This is test mp4 file"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "Attachment mime type such as extension file for video, picture and document",
+              "example": "mp4"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the attachment",
+              "example": "attach1"
+            },
+            "url": {
+              "type": "string",
+              "description": "Uniform Resource Locator, is a web page address (a subset of URI)",
+              "example": "https://serverRoot/api/documentManagement/v4/"
+            },
+            "size": {
+              "$ref": "#/components/schemas/Quantity",
+              "description": "The size of the attachment."
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period of time for which the attachment is valid"
+            },
+            "category": {
+              "type": "array",
+              "description": "Reference to the category. A set of classifications for the attachment types.",
+              "items": {
+                "$ref": "#/components/schemas/CategoryRef"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Document"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/attachment"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Attachment"
+            }
+          }
+        },
+        "Document_Update": {
+          "type": "object",
+          "description": "The Document to be updated",
+          "properties": {
+            "creationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The date and time the document was created. A date and time formatted in compliance with the ISO8601 standard must be used."
+            },
+            "description": {
+              "type": "string",
+              "description": "free-text description of the document",
+              "example": "This is document description"
+            },
+            "documentType": {
+              "type": "string",
+              "description": "Name of the document type",
+              "example": "video"
+            },
+            "lastUpdate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The date and time the document was last modified. A date and time formatted in compliance with the ISO8601 standard must be used."
+            },
+            "lifecycleState": {
+              "type": "string",
+              "description": "The life cycle state of the document.",
+              "example": "Start"
+            },
+            "name": {
+              "type": "string",
+              "description": "A string used to give a name to the document",
+              "example": "doc1"
+            },
+            "version": {
+              "type": "string",
+              "description": "A particular form or variety of an artefact that is different from others or from the original. The form represents differences in properties that characterize an artefact, that are not enough to warrant creating a new artefact",
+              "example": "v1.1"
+            },
+            "binaryAttachment": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AttachmentRefOrValue"
+              }
+            },
+            "category": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CategoryRef"
+              }
+            },
+            "characteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "documentRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DocumentRef"
+              }
+            },
+            "documentSpecification": {
+              "$ref": "#/components/schemas/DocumentSpecification"
+            },
+            "relatedEntity": {
+              "$ref": "#/components/schemas/RelatedEntity"
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Object"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/document"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Document"
+            }
+          }
+        },
+        "Attachment_Update": {
+          "type": "object",
+          "description": "The Attachment to be updated",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Description of the attachment.",
+              "example": "This is test mp4 file"
+            },
+            "mimeType": {
+              "type": "string",
+              "description": "The mimeType of the attachment.",
+              "example": "mp4"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the attachment",
+              "example": "attach1"
+            },
+            "size": {
+              "$ref": "#/components/schemas/Quantity",
+              "description": "The size in Bytes of the document or attachment. If this component\ncontains the embedded data then the size is the size of the embedded data; if\nit is a reference without the data then it is the size of the referenced document."
+            },
+            "attachmentType": {
+              "type": "string",
+              "description": " Attachment type such as video, picture ",
+              "example": "video"
+            },
+            "url": {
+              "type": "string",
+              "description": "The URL of the attachment.",
+              "example": "https://serverRoot/api/documentManagement/v4/attach1.mp4"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period for which the Attachment is valid."
+            },
+            "category": {
+              "type": "array",
+              "description": "Reference to the category. A set of classifications for the attachment types.",
+              "items": {
+                "$ref": "#/components/schemas/CategoryRef"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class",
+              "example": "Document"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships",
+              "example": "https://serverRoot/api/documentManagement/v4/attachment"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "example": "Attachment"
+            }
+          }
+        }
+      }
+    }
+  }

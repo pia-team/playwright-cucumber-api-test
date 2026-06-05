@@ -1,0 +1,3390 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Orbitant Product Inventory Management API",
+      "description": "TMF API Reference : TMF 637 - Product Inventory Management Release : 19.0 - June 2019 The Product Inventory Management API provides standardized mechanism for product inventory management such as creation, update and retrieval of the representation of a product in the inventory. It also allows the notification of events related to product lifecycle Product resource A product offering procured by a customer or other interested party playing a party role. A product is realized as one or more service(s) and / or resource(s). Product Inventory API performs the following operations on product : - Retrieval of a product or a collection of products depending on filter criteria - Partial update of a product (including updating rules and for administration purpose) - Creation of a product (including default values and creation rules and for administration purpose) - Deletion of a product (for administration purposes) - Notification of events on product. Copyright © TM Forum 2019. All Rights Reserved",
+      "contact": {
+        "name": "PiA(people in action)",
+        "url": "http://www.pia-team.com/",
+        "email": "info@pia-team.com"
+      },
+      "license": {
+        "name": "PiA License",
+        "url": "http://www.pia-team.com"
+      },
+      "version": "Version v4 (prepared with Product Inventory Management API REST Specification TMF637 Release 19.0)"
+    },
+    "servers": [
+      {
+        "url": "https://dpim-api.pi.dev-gcu.com/api/productInventoryManagement/v4",
+        "description": "Generated server url"
+      }
+    ],
+    "security": [
+      {
+        "BearerAuthentication": []
+      }
+    ],
+    "tags": [
+      {
+        "name": "product",
+        "description": "the product API"
+      },
+      {
+        "name": "snapshot",
+        "description": "the snapshot API"
+      },
+      {
+        "name": "hub",
+        "description": "the hub API"
+      }
+    ],
+    "paths": {
+      "/product": {
+        "get": {
+          "tags": [
+            "product"
+          ],
+          "summary": "List or find Product objects",
+          "description": "This operation list or find Product entities",
+          "operationId": "listProduct",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort field of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "product"
+          ],
+          "summary": "Creates a Product",
+          "description": "This operation creates a Product entity.",
+          "operationId": "createProduct",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/productSnapshot/{snapshot-id}/restoreSnapshot": {
+        "post": {
+          "tags": [
+            "snapshot"
+          ],
+          "summary": "Restores a Product from Snapshot",
+          "description": "This operation restores a Product entity from a snapshot.",
+          "operationId": "restoreSnapshot",
+          "parameters": [
+            {
+              "name": "snapshot-id",
+              "in": "path",
+              "description": "Identifier of the Snapshot",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/product/{id}/createSnapshot": {
+        "post": {
+          "tags": [
+            "product",
+            "snapshot"
+          ],
+          "summary": "Creates a Product Snapshot",
+          "description": "This operation creates a snapshot of a Product entity.",
+          "operationId": "createSnapshot",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Product",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSnapshotCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Created",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProductSnapshot"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "OK - Snapshot already exists (idempotent)",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProductSnapshot"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub": {
+        "get": {
+          "tags": [
+            "hub",
+            "events subscription"
+          ],
+          "summary": "List listeners",
+          "description": "Resets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "listListener",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort param of Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/EventSubscription"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "hub"
+          ],
+          "summary": "Register a listener",
+          "description": "Sets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "registerListener",
+          "requestBody": {
+            "content": {
+              "application/json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventSubscriptionInput"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Subscribed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/EventSubscription"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/product/{id}": {
+        "get": {
+          "tags": [
+            "product"
+          ],
+          "summary": "Retrieves a Product by ID",
+          "description": "This operation retrieves a Product entity. Attribute selection is enabled for all first level attributes.",
+          "operationId": "retrieveProduct",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Product",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to provide in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "product"
+          ],
+          "summary": "Deletes a Product",
+          "description": "This operation deletes a Product entity.",
+          "operationId": "deleteProduct",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Product",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "product"
+          ],
+          "summary": "Updates partially a Product",
+          "description": "This operation updates partially a Product entity.",
+          "operationId": "patchProduct",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "Identifier of the Product",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/merge-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductUpdate"
+                }
+              },
+              "application/json-patch+json;charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonPatch"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Updated",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/productSnapshot": {
+        "get": {
+          "tags": [
+            "snapshot"
+          ],
+          "summary": "Search Product Snapshots",
+          "description": "This operation searches for Product Snapshot entities by orderId and optional orderItemId.",
+          "operationId": "listSnapshot",
+          "parameters": [
+            {
+              "name": "fields",
+              "in": "query",
+              "description": "Comma-separated properties to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "Requested index for start of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Requested number of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "sort",
+              "in": "query",
+              "description": "Sort field of resources to be provided in response",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProductSnapshot"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/productSnapshot/{snapshot-id}": {
+        "get": {
+          "tags": [
+            "snapshot"
+          ],
+          "summary": "Retrieves a Product Snapshot by ID",
+          "description": "This operation retrieves a Product Snapshot entity.",
+          "operationId": "retrieveSnapshot",
+          "parameters": [
+            {
+              "name": "snapshot-id",
+              "in": "path",
+              "description": "Identifier of the Snapshot",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProductSnapshot"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "snapshot"
+          ],
+          "summary": "Deletes a Product Snapshot",
+          "description": "This operation deletes a Product Snapshot entity.",
+          "operationId": "deleteSnapshot",
+          "parameters": [
+            {
+              "name": "snapshot-id",
+              "in": "path",
+              "description": "Identifier of the Snapshot",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/hub/{id}": {
+        "delete": {
+          "tags": [
+            "hub"
+          ],
+          "summary": "Unregister a listener",
+          "description": "Resets the communication endpoint address the service instance must use to deliver information about its health state, execution state, failures and metrics.",
+          "operationId": "unregisterListener",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of the registered listener",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "405": {
+              "description": "Method Not Allowed",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json;charset=utf-8": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AgreementItemRef": {
+          "type": "object",
+          "description": "Agreement reference. An agreement represents a contract or arrangement, either written or verbal and sometimes enforceable by law, such as a service level agreement or a customer price agreement. An agreement involves a number of other business entities, such as products, services, and resources and/or their specifications.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "agreementItemId": {
+              "type": "string",
+              "description": "Identifier of the agreement"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "BillingAccountRef": {
+          "type": "object",
+          "description": "BillingAccount reference. A BillingAccount is a detailed description of a bill structure.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the billing account"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the billing account"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the billing account"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "Characteristic": {
+          "type": "object",
+          "description": "Describes a given characteristic of an object or entity through a name/description pair.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the characteristic"
+            },
+            "valueType": {
+              "type": "string",
+              "description": "Data type of the value of the characteristic"
+            },
+            "value": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        },
+        "ExternalReference": {
+          "type": "object",
+          "description": "External reference of the individual or reference in other system",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Id of the external reference"
+            },
+            "href": {
+              "type": "string"
+            },
+            "externalReferenceType": {
+              "type": "string",
+              "description": "Type of the external reference"
+            },
+            "name": {
+              "type": "string",
+              "description": "External reference name"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "GeographicLocationRefOrValue": {
+          "type": "object",
+          "description": "A GeographicLocation is a pure-virtual super-class to the GeoJSON-aligned geometries of Point (addresses and locations), MultiPoint, LineString (streets, highways and boundaries), MultiLineString and Polygon (countries, provinces, tracts of land). Use the @type attribute to specify which of these is being specified by the geometry attribute.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the place"
+            },
+            "href": {
+              "type": "string",
+              "description": "Unique reference of the place"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "bbox": {
+              "type": "array",
+              "description": "A bounding box array that contains the geometry. The axes order follows the axes order of the geometry",
+              "items": {
+                "type": "number"
+              }
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name",
+              "enum": [
+                "GeoJsonPoint",
+                "GeoJsonMultiPoint",
+                "GeoJsonLineString",
+                "GeoJsonMultiLineString",
+                "GeoJsonPolygon"
+              ]
+            }
+          },
+          "required": [
+            "@type"
+          ]
+        },
+        "GeographicSubAddress": {
+          "type": "object",
+          "description": "Representation of a GeographicSubAddress  It is used for addressing within a property in an urban area (country properties are often defined differently). It may refer to a building, a building cluster, or a floor of a multistory building.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique Identifier of the subAddress"
+            },
+            "href": {
+              "type": "string",
+              "description": "Link to the subAddress"
+            },
+            "buildingName": {
+              "type": "string",
+              "description": "allows for buildings that have well-known names"
+            },
+            "levelNumber": {
+              "type": "string",
+              "description": "used where a level type may be repeated e.g. BASEMENT 1, BASEMENT 2"
+            },
+            "levelType": {
+              "type": "string",
+              "description": "describes level types within a building"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the subAddress to identify it with a meaningful identification"
+            },
+            "privateStreetName": {
+              "type": "string",
+              "description": "private streets internal to a property (e.g. a university) may have internal names that are not recorded by the land title office."
+            },
+            "privateStreetNumber": {
+              "type": "string",
+              "description": "private streets numbers internal to a private street"
+            },
+            "subAddressType": {
+              "type": "string",
+              "description": "Type of subAddress : it can be a subunit or a private street"
+            },
+            "subUnitNumber": {
+              "type": "string",
+              "description": "the discriminator used for the subunit often just a simple number e.g. FLAT 5, may also be a range"
+            },
+            "subUnitType": {
+              "type": "string",
+              "description": "the type of subunit e.g.BERTH, FLAT, PIER, SUITE, SHOP, TOWER, UNIT, WHARF"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "Money": {
+          "type": "object",
+          "description": "A base / value business entity used to represent money",
+          "properties": {
+            "unit": {
+              "type": "string",
+              "description": "Currency (ISO4217 norm uses 3 letters to define the currency)"
+            },
+            "value": {
+              "type": "number",
+              "format": "float",
+              "description": "A positive floating point number"
+            }
+          }
+        },
+        "Price": {
+          "type": "object",
+          "description": "Provides all amounts (tax included, duty free, tax rate), used currency and percentage to apply for Price Alteration.",
+          "properties": {
+            "percentage": {
+              "type": "number",
+              "format": "float",
+              "description": "Percentage to apply for ProdOfferPriceAlteration"
+            },
+            "taxRate": {
+              "type": "number",
+              "format": "float",
+              "description": "Tax rate"
+            },
+            "dutyFreeAmount": {
+              "$ref": "#/components/schemas/Money"
+            },
+            "taxIncludedAmount": {
+              "$ref": "#/components/schemas/Money"
+            },
+            "tax": {
+              "type": "array",
+              "description": "Tax",
+              "items": {
+                "$ref": "#/components/schemas/TaxItem"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "PriceAlteration": {
+          "type": "object",
+          "description": "Is an amount, usually of money, that modifies the price charged for an order item.",
+          "properties": {
+            "applicationDuration": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Duration during which the alteration applies on the order item price (for instance 2 months free of charge for the recurring charge)"
+            },
+            "description": {
+              "type": "string",
+              "description": "A narrative that explains in detail the semantics of this order item price alteration"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the order item price alteration"
+            },
+            "priceType": {
+              "type": "string",
+              "description": "A category that describes the price such as recurring, one time and usage."
+            },
+            "priority": {
+              "type": "integer",
+              "format": "int32",
+              "description": "Priority level for applying this alteration among all the defined alterations on the order item price"
+            },
+            "recurringChargePeriod": {
+              "type": "string",
+              "description": "Could be month, week..."
+            },
+            "unitOfMeasure": {
+              "type": "string",
+              "description": "Could be minutes, GB..."
+            },
+            "price": {
+              "$ref": "#/components/schemas/Price"
+            },
+            "productOfferingPrice": {
+              "$ref": "#/components/schemas/ProductOfferingPriceRef"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "pricingCategory": {
+              "type": "string",
+              "description": "Charge, Penalty, Cost, Fee, Discount"
+            },
+            "recurringChargePeriodLength": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "recurringChargePeriodCount": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "salesTime": {
+              "type": "string",
+              "description": "Upfront, Billing"
+            },
+            "advancedPricingMethod": {
+              "type": "string",
+              "description": "Fixed-Flat, Fixed-Cumulative"
+            }
+          },
+          "required": [
+            "price",
+            "priceType"
+          ]
+        },
+        "ProductCreate": {
+          "type": "object",
+          "description": "The Product to be created",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the product"
+            },
+            "description": {
+              "type": "string",
+              "description": "Is the description of the product. It could be copied from the description of the Product Offering."
+            },
+            "isBundle": {
+              "type": "boolean",
+              "description": "If true, the product is a ProductBundle which is an instantiation of a BundledProductOffering. If false, the product is a ProductComponent which is an instantiation of a SimpleProductOffering."
+            },
+            "isCustomerVisible": {
+              "type": "boolean",
+              "description": "If true, the product is visible by the customer."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the product. It could be the same as the name of the product offering"
+            },
+            "orderDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was ordered"
+            },
+            "productSerialNumber": {
+              "type": "string",
+              "description": "Is the serial number for the product. This is typically applicable to tangible products e.g. Broadband Router."
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date from which the product starts"
+            },
+            "terminationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was terminated"
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementItemRef"
+              }
+            },
+            "billingAccount": {
+              "$ref": "#/components/schemas/BillingAccountRef"
+            },
+            "place": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRefOrValue"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "product": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRefOrValue"
+              }
+            },
+            "productCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "productOffering": {
+              "$ref": "#/components/schemas/ProductOfferingRef"
+            },
+            "productOrderItem": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedProductOrderItem"
+              }
+            },
+            "productPrice": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductPrice"
+              }
+            },
+            "productRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRelationship"
+              }
+            },
+            "productSpecification": {
+              "$ref": "#/components/schemas/ProductSpecificationRef"
+            },
+            "productTerm": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductTerm"
+              }
+            },
+            "realizingResource": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ResourceRef"
+              }
+            },
+            "realizingService": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ServiceRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "statusReason": {
+              "type": "string",
+              "description": "Reason explanation of the product status"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "expectedExpiryDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the expected expiry date when the product was ordered"
+            },
+            "channel": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedChannel"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            }
+          },
+          "required": [
+            "status"
+          ]
+        },
+        "ProductOfferingPriceRef": {
+          "type": "object",
+          "description": "ProductPriceOffering reference. An amount, usually of money, that is asked for or allowed when a ProductOffering is bought, rented, or leased",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of the product offering price"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "ProductOfferingRef": {
+          "type": "object",
+          "description": "ProductOffering reference. A product offering represents entities that are orderable from the provider of the catalog, this resource includes pricing information.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of the product offering"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "ProductPrice": {
+          "type": "object",
+          "description": "An amount, usually of money, that represents the actual price paid by a Customer for a purchase, a rent or a lease of a Product. The price is valid for a defined period of time.",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "A narrative that explains in detail the semantics of this product price."
+            },
+            "name": {
+              "type": "string",
+              "description": "A short descriptive name such as \"Subscription price\"."
+            },
+            "priceType": {
+              "type": "string",
+              "description": "A category that describes the price, such as recurring, discount, allowance, penalty, and so forth."
+            },
+            "recurringChargePeriod": {
+              "type": "string",
+              "description": "Could be month, week..."
+            },
+            "unitOfMeasure": {
+              "type": "string",
+              "description": "Could be minutes, GB..."
+            },
+            "billingAccount": {
+              "$ref": "#/components/schemas/BillingAccountRef"
+            },
+            "price": {
+              "$ref": "#/components/schemas/Price"
+            },
+            "productOfferingPrice": {
+              "$ref": "#/components/schemas/ProductOfferingPriceRef"
+            },
+            "productPriceAlteration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PriceAlteration"
+              }
+            },
+            "productPriceCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "pricingCategory": {
+              "type": "string",
+              "description": "Charge, Penalty, Cost, Fee, Discount"
+            },
+            "recurringChargePeriodLength": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "recurringChargePeriodCount": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "salesTime": {
+              "type": "string",
+              "description": "Upfront, Billing"
+            },
+            "advancedPricingMethod": {
+              "type": "string",
+              "description": "Fixed-Flat, Fixed-Cumulative"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod",
+              "description": "The period for which this REST resource is valid"
+            }
+          },
+          "required": [
+            "price",
+            "priceType"
+          ]
+        },
+        "ProductRefOrValue": {
+          "type": "object",
+          "description": "A product to be created defined by value or existing defined by reference. The polymorphic attributes @type, @schemaLocation & @referredType are related to the product entity and not the RelatedProductRefOrValue class itself",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the product"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the product"
+            },
+            "description": {
+              "type": "string",
+              "description": "Is the description of the product. It could be copied from the description of the Product Offering."
+            },
+            "isBundle": {
+              "type": "boolean",
+              "description": "If true, the product is a ProductBundle which is an instantiation of a BundledProductOffering. If false, the product is a ProductComponent which is an instantiation of a SimpleProductOffering."
+            },
+            "isCustomerVisible": {
+              "type": "boolean",
+              "description": "If true, the product is visible by the customer."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the product. It could be the same as the name of the product offering"
+            },
+            "orderDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was ordered"
+            },
+            "productSerialNumber": {
+              "type": "string",
+              "description": "Is the serial number for the product. This is typically applicable to tangible products e.g. Broadband Router."
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date from which the product starts"
+            },
+            "terminationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was terminated"
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementItemRef"
+              }
+            },
+            "billingAccount": {
+              "$ref": "#/components/schemas/BillingAccountRef"
+            },
+            "place": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRefOrValue"
+              }
+            },
+            "productCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "productOffering": {
+              "$ref": "#/components/schemas/ProductOfferingRef"
+            },
+            "productOrderItem": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedProductOrderItem"
+              }
+            },
+            "productPrice": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductPrice"
+              }
+            },
+            "productRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRelationship"
+              }
+            },
+            "productSpecification": {
+              "$ref": "#/components/schemas/ProductSpecificationRef"
+            },
+            "productTerm": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductTerm"
+              }
+            },
+            "realizingResource": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ResourceRef"
+              }
+            },
+            "realizingService": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ServiceRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            },
+            "statusReason": {
+              "type": "string",
+              "description": "Reason explanation of the product status"
+            }
+          }
+        },
+        "ProductRelationship": {
+          "type": "object",
+          "description": "Linked products to the one instantiate, such as [bundled] if the product is a bundle and you want to describe the bundled products inside this bundle; [reliesOn] if the product needs another already owned product to rely on (e.g. an option on an already owned mobile access product) [targets] or [isTargeted] (depending on the way of expressing the link) for any other kind of links that may be useful",
+          "properties": {
+            "relationshipType": {
+              "type": "string",
+              "description": "Type of the product relationship, such as [bundled] if the product is a bundle and you want to describe the bundled products inside this bundle; [reliesOn] if the product needs another already owned product to rely on (e.g. an option on an already owned mobile access product) [targets] or [isTargeted] (depending on the way of expressing the link) for any other kind of links that may be useful"
+            },
+            "product": {
+              "$ref": "#/components/schemas/ProductRefOrValue"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "product",
+            "relationshipType"
+          ]
+        },
+        "ProductSpecificationRef": {
+          "type": "object",
+          "description": "Product specification reference: A ProductSpecification is a detailed description of a tangible or intangible object made available externally in the form of a ProductOffering to customers or other parties playing a party role.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Hyperlink reference"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of the product specification"
+            },
+            "targetProductSchema": {
+              "$ref": "#/components/schemas/TargetProductSchema"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "href",
+            "id"
+          ]
+        },
+        "ProductTerm": {
+          "type": "object",
+          "description": "Description of a productTerm linked to this product. This represent a commitment with a duration",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Description of the productTerm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the productTerm"
+            },
+            "duration": {
+              "$ref": "#/components/schemas/Quantity"
+            },
+            "validFor": {
+              "$ref": "#/components/schemas/TimePeriod"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "Quantity": {
+          "type": "object",
+          "description": "An amount in a given unit",
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "float",
+              "description": "Numeric value in a given unit"
+            },
+            "units": {
+              "type": "string",
+              "description": "Unit"
+            }
+          }
+        },
+        "RelatedChannel": {
+          "type": "object",
+          "description": "Related channel to another entity. May be online web, mobile app, social ,etc.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the channel."
+            },
+            "role": {
+              "type": "string",
+              "description": "Role playing by the channel."
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "RelatedParty": {
+          "type": "object",
+          "description": "Related Entity reference. A related party defines party or party role linked to a specific entity.",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "role": {
+              "type": "string",
+              "description": "Role played by the related party"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "@referredType",
+            "id"
+          ]
+        },
+        "RelatedPlaceRefOrValue": {
+          "type": "object",
+          "description": "Related Entity reference. A related place defines a place described by reference or by value linked to a specific entity. The polymorphic attributes @type, @schemaLocation & @referredType are related to the place entity and not the RelatedPlaceRefOrValue class itself",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the place"
+            },
+            "href": {
+              "type": "string",
+              "description": "Unique reference of the place"
+            },
+            "city": {
+              "type": "string",
+              "description": "City that the address is in"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country that the address is in"
+            },
+            "locality": {
+              "type": "string",
+              "description": "An area of defined or undefined boundaries within a local authority or other legislatively defined area, usually rural or semi rural in nature. [ANZLIC-STREET], or a suburb, a bounded locality within a city, town or shire principally of urban character [ANZLICSTREET]"
+            },
+            "name": {
+              "type": "string",
+              "description": "A user-friendly name for the place, such as [Paris Store], [London Store], [Main Home]"
+            },
+            "postcode": {
+              "type": "string",
+              "description": "descriptor for a postal delivery area, used to speed and simplify the delivery of mail (also know as zipcode)"
+            },
+            "stateOrProvince": {
+              "type": "string",
+              "description": "the State or Province that the address is in"
+            },
+            "streetName": {
+              "type": "string",
+              "description": "Name of the street or other street type"
+            },
+            "streetNr": {
+              "type": "string",
+              "description": "Number identifying a specific property on a public street. It may be combined with streetNrLast for ranged addresses"
+            },
+            "streetNrLast": {
+              "type": "string",
+              "description": "Last number in a range of street numbers allocated to a property"
+            },
+            "streetNrLastSuffix": {
+              "type": "string",
+              "description": "Last street number suffix for a ranged address"
+            },
+            "streetNrSuffix": {
+              "type": "string",
+              "description": "the first street number suffix"
+            },
+            "streetSuffix": {
+              "type": "string",
+              "description": "A modifier denoting a relative direction"
+            },
+            "streetType": {
+              "type": "string",
+              "description": "alley, avenue, boulevard, brae, crescent, drive, highway, lane, terrace, parade, place, tarn, way, wharf "
+            },
+            "geographicLocation": {
+              "$ref": "#/components/schemas/GeographicLocationRefOrValue"
+            },
+            "geographicSubAddress": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GeographicSubAddress"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "description": "External reference of the shopping cart or reference in other system",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "role": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "role"
+          ]
+        },
+        "RelatedProductOrderItem": {
+          "type": "object",
+          "description": "RelatedProductOrderItem (ProductOrder item) .The product order item which triggered product creation/change/termination.",
+          "properties": {
+            "orderItemAction": {
+              "type": "string",
+              "description": "Action of the order item for this product"
+            },
+            "orderItemId": {
+              "type": "string",
+              "description": "Identifier of the order item where the product was managed"
+            },
+            "productOrderHref": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "productOrderId": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "role": {
+              "type": "string",
+              "description": "role of the product order item for this product"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "orderItemId",
+            "productOrderId"
+          ]
+        },
+        "ResourceRef": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the resource"
+            },
+            "value": {
+              "type": "string",
+              "description": "The resource value that can be used to identify a resource with a public key (e.g.: a tel nr, an msisdn)"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "href",
+            "id"
+          ]
+        },
+        "ServiceRef": {
+          "type": "object",
+          "description": "Service reference, for when Service is used by other entities",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of a related entity."
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the related entity."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the related entity."
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "@referredType": {
+              "type": "string",
+              "description": "The actual type of the target instance when needed for disambiguation."
+            }
+          },
+          "required": [
+            "href",
+            "id"
+          ]
+        },
+        "TargetProductSchema": {
+          "type": "object",
+          "description": "The reference object to the schema and type of target product which is described by product specification",
+          "properties": {
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "This field provides a link to the schema describing the target product"
+            },
+            "@type": {
+              "type": "string",
+              "description": "Class type of the target product"
+            }
+          },
+          "required": [
+            "@schemaLocation",
+            "@type"
+          ]
+        },
+        "TaxItem": {
+          "type": "object",
+          "properties": {
+            "taxAmount": {
+              "$ref": "#/components/schemas/Money",
+              "description": "Tax amount"
+            },
+            "taxRate": {
+              "type": "number",
+              "description": "Tax rate"
+            },
+            "taxCategory": {
+              "type": "string",
+              "description": "A categorization of the tax rate"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          },
+          "required": [
+            "taxAmount",
+            "taxCategory",
+            "taxRate"
+          ]
+        },
+        "TimePeriod": {
+          "type": "object",
+          "description": "A period of time, either as a deadline (endDateTime only) a startDateTime only, or both",
+          "properties": {
+            "endDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End of the time period, using IETC-RFC-3339 format"
+            },
+            "startDateTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start of the time period, using IETC-RFC-3339 format. If you define a start, you must also define an end"
+            }
+          }
+        },
+        "Product": {
+          "type": "object",
+          "description": "A product offering procured by a customer or other interested party playing a party role. A product is realized as one or more service(s) and / or resource(s).",
+          "properties": {
+            "createdDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "createdBy": {
+              "type": "string"
+            },
+            "updatedBy": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the product"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the product"
+            },
+            "description": {
+              "type": "string",
+              "description": "Is the description of the product. It could be copied from the description of the Product Offering."
+            },
+            "isBundle": {
+              "type": "boolean",
+              "description": "If true, the product is a ProductBundle which is an instantiation of a BundledProductOffering. If false, the product is a ProductComponent which is an instantiation of a SimpleProductOffering."
+            },
+            "isCustomerVisible": {
+              "type": "boolean",
+              "description": "If true, the product is visible by the customer."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the product. It could be the same as the name of the product offering"
+            },
+            "orderDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was ordered"
+            },
+            "productSerialNumber": {
+              "type": "string",
+              "description": "Is the serial number for the product. This is typically applicable to tangible products e.g. Broadband Router."
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date from which the product starts"
+            },
+            "terminationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was terminated"
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementItemRef"
+              }
+            },
+            "billingAccount": {
+              "$ref": "#/components/schemas/BillingAccountRef"
+            },
+            "place": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRefOrValue"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "product": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRefOrValue"
+              }
+            },
+            "productCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "productOffering": {
+              "$ref": "#/components/schemas/ProductOfferingRef"
+            },
+            "productOrderItem": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedProductOrderItem"
+              }
+            },
+            "productPrice": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductPrice"
+              }
+            },
+            "productRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRelationship"
+              }
+            },
+            "productSpecification": {
+              "$ref": "#/components/schemas/ProductSpecificationRef"
+            },
+            "productTerm": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductTerm"
+              }
+            },
+            "realizingResource": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ResourceRef"
+              }
+            },
+            "realizingService": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ServiceRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "statusReason": {
+              "type": "string",
+              "description": "Reason explanation of the product status"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "expectedExpiryDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the expected expiry date when the product was ordered"
+            },
+            "channel": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedChannel"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            }
+          }
+        },
+        "Error": {
+          "type": "object",
+          "description": "Used when an API throws an Error, typically with a HTTP error response-code (3xx, 4xx, 5xx)",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "referenceError": {
+              "type": "string"
+            },
+            "@baseType": {
+              "type": "string"
+            },
+            "@schemaLocation": {
+              "type": "string"
+            },
+            "@type": {
+              "type": "string"
+            }
+          }
+        },
+        "ProductSnapshotCreate": {
+          "type": "object",
+          "description": "The Snapshot request data",
+          "properties": {
+            "orderId": {
+              "type": "string",
+              "description": "The order ID associated with this snapshot"
+            },
+            "orderItemId": {
+              "type": "string",
+              "description": "The order item ID associated with this snapshot"
+            }
+          },
+          "required": [
+            "orderId",
+            "orderItemId"
+          ]
+        },
+        "ProductSnapshot": {
+          "type": "object",
+          "description": "A snapshot of a Product entity at a specific point in time",
+          "properties": {
+            "createdDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "createdBy": {
+              "type": "string"
+            },
+            "updatedBy": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the snapshot"
+            },
+            "href": {
+              "type": "string",
+              "description": "Reference of the snapshot"
+            },
+            "orderId": {
+              "type": "string",
+              "description": "The order ID associated with this snapshot"
+            },
+            "orderItemId": {
+              "type": "string",
+              "description": "The order item ID associated with this snapshot"
+            },
+            "snapshotCreatedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when the snapshot was created"
+            },
+            "snapshotObject": {
+              "$ref": "#/components/schemas/Product",
+              "description": "The complete Product entity captured at the snapshot time"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            }
+          }
+        },
+        "EventSubscriptionInput": {
+          "type": "object",
+          "description": "Data containing the callback endpoint to deliver the information",
+          "properties": {
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback"
+          ]
+        },
+        "EventSubscription": {
+          "type": "object",
+          "description": "Sets the communication endpoint address the service instance must use to deliver notification information",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Version number of the entity"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of creation"
+            },
+            "updatedDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Date of update"
+            },
+            "createdBy": {
+              "type": "string",
+              "description": "Name of created by user"
+            },
+            "updatedBy": {
+              "type": "string",
+              "description": "Name of updated by user"
+            },
+            "id": {
+              "type": "string",
+              "description": "Id of the listener",
+              "minLength": 1
+            },
+            "callback": {
+              "type": "string",
+              "description": "The callback being registered.",
+              "minLength": 1
+            },
+            "query": {
+              "type": "string",
+              "description": "additional data to be passed"
+            }
+          },
+          "required": [
+            "callback",
+            "id"
+          ]
+        },
+        "ProductUpdate": {
+          "type": "object",
+          "description": "The Product to be updated",
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Is the description of the product. It could be copied from the description of the Product Offering."
+            },
+            "isBundle": {
+              "type": "boolean",
+              "description": "If true, the product is a ProductBundle which is an instantiation of a BundledProductOffering. If false, the product is a ProductComponent which is an instantiation of a SimpleProductOffering."
+            },
+            "isCustomerVisible": {
+              "type": "boolean",
+              "description": "If true, the product is visible by the customer."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the product. It could be the same as the name of the product offering"
+            },
+            "orderDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was ordered"
+            },
+            "productSerialNumber": {
+              "type": "string",
+              "description": "Is the serial number for the product. This is typically applicable to tangible products e.g. Broadband Router."
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date from which the product starts"
+            },
+            "terminationDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the date when the product was terminated"
+            },
+            "agreement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AgreementItemRef"
+              }
+            },
+            "billingAccount": {
+              "$ref": "#/components/schemas/BillingAccountRef"
+            },
+            "place": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedPlaceRefOrValue"
+              }
+            },
+            "externalReference": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ExternalReference"
+              }
+            },
+            "product": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRefOrValue"
+              }
+            },
+            "productCharacteristic": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Characteristic"
+              }
+            },
+            "productOffering": {
+              "$ref": "#/components/schemas/ProductOfferingRef"
+            },
+            "productOrderItem": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedProductOrderItem"
+              }
+            },
+            "productPrice": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductPrice"
+              }
+            },
+            "productRelationship": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductRelationship"
+              }
+            },
+            "productSpecification": {
+              "$ref": "#/components/schemas/ProductSpecificationRef"
+            },
+            "productTerm": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ProductTerm"
+              }
+            },
+            "realizingResource": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ResourceRef"
+              }
+            },
+            "realizingService": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ServiceRef"
+              }
+            },
+            "relatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            },
+            "status": {
+              "type": "string"
+            },
+            "statusReason": {
+              "type": "string",
+              "description": "Reason explanation of the product status"
+            },
+            "@baseType": {
+              "type": "string",
+              "description": "When sub-classing, this defines the super-class"
+            },
+            "@schemaLocation": {
+              "type": "string",
+              "description": "A URI to a JSON-Schema file that defines additional attributes and relationships"
+            },
+            "@type": {
+              "type": "string",
+              "description": "When sub-classing, this defines the sub-class entity name"
+            },
+            "expectedExpiryDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Is the expected expiry date when the product was ordered"
+            },
+            "channel": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedChannel"
+              }
+            },
+            "aclRelatedParty": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RelatedParty"
+              }
+            }
+          }
+        },
+        "JsonPatch": {
+          "description": "The Product to be updated"
+        }
+      },
+      "securitySchemes": {
+        "BearerAuthentication": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }

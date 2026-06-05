@@ -15,16 +15,17 @@ You are an API test automation expert. Analyze the provided Swagger JSON file an
 - Step definition files: `src/features/steps/{feature-name}/{feature-name}.step.ts`
 - Service files: `src/services/{feature-name}Service.ts`
 - Model files: `src/models/{feature-name}.model.ts`
-- Endpoint management: `src/config/endpoints.ts`
+- Endpoint management: `src/config/{featureName}.endpoints.ts` (one file per API, not a shared endpoints.ts)
+- Keycloak token path only: `src/config/keycloak.endpoints.ts` (framework auth, do not edit per feature)
 
 #### 2. Feature File Format:
 ```gherkin
+@{tagName}
 Feature: {API Name} API
 
-  @{tagName}
   Scenario: {Scenario description}
-    Given I have authentication credentials for user "orbitant"
-    And I send a POST request to get access token
+    Given I have authentication credentials for the configured test user
+    When I send a POST request to get access token
     And I have a valid authorization token from the response
     And I initialize {service-name} service with authorization token
     When I send a {METHOD} request to the {endpoint-name} endpoint
@@ -39,7 +40,7 @@ import { logger } from '../../../utils/logger';
 import { ServiceHelper } from '../../../utils/serviceHelper';
 import { ResponseHelper } from '../../../utils/responseHelper';
 import { {ServiceName}Service } from '../../../services/{serviceName}Service';
-import { endpoints } from '../../../config/endpoints';
+import { endpoints } from '../../../config/{featureName}.endpoints';
 
 let {serviceName}Service: {ServiceName}Service;
 let response: any;
@@ -70,7 +71,7 @@ Then('the response should contain {validation}', async () => {
 ```typescript
 import { ApiClient } from '../core/api/apiClient';
 import { {ModelName} } from '../models/{modelName}.model';
-import { endpoints } from '../config/endpoints';
+import { endpoints } from '../config/{featureName}.endpoints';
 
 export class {ServiceName}Service {
   constructor(private api: ApiClient) {}
@@ -82,17 +83,15 @@ export class {ServiceName}Service {
 ```
 
 #### 5. Endpoint Management:
-All endpoints are managed centrally in `src/config/endpoints.ts`:
+Each API gets its own `src/config/{featureName}.endpoints.ts` (full baseURI from Swagger servers + resource paths). Do NOT use or create `src/config/endpoints.ts`.
 ```typescript
 export const endpoints = {
   {apiGroup}: {
-    base: '/api/{apiGroup}/v{version}',
+    baseURI: 'https://host/api/{apiGroup}/v{version}',
     {resource}: {
-      list: '/api/{apiGroup}/v{version}/{resource}',
-      byId: (id: string) => `/api/{apiGroup}/v{version}/{resource}/${id}`,
-      create: '/api/{apiGroup}/v{version}/{resource}',
-      update: (id: string) => `/api/{apiGroup}/v{version}/{resource}/${id}`,
-      delete: (id: string) => `/api/{apiGroup}/v{version}/{resource}/${id}`
+      list: '/{resource}',
+      create: '/{resource}',
+      byId: (id: string) => `/{resource}/${id}`,
     }
   }
 } as const;
@@ -113,7 +112,8 @@ export const endpoints = {
   - `getResponseBody(response)`
 
 - **AuthHelper**: For authentication
-  - `getCredentialsForUser(username)`
+  - `getConfiguredCredentials()` — uses credentials from the test-run UI (never hardcode usernames in features)
+  - `getCredentialsForUser(username)` — legacy; prefer the configured test user step
   - `getToken(credentials)`
   - `getAccessToken()`
 
@@ -159,6 +159,22 @@ export interface {ModelName} {
 }
 ```
 
+### HTTP status codes (GCU/TMF — mandatory in features and steps)
+
+This platform does **not** always match generic Swagger defaults. Use these in **every** generated feature:
+
+| Operation | Expected status in `Then the response status should be {code}` |
+|-----------|------------------------------------------------------------------|
+| **GET list** or **GET by id** | **`Then the response status should be 200 or 206`** (accept either) |
+| **POST create** success | **201** |
+| **PATCH/PUT** update success | **200** or **204** (per Swagger) |
+| **DELETE** success | **204** or **200** (per Swagger) |
+| Validation / missing required field | **400** |
+
+- For every GET list or GET retrieve scenario, assert with **`Then the response status should be 200 or 206`** (shared step in `common.step.ts`).
+- PATCH service methods must send `Content-Type: application/merge-patch+json` (plain `application/json` on PATCH returns 400 on GCU).
+- For POST bodies that reference another resource by `id`, create that parent in the step first and use the real `id` from the create response (never fake IDs).
+
 ### Tasks:
 
 1. **Analyze Swagger JSON** and extract:
@@ -175,7 +191,7 @@ export interface {ModelName} {
    - Step definition file
    - Service class
    - Model interface (if request/response body exists)
-   - Add endpoints to `endpoints.ts`
+   - Add `src/config/{featureName}.endpoints.ts` for that API
 
 4. **Scenarios should include**:
    - Authentication setup (always)
@@ -201,8 +217,8 @@ If Swagger has this endpoint:
           {"name": "sort", "in": "query", "type": "string"}
         ],
         "responses": {
-          "200": {
-            "description": "Success",
+          "206": {
+            "description": "Partial Content (list)",
             "schema": {"type": "array", "items": {"$ref": "#/definitions/Product"}}
           }
         }
@@ -214,7 +230,7 @@ If Swagger has this endpoint:
 
 Create:
 
-1. `src/config/endpoints.ts` - Add products endpoint
+1. `src/config/product.endpoints.ts` - Products API paths
 2. `src/models/product.model.ts` - Product interface
 3. `src/services/productService.ts` - ProductService class
 4. `src/features/products/products.feature` - Feature file
@@ -222,13 +238,18 @@ Create:
 
 ### Important Notes:
 
+- Step defs: import only `Given`, `When`, `Then` from `@cucumber/cucumber` — never `And()` or `But()`
+- Strict TS: `requireResponseId()` from `src/utils/strictHelpers.ts` for ids; no raw `process.env` → `string`
+- Services: `buildApiUrl(baseURI, path)` from `src/utils/apiUrl.ts` — never call API with path-only URL
+- Step defs: **every** step pattern ends with ` for <featureName>` (e.g. `for partyManagement4`); use `const FEATURE = 'partyManagement4'` in step file; feature Gherkin must match
 - Use logger in all steps
 - Use util classes, avoid code duplication
 - Use ResponseHelper methods for response validation
 - Use ServiceHelper for service initialization
-- Don't hardcode endpoints, get them from endpoints.ts
+- Don't hardcode URLs; use the feature's `{featureName}.endpoints.ts` file
 - Pay attention to TypeScript type safety
 - Create at least 2-3 scenarios per endpoint (success, error, edge case)
+- GET list/retrieve scenarios: **`Then the response status should be 200 or 206`**; create scenarios assert **201**
 
 Now analyze the provided Swagger JSON file and create all files according to the rules above.
 
