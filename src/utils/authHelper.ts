@@ -4,31 +4,40 @@ import { ApiClient } from '../core/api/apiClient';
 import { logger } from './logger';
 import { keycloakEndpoints } from '../config/keycloak.endpoints';
 import { envConfig } from '../config/env.config';
+import { getApiProjectConfig, extractKeycloakBaseUrl } from '../config/projectEnv';
 
 export class AuthHelper {
   private static tokenResponse: TokenResponse | null = null;
   private static authService: AuthService | null = null;
 
   /**
-   * Credentials from the test-run UI via process env (set by backend before Cucumber starts).
-   * Requires API_TEST_USERNAME, API_TEST_PASSWORD, and optionally API_TEST_CLIENT_ID / API_KEYCLOAK_BASE_URL.
+   * Credentials from config/projects/{project}.json (synced from Ortamlar → Keycloak).
+   * Falls back to process env when set (legacy test runs).
    */
   static getConfiguredCredentials(): TokenRequest {
-    const username = process.env.API_TEST_USERNAME?.trim();
-    const password = process.env.API_TEST_PASSWORD;
+    const envUsername = process.env.API_TEST_USERNAME?.trim();
+    const envPassword = process.env.API_TEST_PASSWORD;
 
-    if (!username || !password) {
-      throw new Error(
-        'No API credentials in environment. Run tests from the Test Assistant UI with a Keycloak profile selected.',
-      );
+    if (envUsername && envPassword) {
+      logger.info(`Using API credentials from environment for user: ${envUsername}`);
+      return {
+        grant_type: 'password',
+        client_id: process.env.API_TEST_CLIENT_ID?.trim() || 'orbitant-ui-client',
+        username: envUsername,
+        password: envPassword,
+      };
     }
 
-    logger.info(`Using API credentials from test-run UI for user: ${username}`);
+    const config = getApiProjectConfig();
+    const baseUrl = extractKeycloakBaseUrl(config.keycloakUrl);
+    process.env.API_KEYCLOAK_BASE_URL = baseUrl;
+
+    logger.info(`Using API credentials from project config for user: ${config.username}`);
     return {
       grant_type: 'password',
-      client_id: process.env.API_TEST_CLIENT_ID?.trim() || 'orbitant-ui-client',
-      username,
-      password,
+      client_id: config.clientId?.trim() || 'orbitant-ui-client',
+      username: config.username,
+      password: config.password,
     };
   }
 
@@ -93,7 +102,7 @@ export class AuthHelper {
       try {
         if (responseBody.trim().startsWith('<!DOCTYPE html>')) {
           logger.warn(
-            'Received HTML instead of JSON token (SSO/Cloudflare?). Check Keycloak URL in the UI profile.',
+            'Received HTML instead of JSON token (SSO/Cloudflare?). Check Keycloak URL in Ortamlar profile.',
           );
         } else {
           this.tokenResponse = JSON.parse(responseBody);
