@@ -49,4 +49,15 @@ export class ApiClient {
       headers: options?.headers
     });
   }
+
+  postMultipart(
+    url: string,
+    multipart: Record<string, string | { name: string; mimeType?: string; buffer: Buffer }>,
+    options?: { headers?: Record<string, string> },
+  ) {
+    return this.context.post(url, {
+      multipart,
+      headers: options?.headers,
+    });
+  }
 }

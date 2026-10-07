@@ -4,8 +4,11 @@ import {
   extractProjectKeyFromFeatureUri,
   setScenarioProjectKey,
 } from '../../config/projectEnv';
+import { resetTestDataCache } from '../../utils/testData';
+import { runGeneratedAfter, runGeneratedBefore } from '../lifecycle/lifecycleRegistry';
 
-Before(function (scenario) {
+Before(async function (scenario) {
+  resetTestDataCache();
   const featureUri = scenario.pickle?.uri || scenario.gherkinDocument?.uri || '';
   const projectKey = extractProjectKeyFromFeatureUri(featureUri);
   setScenarioProjectKey(projectKey);
@@ -31,8 +34,16 @@ Before(function (scenario) {
 
   ReportHelper.setFeature(gherkinFeatureName);
   ReportHelper.startScenario(scenarioName);
+
+  // Scoped BEFORE lifecycle of migrated tests (no-op for features without a registration).
+  await runGeneratedBefore(featureUri, this);
 });
 
-After(function () {
-  setScenarioProjectKey(undefined);
+// Runs before afterEach.ts's After (After hooks run in reverse definition order), while the project key is set.
+After(async function (scenario) {
+  try {
+    await runGeneratedAfter(scenario.pickle?.uri || scenario.gherkinDocument?.uri || '', this);
+  } finally {
+    setScenarioProjectKey(undefined);
+  }
 });

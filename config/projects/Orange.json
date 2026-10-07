@@ -1,0 +1,6 @@
+{
+  "keycloakUrl" : "https://diam.dnextsmf-orangedev.com/realms/orbitant-realm",
+  "username" : "admin",
+  "password" : "admin",
+  "clientId" : "orbitant-ui-client"
+}

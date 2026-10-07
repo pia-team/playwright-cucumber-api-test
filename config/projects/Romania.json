@@ -1,0 +1,6 @@
+{
+  "keycloakUrl" : "https://diam.test.dev-gcu.com/realms/orbitant-realm",
+  "username" : "nora",
+  "password" : "1234",
+  "clientId" : "orbitant-ui-client"
+}
