@@ -20,6 +20,8 @@ playwright/.cache/
 test-data/
 config/api-auth.runtime.json
 config/variables/
+# Keycloak / credential profiles synced by CoTester — never commit secrets
+config/projects/
 .backup/
 .DS_Store
 Thumbs.db

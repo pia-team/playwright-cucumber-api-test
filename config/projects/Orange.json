@@ -1,6 +1,7 @@
 {
-  "keycloakUrl" : "https://diam.dnextsmf-orangedev.com/realms/orbitant-realm",
-  "username" : "admin",
-  "password" : "admin",
-  "clientId" : "orbitant-ui-client"
+  "keycloakUrl": "https://diam.dnextsmf-orangedev.com/realms/orbitant-realm",
+  "username": "admin",
+  "password": "",
+  "clientId": "orbitant-ui-client",
+  "_cotesterNote": "Password injected at runtime via CoTester credentials \u2014 not stored in shared config."
 }

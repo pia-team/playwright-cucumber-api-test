@@ -81,7 +81,7 @@ export interface PartyRoleCreate {
   '@type'?: string;
   account?: AccountRef[];
   agreement?: AgreementRef[];
-  attachment?: AttachmentRef[];
+  attachment?: AttachmentRefOrValue[];
   characteristic?: Characteristic[];
   contactMedium?: ContactMedium[];
   creditProfile?: CreditProfile[];

@@ -5,21 +5,47 @@ import { logger } from './logger';
 import { keycloakEndpoints } from '../config/keycloak.endpoints';
 import { envConfig } from '../config/env.config';
 import { getApiProjectConfig, extractKeycloakBaseUrl } from '../config/projectEnv';
+import {
+  clearAuthScenarioToken,
+  enterAuthScenario,
+  getAuthScenarioState,
+} from './authScenarioStore';
 
+export { clearAuthScenarioToken, enterAuthScenario };
+
+/**
+ * Job/scenario-scoped auth helper. Tokens live in authScenarioStore (or job key),
+ * never in a process-wide static field shared across parallel CoTester jobs.
+ */
 export class AuthHelper {
-  private static tokenResponse: TokenResponse | null = null;
-  private static authService: AuthService | null = null;
+  private static authServiceByJob = new Map<string, AuthService>();
+
+  private static jobScopeKey(): string {
+    return (
+      process.env.COTESTER_RUNTIME_DIR?.trim() ||
+      process.env.CUCUMBER_WORKER_ID?.trim() ||
+      'default'
+    );
+  }
 
   /**
-   * Credentials from config/projects/{project}.json (synced from Ortamlar → Keycloak).
-   * Falls back to process env when set (legacy test runs).
+   * Credentials from runtime env (FAZ 3 Credential Profile) first, then
+   * config/projects/{project}.json (legacy). Empty shared JSON password fails closed.
    */
   static getConfiguredCredentials(): TokenRequest {
     const envUsername = process.env.API_TEST_USERNAME?.trim();
     const envPassword = process.env.API_TEST_PASSWORD;
+    const envKeycloak = process.env.API_KEYCLOAK_URL?.trim();
 
     if (envUsername && envPassword) {
-      logger.info(`Using API credentials from environment for user: ${envUsername}`);
+      if (envKeycloak) {
+        try {
+          process.env.API_KEYCLOAK_BASE_URL = extractKeycloakBaseUrl(envKeycloak);
+        } catch {
+          process.env.API_KEYCLOAK_BASE_URL = envKeycloak;
+        }
+      }
+      logger.info(`Using API credentials from runtime environment for user: ${envUsername}`);
       return {
         grant_type: 'password',
         client_id: process.env.API_TEST_CLIENT_ID?.trim() || 'orbitant-ui-client',
@@ -31,6 +57,13 @@ export class AuthHelper {
     const config = getApiProjectConfig();
     const baseUrl = extractKeycloakBaseUrl(config.keycloakUrl);
     process.env.API_KEYCLOAK_BASE_URL = baseUrl;
+
+    if (!config.password) {
+      throw new Error(
+        'Keycloak password is not available. Select a KEYCLOAK Credential Profile for this run ' +
+          '(shared config/projects JSON no longer stores passwords).',
+      );
+    }
 
     logger.info(`Using API credentials from project config for user: ${config.username}`);
     return {
@@ -65,7 +98,9 @@ export class AuthHelper {
   }
 
   static async initializeAuthService(): Promise<AuthService> {
-    if (!this.authService) {
+    const key = this.jobScopeKey();
+    let service = this.authServiceByJob.get(key);
+    if (!service) {
       const context = await request.newContext({
         baseURL: envConfig.baseUrl,
         extraHTTPHeaders: {
@@ -73,12 +108,11 @@ export class AuthHelper {
           'content-type': 'application/x-www-form-urlencoded',
         },
       });
-
-      this.authService = new AuthService(new ApiClient(context));
-      logger.debug('Auth service initialized');
+      service = new AuthService(new ApiClient(context));
+      this.authServiceByJob.set(key, service);
+      logger.debug('Auth service initialized (job-scoped)');
     }
-
-    return this.authService;
+    return service;
   }
 
   static async getToken(credentials: TokenRequest): Promise<any> {
@@ -105,12 +139,12 @@ export class AuthHelper {
             'Received HTML instead of JSON token (SSO/Cloudflare?). Check Keycloak URL in Ortamlar profile.',
           );
         } else {
-          this.tokenResponse = JSON.parse(responseBody);
-          logger.debug('Token response received and parsed');
+          getAuthScenarioState().tokenResponse = JSON.parse(responseBody);
+          logger.debug('Token response received and parsed (scenario-scoped)');
         }
       } catch (error) {
         logger.error(
-          `Failed to parse token response as JSON. Status: ${status}, Body: ${responseBody}`,
+          `Failed to parse token response as JSON. Status: ${status}, Body length: ${responseBody?.length ?? 0}`,
           error,
         );
       }
@@ -120,18 +154,19 @@ export class AuthHelper {
   }
 
   static setTokenResponse(tokenResponse: TokenResponse): void {
-    this.tokenResponse = tokenResponse;
+    getAuthScenarioState().tokenResponse = tokenResponse;
   }
 
   static getTokenResponse(): TokenResponse | null {
-    return this.tokenResponse;
+    return getAuthScenarioState().tokenResponse;
   }
 
   static getAccessToken(): string | null {
-    return this.tokenResponse?.access_token || null;
+    return getAuthScenarioState().tokenResponse?.access_token || null;
   }
 
   static clearToken(): void {
-    this.tokenResponse = null;
+    clearAuthScenarioToken();
+    this.authServiceByJob.delete(this.jobScopeKey());
   }
 }

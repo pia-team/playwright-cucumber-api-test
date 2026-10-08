@@ -6,8 +6,11 @@ import {
 } from '../../config/projectEnv';
 import { resetTestDataCache } from '../../utils/testData';
 import { runGeneratedAfter, runGeneratedBefore } from '../lifecycle/lifecycleRegistry';
+import { clearAuthScenarioToken, enterAuthScenario } from '../../utils/authHelper';
 
 Before(async function (scenario) {
+  enterAuthScenario();
+  clearAuthScenarioToken();
   resetTestDataCache();
   const featureUri = scenario.pickle?.uri || scenario.gherkinDocument?.uri || '';
   const projectKey = extractProjectKeyFromFeatureUri(featureUri);

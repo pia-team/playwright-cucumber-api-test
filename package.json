@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "test:unit": "node --require ts-node/register/transpile-only --test tests/*.test.ts tests/e2e/mockApiServer.test.ts",
+    "test:e2e:local": "node --require ts-node/register/transpile-only tests/e2e/run-local-e2e.ts",
     "test": "cucumber-js",
     "test:tag": "cucumber-js --tags",
     "test:category": "cucumber-js --tags @quote",
@@ -7,7 +9,8 @@
     "report:open": "node -e \"require('child_process').exec('start reports/cucumber-report/detailed-report.html', (err) => { if (err) console.log('Please open the report manually'); })\""
   },
   "dependencies": {
-    "@playwright/test": "^1.57.0"
+    "@playwright/test": "^1.57.0",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^12.5.0",

@@ -126,14 +126,18 @@ npm install
 
 ### 3️⃣ Environment Configuration
 
-Set environment variables:
+CoTester injects job-scoped variables at run time (Credential Profiles, Environment URLs). For local runs, see `cotester.env.example`:
 
 ```bash
+export COTESTER_API_BASE_URL=https://api.dev.example.com
 export BASE_URL=https://api.dev.example.com
-export API_TOKEN=your-token
+export API_TOKEN=your-bearer-token
+# Or KEYCLOAK: API_KEYCLOAK_URL, API_TEST_USERNAME, API_TEST_PASSWORD, …
+# Or BASIC: API_BASIC_USERNAME, API_BASIC_PASSWORD
+# Or API_KEY: API_KEY_VALUE, API_KEY_HEADER, API_KEY_PLACEMENT, …
 ```
 
-Or use `.env` file if supported.
+**Auth precedence (generic HTTP steps):** step auth mode and step-level Bearer token → runtime env / `COTESTER_RUNTIME_CREDENTIALS_FILE` → legacy `config/projects/*.json` (passwords may be empty in shared repos). Mode `NONE` sends no profile auth.
 
 ---
 
