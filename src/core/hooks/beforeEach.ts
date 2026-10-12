@@ -7,11 +7,31 @@ import {
 import { resetTestDataCache } from '../../utils/testData';
 import { runGeneratedAfter, runGeneratedBefore } from '../lifecycle/lifecycleRegistry';
 import { clearAuthScenarioToken, enterAuthScenario } from '../../utils/authHelper';
+import { resetApiHttpScenarioGlobals } from '../../utils/apiScenarioGlobals';
 
 Before(async function (scenario) {
   enterAuthScenario();
   clearAuthScenarioToken();
   resetTestDataCache();
+  // Fresh scenario scope; optional Test Flow preload below.
+  const world = this as { scenarioVars?: Record<string, string> };
+  world.scenarioVars = {};
+  const flowContextPath = process.env.COTESTER_FLOW_CONTEXT_PATH;
+  if (flowContextPath) {
+    try {
+      const fs = await import('fs/promises');
+      const raw = await fs.readFile(flowContextPath, 'utf8');
+      const parsed = JSON.parse(raw || '{}');
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        world.scenarioVars = { ...(parsed as Record<string, string>) };
+      }
+    } catch (e: unknown) {
+      if ((e as NodeJS.ErrnoException)?.code !== 'ENOENT') {
+        console.warn('Failed to load flow context:', e);
+      }
+    }
+  }
+  resetApiHttpScenarioGlobals();
   const featureUri = scenario.pickle?.uri || scenario.gherkinDocument?.uri || '';
   const projectKey = extractProjectKeyFromFeatureUri(featureUri);
   setScenarioProjectKey(projectKey);

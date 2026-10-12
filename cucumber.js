@@ -11,6 +11,8 @@ module.exports = {
       'html:reports/cucumber-report/report.html',
       'junit:reports/cucumber-report/junit-report.xml',
       'message:reports/cucumber-report/cucumber-messages.ndjson',
+      // Same reporter as WEB (test-asistant-playwright); results → ./allure-results
+      'allure-cucumberjs/reporter',
     ],
     publishQuiet: true,
     worldParameters: {
@@ -25,6 +27,7 @@ module.exports = {
       'progress',
       'json:reports/cucumber-report/cucumber-report.json',
       'html:reports/cucumber-report/report.html',
+      'allure-cucumberjs/reporter',
     ],
     publishQuiet: true,
   },

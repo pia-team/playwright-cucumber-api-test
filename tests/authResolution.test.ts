@@ -1,6 +1,10 @@
 import { afterEach, beforeEach, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveRequestAuth } from '../src/utils/authResolution';
+import {
+  embeddedSecretConfigurationError,
+  normalizeBearerToken,
+  resolveRequestAuth,
+} from '../src/utils/authResolution';
 
 const ENV_KEYS = [
   'API_TOKEN',
@@ -48,6 +52,31 @@ describe('resolveRequestAuth', () => {
     assert.deepEqual(result.query, {});
   });
 
+  it('BEARER strips a leading Bearer prefix so the header has exactly one', async () => {
+    process.env.API_TOKEN = 'Bearer already-prefixed-token';
+    const result = await resolveRequestAuth('BEARER');
+    assert.equal(result.headers.Authorization, 'Bearer already-prefixed-token');
+    assert.equal(result.headers.Authorization.startsWith('Bearer Bearer'), false);
+  });
+
+  it('BEARER strips repeated Bearer prefixes', async () => {
+    process.env.API_TOKEN = 'Bearer Bearer double-prefixed';
+    const result = await resolveRequestAuth('BEARER');
+    assert.equal(result.headers.Authorization, 'Bearer double-prefixed');
+  });
+
+  it('BEARER rejects empty token after normalization without sending a request', async () => {
+    process.env.API_TOKEN = 'Bearer   ';
+    await assert.rejects(() => resolveRequestAuth('BEARER'), /no token is available/);
+  });
+
+  it('normalizeBearerToken never returns a Bearer prefix', () => {
+    assert.equal(normalizeBearerToken('raw-token'), 'raw-token');
+    assert.equal(normalizeBearerToken('Bearer raw-token'), 'raw-token');
+    assert.equal(normalizeBearerToken('  bearer   x  '), 'x');
+    assert.equal(normalizeBearerToken('Bearer'), '');
+  });
+
   it('BEARER prefers step-level bearerToken over env', async () => {
     process.env.API_TOKEN = 'env-token';
     const result = await resolveRequestAuth('BEARER', { bearerToken: 'step-token' });
@@ -70,6 +99,30 @@ describe('resolveRequestAuth', () => {
     const result = await resolveRequestAuth('API_KEY');
     assert.equal(result.headers['X-Custom-Key'], 'dummy-api-key');
     assert.deepEqual(result.query, {});
+  });
+
+  it('API_KEY header name from the feature uses the credential value', async () => {
+    process.env.API_KEY_VALUE = 'dummy-api-key';
+    process.env.API_KEY_HEADER = 'X-Other';
+    const result = await resolveRequestAuth('API_KEY', { apiKeyHeader: 'X-API-Key' });
+    assert.equal(result.headers['X-API-Key'], 'dummy-api-key');
+    assert.equal(result.headers['X-Other'], undefined);
+  });
+
+  it('missing BEARER credential fails closed without sending a request', async () => {
+    await assert.rejects(() => resolveRequestAuth('BEARER'), /Credential Profile/);
+  });
+
+  it('missing API_KEY credential fails closed', async () => {
+    await assert.rejects(() => resolveRequestAuth('API_KEY'), /API_KEY_VALUE/);
+    await assert.rejects(() => resolveRequestAuth('API_KEY'), /request was not sent/i);
+  });
+
+  it('embedded secret with auth mode NONE is a configuration error', () => {
+    const error = embeddedSecretConfigurationError(['X-API-Key']);
+    assert.match(error.message, /X-API-Key/);
+    assert.match(error.message, /request was not sent/i);
+    assert.equal(error.message.includes('synthetic-partner-key-value'), false);
   });
 
   it('API_KEY applies query param when placement is query', async () => {

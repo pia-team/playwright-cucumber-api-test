@@ -15,6 +15,17 @@ export class ApiClient {
     return this.context.get(url, requestOptions);
   }
 
+  /** True HTTP HEAD — must not be silently rewritten to GET. */
+  head(url: string, options?: { headers?: Record<string, string>; params?: Record<string, string | number> }) {
+    const requestOptions: any = {
+      headers: options?.headers,
+    };
+    if (options?.params) {
+      requestOptions.params = options.params;
+    }
+    return this.context.head(url, requestOptions);
+  }
+
   post(url: string, body?: unknown, options?: { headers?: Record<string, string>; form?: boolean }) {
     const requestOptions: any = {
       headers: options?.headers

@@ -2,6 +2,7 @@
 node_modules/
 
 # Testing reports and results
+allure-results/
 allure-reports/
 reports/
 test-results/

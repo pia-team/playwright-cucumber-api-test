@@ -13,7 +13,27 @@ export type ResolvedRequestAuth = {
 export type ResolveAuthOptions = {
   /** Step-level Bearer token (wins over API_TOKEN / env profile). */
   bearerToken?: string;
+  /** Header name from the feature. The value always comes from the credential profile. */
+  apiKeyHeader?: string;
+  /** Query name from the feature. The value always comes from the credential profile. */
+  apiKeyQuery?: string;
 };
+
+const CONFIG_ERROR =
+  'The request was not sent. Bind a Credential Profile and run again.';
+
+/**
+ * Strips repeated leading "Bearer " prefixes so the Authorization header has exactly one.
+ * Does not log the token value.
+ */
+export function normalizeBearerToken(raw: string | undefined | null): string {
+  let token = String(raw ?? '').trim();
+  // Strip one or more leading "Bearer" labels (with or without following whitespace).
+  while (/^bearer(\s+|$)/i.test(token)) {
+    token = token.replace(/^bearer\s*/i, '').trim();
+  }
+  return token;
+}
 
 /**
  * Resolves auth for generic HTTP steps.
@@ -33,13 +53,14 @@ export async function resolveRequestAuth(
   }
 
   if (normalized === 'BEARER') {
-    const token =
+    const raw =
       options?.bearerToken?.trim() ||
       process.env.API_TOKEN?.trim() ||
       envConfig.token?.trim();
+    const token = normalizeBearerToken(raw);
     if (!token) {
       throw new Error(
-        'BEARER auth selected but no token is available. Set API_TOKEN via CoTester Credential Profile or pass a step-level Bearer token.',
+        `BEARER auth selected but no token is available. Set API_TOKEN via a CoTester BEARER_TOKEN Credential Profile. ${CONFIG_ERROR}`,
       );
     }
     logger.info('API auth mode BEARER — token applied (value not logged)');
@@ -51,7 +72,7 @@ export async function resolveRequestAuth(
     const password = process.env.API_BASIC_PASSWORD;
     if (!username || password == null || password === '') {
       throw new Error(
-        'BASIC auth selected but API_BASIC_USERNAME/API_BASIC_PASSWORD are not set. Configure a BASIC Credential Profile.',
+        `BASIC auth selected but API_BASIC_USERNAME/API_BASIC_PASSWORD are not set. Configure a BASIC_AUTH Credential Profile. ${CONFIG_ERROR}`,
       );
     }
     const encoded = Buffer.from(`${username}:${password}`, 'utf-8').toString('base64');
@@ -63,31 +84,35 @@ export async function resolveRequestAuth(
     const value = process.env.API_KEY_VALUE?.trim();
     if (!value) {
       throw new Error(
-        'API_KEY auth selected but API_KEY_VALUE is not set. Configure an API Key Credential Profile.',
+        `API_KEY auth selected but API_KEY_VALUE is not set. Configure an API_KEY Credential Profile. ${CONFIG_ERROR}`,
       );
     }
+    const stepQuery = options?.apiKeyQuery?.trim();
+    const stepHeader = options?.apiKeyHeader?.trim();
     const placement = (process.env.API_KEY_PLACEMENT || 'header').trim().toLowerCase();
-    if (placement === 'query') {
-      const queryName = process.env.API_KEY_QUERY?.trim() || 'api_key';
+    if (stepQuery || (!stepHeader && placement === 'query')) {
+      const queryName = stepQuery || process.env.API_KEY_QUERY?.trim() || 'api_key';
       logger.info(`API auth mode API_KEY — query param "${queryName}" applied (value not logged)`);
       return { headers: {}, query: { [queryName]: value } };
     }
-    const headerName = process.env.API_KEY_HEADER?.trim() || 'X-API-Key';
+    const headerName = stepHeader || process.env.API_KEY_HEADER?.trim() || 'X-API-Key';
     logger.info(`API auth mode API_KEY — header "${headerName}" applied (value not logged)`);
     return { headers: { [headerName]: value }, query: {} };
   }
 
   if (normalized === 'KEYCLOAK') {
-    const existing = AuthHelper.getAccessToken();
+    const existing = normalizeBearerToken(AuthHelper.getAccessToken());
     if (existing) {
       logger.info('API auth mode KEYCLOAK — using scenario-scoped cached access token');
       return { headers: { Authorization: `Bearer ${existing}` }, query: {} };
     }
     const credentials = AuthHelper.getConfiguredCredentials();
     await AuthHelper.getToken(credentials);
-    const token = AuthHelper.getAccessToken();
+    const token = normalizeBearerToken(AuthHelper.getAccessToken());
     if (!token) {
-      throw new Error('KEYCLOAK auth failed — could not obtain access token');
+      throw new Error(
+        `KEYCLOAK auth failed — could not obtain an access token. Configure a KEYCLOAK Credential Profile. ${CONFIG_ERROR}`,
+      );
     }
     logger.info('API auth mode KEYCLOAK — token obtained (value not logged)');
     return { headers: { Authorization: `Bearer ${token}` }, query: {} };
@@ -103,6 +128,18 @@ export async function resolveAuthorizationHeader(
 ): Promise<Record<string, string>> {
   const resolved = await resolveRequestAuth(mode, options);
   return resolved.headers;
+}
+
+/**
+ * Sensitive header names found in a Gherkin table must not be sent, and auth mode NONE
+ * must not continue as an unauthenticated call.
+ */
+export function embeddedSecretConfigurationError(headerNames: string[]): Error {
+  const name = headerNames.find((item) => item && item.trim()) || 'secret header';
+  return new Error(
+    `Configuration error: sensitive header "${name}" was embedded in the feature and ignored. `
+      + `Bind a Credential Profile and set auth mode to BEARER, BASIC, API_KEY, or KEYCLOAK. ${CONFIG_ERROR}`,
+  );
 }
 
 /** Merge request headers/query with auth; profile auth wins over duplicate keys in step tables. */

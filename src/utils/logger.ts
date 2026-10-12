@@ -1,3 +1,5 @@
+import { redactBody, redactHeaders, redactUrl } from './httpEvidence';
+
 export enum LogLevel {
   DEBUG = 0,
   INFO = 1,
@@ -83,12 +85,12 @@ export class Logger {
   }
 
   static logRequest(method: string, url: string, headers?: Record<string, string>, body?: any): void {
-    this.info(`HTTP Request: ${method} ${url}`);
+    this.info(`HTTP Request: ${method} ${redactUrl(url || '')}`);
     if (headers) {
-      this.debug('Request Headers:', headers);
+      this.debug('Request Headers:', redactHeaders(headers));
     }
-    if (body) {
-      this.debug('Request Body:', body);
+    if (body !== undefined && body !== null) {
+      this.debug('Request Body:', redactBody(typeof body === 'string' ? body : JSON.stringify(body)));
     }
   }
 
@@ -96,10 +98,10 @@ export class Logger {
     const level = status >= 400 ? 'error' : status >= 300 ? 'warn' : 'info';
     this[level](`HTTP Response: ${status} ${statusText}`);
     if (headers) {
-      this.debug('Response Headers:', headers);
+      this.debug('Response Headers:', redactHeaders(headers));
     }
-    if (body) {
-      this.debug('Response Body:', body);
+    if (body !== undefined && body !== null) {
+      this.debug('Response Body:', redactBody(typeof body === 'string' ? body : JSON.stringify(body)));
     }
   }
 

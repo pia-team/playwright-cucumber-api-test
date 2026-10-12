@@ -15,6 +15,11 @@ export interface RuntimeCredentialsFile {
 
 let cachedFile: RuntimeCredentialsFile | null | undefined;
 
+/** Test-only: clear in-memory credentials cache between cases. */
+export function resetRuntimeCredentialsCacheForTests(): void {
+  cachedFile = undefined;
+}
+
 /** Read job-scoped credentials JSON (COTESTER_RUNTIME_CREDENTIALS_FILE); never log contents. */
 export function loadRuntimeCredentialsFile(): RuntimeCredentialsFile | null {
   if (cachedFile !== undefined) {

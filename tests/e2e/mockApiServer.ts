@@ -11,9 +11,18 @@ export type MockUser = {
   email: string;
 };
 
+export type RecordedCall = {
+  method: string;
+  path: string;
+  query: string;
+  customerHeader: string;
+  body: string;
+};
+
 export type MockApiServer = {
   baseUrl: string;
   port: number;
+  requests: RecordedCall[];
   close: () => Promise<void>;
 };
 
@@ -68,12 +77,23 @@ export async function startMockApiServer(options?: {
     ['1', { id: '1', name: 'Demo User', email: 'demo@example.com' }],
   ]);
   let nextId = 2;
+  const customers = new Map<string, { id: string; name: string; step: string }>();
+  let nextCustomer = 123;
+  const requests: RecordedCall[] = [];
 
   const server = http.createServer(async (req, res) => {
     try {
       const method = (req.method || 'GET').toUpperCase();
       const url = new URL(req.url || '/', `http://${host}`);
       const pathname = url.pathname;
+      const rawBody = await readBody(req);
+      requests.push({
+        method,
+        path: pathname,
+        query: url.searchParams.toString(),
+        customerHeader: String(req.headers['x-customer'] || ''),
+        body: rawBody,
+      });
 
       if (method === 'GET' && pathname === '/users') {
         sendJson(res, 200, { users: Array.from(users.values()) });
@@ -100,7 +120,7 @@ export async function startMockApiServer(options?: {
       }
 
       if (method === 'POST' && pathname === '/auth/token') {
-        const raw = await readBody(req);
+        const raw = rawBody;
         const ct = String(req.headers['content-type'] || '').toLowerCase();
         if (ct.includes('application/json') && raw.trim()) {
           parseJsonBody(raw);
@@ -137,7 +157,7 @@ export async function startMockApiServer(options?: {
         }
 
         if (method === 'PUT' || method === 'PATCH') {
-          const raw = await readBody(req);
+          const raw = rawBody;
           let body: Record<string, unknown>;
           try {
             body = (parseJsonBody(raw) as Record<string, unknown>) || {};
@@ -161,8 +181,72 @@ export async function startMockApiServer(options?: {
         }
       }
 
+      if (pathname === '/customers' || pathname.startsWith('/customers/')) {
+        const customerId = pathname === '/customers' ? null : decodeURIComponent(pathname.slice('/customers/'.length));
+        if (method === 'POST' && pathname === '/customers') {
+          let body: Record<string, unknown> = {};
+          try {
+            body = (parseJsonBody(rawBody) as Record<string, unknown>) || {};
+          } catch {
+            sendJson(res, 400, { error: 'invalid_json' });
+            return;
+          }
+          const id = body.name === 'secret' ? 'super-secret-token-value' : String(nextCustomer++);
+          const customer = { id, name: typeof body.name === 'string' ? body.name : 'Test', step: 'created' };
+          customers.set(id, customer);
+          sendJson(res, 201, customer);
+          return;
+        }
+        if (!customerId) {
+          sendJson(res, 404, { error: 'not_found' });
+          return;
+        }
+        if (method === 'GET') {
+          const customer = customers.get(customerId);
+          if (!customer) {
+            sendJson(res, 404, { error: 'not_found' });
+            return;
+          }
+          sendJson(res, 200, { ...customer, step: 'fetched' });
+          return;
+        }
+        if (method === 'PATCH') {
+          const customer = customers.get(customerId);
+          if (!customer) {
+            sendJson(res, 404, { error: 'not_found' });
+            return;
+          }
+          let body: Record<string, unknown> = {};
+          try {
+            body = (parseJsonBody(rawBody) as Record<string, unknown>) || {};
+          } catch {
+            sendJson(res, 400, { error: 'invalid_json' });
+            return;
+          }
+          const updated = {
+            id: customerId,
+            name: typeof body.name === 'string' ? body.name : customer.name,
+            step: 'updated',
+            echo: body.echo ?? null,
+          };
+          customers.set(customerId, { id: customerId, name: updated.name, step: 'updated' });
+          sendJson(res, 200, updated);
+          return;
+        }
+        if (method === 'DELETE') {
+          if (!customers.has(customerId)) {
+            sendJson(res, 404, { error: 'not_found' });
+            return;
+          }
+          customers.delete(customerId);
+          res.writeHead(204);
+          res.end();
+          return;
+        }
+      }
+
       if (method === 'POST' && pathname === '/users') {
-        const raw = await readBody(req);
+        const raw = rawBody;
         let body: Record<string, unknown>;
         try {
           body = (parseJsonBody(raw) as Record<string, unknown>) || {};
@@ -178,6 +262,19 @@ export async function startMockApiServer(options?: {
         const user: MockUser = { id, name: body.name, email: body.email };
         users.set(id, user);
         sendJson(res, 201, user);
+        return;
+      }
+
+      if (method === 'GET' && pathname === '/lookup') {
+        const id = url.searchParams.get('id') || '';
+        const limit = url.searchParams.get('limit') || '';
+        const uuidOk =
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+        sendJson(res, 200, {
+          id,
+          limit,
+          uuidShape: uuidOk ? 'true' : 'false',
+        });
         return;
       }
 
@@ -201,6 +298,7 @@ export async function startMockApiServer(options?: {
   return {
     baseUrl,
     port,
+    requests,
     close: () =>
       new Promise<void>((resolve, reject) => {
         server.close((err) => (err ? reject(err) : resolve()));

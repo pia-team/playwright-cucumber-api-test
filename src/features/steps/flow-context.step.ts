@@ -1,4 +1,4 @@
-import { Given, Then, Before } from '@cucumber/cucumber';
+import { Given, Then } from '@cucumber/cucumber';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -38,23 +38,6 @@ async function writeFlowContext(data: Record<string, string>): Promise<void> {
   await fs.writeFile(tmp, JSON.stringify(data, null, 2), 'utf8');
   await fs.rename(tmp, contextPath);
 }
-
-Before(async function (this: WorldWithVars) {
-  this.scenarioVars = this.scenarioVars || {};
-  const flowContextPath = process.env.COTESTER_FLOW_CONTEXT_PATH;
-  if (!flowContextPath) return;
-  try {
-    const raw = await fs.readFile(flowContextPath, 'utf8');
-    const parsed = JSON.parse(raw || '{}');
-    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      this.scenarioVars = { ...this.scenarioVars, ...(parsed as Record<string, string>) };
-    }
-  } catch (e: unknown) {
-    if ((e as NodeJS.ErrnoException)?.code !== 'ENOENT') {
-      console.warn('Failed to load flow context:', e);
-    }
-  }
-});
 
 Given('I store {string} as {string} in flow context', async function (this: WorldWithVars, value: string, key: string) {
   this.scenarioVars = this.scenarioVars || {};
