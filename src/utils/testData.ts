@@ -33,6 +33,12 @@ export type Dataset = {
 
 export type DatasetRowsOptions = { sheet?: string };
 
+export type DatasetCellOptions = {
+  sheet?: string;
+  /** 0-based row index; defaults to first row. */
+  rowIndex?: number;
+};
+
 type DatasetFile = {
   sourceFormat: string;
   defaultSheet: string | null;
@@ -172,6 +178,48 @@ export const testData = {
   /** Rows of a DATASET binding; multi-sheet workbooks require `{ sheet }`. */
   async getRows(bindingKey: string, options: DatasetRowsOptions = {}): Promise<DatasetRow[]> {
     return selectSheet(bindingKey, await loadDatasetFile(bindingKey), options.sheet).rows;
+  },
+
+  /**
+   * Single cell from a DATASET binding (DATA-2). Fail-closed on empty dataset,
+   * missing column, or out-of-range row. Values stay strings for runner compatibility.
+   */
+  async getCell(
+    bindingKey: string,
+    column: string,
+    options: DatasetCellOptions = {},
+  ): Promise<string> {
+    if (!column || !String(column).trim()) {
+      throw new Error(`Data Center dataset "${bindingKey}" column name is required.`);
+    }
+    const col = String(column);
+    const rows = await this.getRows(bindingKey, { sheet: options.sheet });
+    if (!rows.length) {
+      throw new Error(`Data Center dataset "${bindingKey}" has no rows.`);
+    }
+    // DATA-3: job-scoped iteration overrides authoring-time rowIndex so every
+    // field bound to this dataset reads the same row in the current iteration.
+    const envRaw = process.env.COTESTER_DATASET_ROW_INDEX;
+    let index = options.rowIndex == null ? 0 : options.rowIndex;
+    if (envRaw != null && String(envRaw).trim() !== '') {
+      const parsed = Number.parseInt(String(envRaw).trim(), 10);
+      if (!Number.isInteger(parsed) || parsed < 0) {
+        throw new Error(
+          `COTESTER_DATASET_ROW_INDEX must be a non-negative integer (got "${envRaw}").`,
+        );
+      }
+      index = parsed;
+    }
+    if (!Number.isInteger(index) || index < 0 || index >= rows.length) {
+      throw new Error(
+        `Data Center dataset "${bindingKey}" has no row at index ${index} (${rows.length} rows).`,
+      );
+    }
+    const row = rows[index];
+    if (!row || !Object.prototype.hasOwnProperty.call(row, col)) {
+      throw new Error(`Data Center dataset "${bindingKey}" has no column "${col}".`);
+    }
+    return String(row[col] ?? '');
   },
 };
 

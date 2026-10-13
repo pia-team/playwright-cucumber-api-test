@@ -41,6 +41,8 @@ import {
 } from '../../../utils/scenarioTemplate';
 import { generateRuntimeValue } from '../../../utils/runtimeGenerate';
 import { resolveCredentialBodyPlaceholders } from '../../../utils/credentialBodyBinding';
+import { testData } from '../../../utils/testData';
+import { postMultipartFile } from '../../../utils/multipartUpload';
 import {
   beginAcquisition,
   mergeStoreValue,
@@ -292,6 +294,87 @@ Given(
     this.scenarioVars[varName] = value;
     // Non-secret runtime values stay visible in HTTP evidence (UUID/email/etc.).
     logger.info(`Scenario variable "${varName}" generated as ${spec}`);
+  },
+);
+
+async function loadDatasetCellIntoScenarioVar(
+  world: { scenarioVars?: Record<string, string> },
+  varName: string,
+  bindingKey: string,
+  column: string,
+  rowIndex: number,
+  sheet?: string,
+) {
+  if (!SAFE_VARIABLE.test(varName)) {
+    throw new Error(`Invalid scenario variable name "${varName}"`);
+  }
+  const value = await testData.getCell(bindingKey, column, {
+    rowIndex,
+    sheet: sheet || undefined,
+  });
+  world.scenarioVars = world.scenarioVars || {};
+  world.scenarioVars[varName] = value;
+  logger.info(
+    `Scenario variable "${varName}" loaded from Data Center dataset "${bindingKey}" column "${column}" row ${rowIndex + 1}` +
+      (sheet ? ` sheet "${sheet}"` : ''),
+  );
+}
+
+Given(
+  'the scenario variable {string} is loaded from Data Center dataset {string} column {string} as first row',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    varName: string,
+    bindingKey: string,
+    column: string,
+  ) {
+    await loadDatasetCellIntoScenarioVar(this, varName, bindingKey, column, 0);
+  },
+);
+
+Given(
+  'the scenario variable {string} is loaded from Data Center dataset {string} column {string} as row {int}',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    varName: string,
+    bindingKey: string,
+    column: string,
+    rowNumber: number,
+  ) {
+    if (!Number.isInteger(rowNumber) || rowNumber < 1) {
+      throw new Error(`Dataset row number must be a positive integer (got ${rowNumber})`);
+    }
+    await loadDatasetCellIntoScenarioVar(this, varName, bindingKey, column, rowNumber - 1);
+  },
+);
+
+Given(
+  'the scenario variable {string} is loaded from Data Center dataset {string} column {string} sheet {string} as first row',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    varName: string,
+    bindingKey: string,
+    column: string,
+    sheet: string,
+  ) {
+    await loadDatasetCellIntoScenarioVar(this, varName, bindingKey, column, 0, sheet);
+  },
+);
+
+Given(
+  'the scenario variable {string} is loaded from Data Center dataset {string} column {string} sheet {string} as row {int}',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    varName: string,
+    bindingKey: string,
+    column: string,
+    sheet: string,
+    rowNumber: number,
+  ) {
+    if (!Number.isInteger(rowNumber) || rowNumber < 1) {
+      throw new Error(`Dataset row number must be a positive integer (got ${rowNumber})`);
+    }
+    await loadDatasetCellIntoScenarioVar(this, varName, bindingKey, column, rowNumber - 1, sheet);
   },
 );
 
@@ -770,6 +853,161 @@ When(
     (global as any).__cotesterStatusChecked = false;
     (global as any).__cotesterExtractAllowed = false;
 
+    await attachHttpEvidence(this);
+  },
+);
+
+When(
+  'the user sends a multipart {word} request to {string} with Data Center file {string} as field {string}',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    method: string,
+    path: string,
+    bindingKey: string,
+    fieldName: string,
+  ) {
+    const m = (method || 'POST').toUpperCase();
+    const s = state();
+    (global as any).__cotesterStepBlocked = '';
+    if (s.authMode === 'NONE' && !s.bearerToken && s.embeddedSecretHeaders.length > 0) {
+      throw embeddedSecretConfigurationError(s.embeddedSecretHeaders);
+    }
+
+    const auth = await resolveRequestAuth(s.authMode, {
+      bearerToken: s.bearerToken,
+      apiKeyHeader: s.apiKeyHeader,
+      apiKeyQuery: s.apiKeyQuery,
+    });
+    const headers = mergeHeadersWithoutAuthConflict(s.headers, auth.headers);
+    // Multipart sets its own Content-Type boundary; drop a stale authoring header.
+    delete headers['Content-Type'];
+    delete headers['content-type'];
+    const query = mergeQueryWithAuth(s.query, auth.query);
+
+    const sources = [path, ...Object.values(headers), ...Object.values(query)];
+    const missing = [...new Set(sources.flatMap((text) => missingPlaceholders(text, this.scenarioVars)))];
+    if (missing.length > 0 || sources.some((text) => hasInvalidPlaceholder(text))) {
+      const names = missing.length > 0 ? missing.join(', ') : 'geçersiz ad';
+      blockUnresolved(`Değişken çözümlenemedi: ${names}. İstek gönderilmedi.`);
+      return;
+    }
+
+    const urlPath = substituteTemplates(path, this.scenarioVars, true);
+    let resolvedPath = urlPath;
+    try {
+      resolvedPath = resolveRequestPath(urlPath, this.scenarioVars);
+    } catch (error) {
+      blockUnresolved(error instanceof Error ? error.message : 'Değişken çözümlenemedi. İstek gönderilmedi.');
+      return;
+    }
+    const params: Record<string, string> = {};
+    for (const [key, value] of Object.entries(query)) {
+      params[key] = substituteTemplates(value, this.scenarioVars, false);
+    }
+    const resolvedHeaders: Record<string, string> = {};
+    for (const [key, value] of Object.entries(headers)) {
+      resolvedHeaders[key] = substituteTemplates(value, this.scenarioVars, false);
+    }
+
+    let filePath: string;
+    try {
+      filePath = await testData.getFile(bindingKey);
+    } catch (error) {
+      blockUnresolved(error instanceof Error ? error.message : 'Data Center file binding missing.');
+      return;
+    }
+
+    const resolvedUrl = buildResolvedUrl(resolvedPath, params);
+    const requestTs = new Date().toISOString();
+    beginHttpEvidence({
+      method: m,
+      url: resolvedUrl,
+      path: resolvedPath,
+      query: params,
+      requestHeaders: resolvedHeaders,
+      requestBody: `[multipart file field=${fieldName} binding=${bindingKey}]`,
+      requestBodyKind: 'binary',
+      authMode: s.authMode,
+      requestTimestamp: requestTs,
+    });
+
+    const clientContext = await ApiContext.create(resolvedHeaders);
+    const client = new ApiClient(clientContext);
+    setLastHttpSendSnapshot({
+      method: m,
+      path,
+      resolvedPath,
+      resolvedUrl,
+      headers: { ...resolvedHeaders },
+      params: { ...params },
+      bodyPayload: undefined,
+      resolvedBody: null,
+      isForm: false,
+      authMode: s.authMode,
+      bearerFromScenarioVariable: s.bearerFromScenarioVariable,
+      managedFingerprint: undefined,
+      tokenGenerationUsed: undefined,
+      hadExplicitAuthorization: Object.keys(s.headers).some((k) => k.toLowerCase() === 'authorization'),
+      recoveryAttempted: false,
+    });
+
+    const startedAt = Date.now();
+    let response: any;
+    try {
+      response = await postMultipartFile(client, resolvedPath, fieldName, filePath);
+    } catch (error) {
+      const transportError = error instanceof Error ? error.message : 'İstek gönderilemedi.';
+      beginHttpEvidence({
+        transportError,
+        durationMs: Date.now() - startedAt,
+      });
+      recordEndpointHit({
+        method: m,
+        path: resolvedPath,
+        status: null,
+        transportError: true,
+      });
+      await attachHttpEvidence(this);
+      if (!chainMode()) throw error;
+      blockUnresolved(transportError);
+      return;
+    }
+
+    const elapsedMs = Date.now() - startedAt;
+    (global as any).__cotesterElapsedMs = elapsedMs;
+    (global as any).__cotesterSentJson = undefined;
+    (global as any).__cotesterSentQuery = params;
+    await ResponseHelper.logAndSetResponse(response, m, resolvedPath, params);
+    (global as any).currentResponse = response;
+
+    let bodyText: string | null = null;
+    try {
+      bodyText = await response.text();
+    } catch {
+      bodyText = null;
+    }
+    (global as any).__cotesterResponseBodyText = bodyText;
+    try {
+      (global as any).__cotesterResponseJson =
+        bodyText && (bodyText.trim().startsWith('{') || bodyText.trim().startsWith('['))
+          ? JSON.parse(bodyText)
+          : undefined;
+    } catch {
+      (global as any).__cotesterResponseJson = undefined;
+    }
+    const responseHeaders = response.headers() as Record<string, string>;
+    recordResponseEvidence(response.status(), responseHeaders, bodyText, {
+      durationMs: elapsedMs,
+      transportError: null,
+    });
+    recordEndpointHit({
+      method: m,
+      path: resolvedPath,
+      status: response.status(),
+      transportError: false,
+    });
+    (global as any).__cotesterStatusChecked = false;
+    (global as any).__cotesterExtractAllowed = false;
     await attachHttpEvidence(this);
   },
 );

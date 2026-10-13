@@ -254,8 +254,18 @@ export async function startMockApiServer(options?: {
           sendJson(res, 400, { error: 'invalid_json' });
           return;
         }
-        if (typeof body.name !== 'string' || typeof body.email !== 'string') {
+        if (
+          typeof body.name !== 'string' ||
+          !body.name.trim() ||
+          typeof body.email !== 'string' ||
+          !body.email.trim()
+        ) {
           sendJson(res, 400, { error: 'name_and_email_required' });
+          return;
+        }
+        // Deterministic DATA-3 failure fixture: Bob is rejected after the request is recorded.
+        if (body.name === 'Bob') {
+          sendJson(res, 400, { error: 'bob_rejected_for_data3_fixture' });
           return;
         }
         const id = String(nextId++);
