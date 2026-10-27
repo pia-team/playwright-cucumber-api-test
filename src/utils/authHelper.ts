@@ -2,9 +2,9 @@ import { request } from '@playwright/test';
 import { AuthService, TokenRequest, TokenResponse } from '../services/authService';
 import { ApiClient } from '../core/api/apiClient';
 import { logger } from './logger';
-import { keycloakEndpoints } from '../config/keycloak.endpoints';
 import { envConfig } from '../config/env.config';
-import { getApiProjectConfig, extractKeycloakBaseUrl } from '../config/projectEnv';
+import { getApiProjectConfig, keycloakTokenUri } from '../config/projectEnv';
+import { loadRuntimeCredentialsFile } from './runtimeCredentials';
 import {
   clearAuthScenarioToken,
   enterAuthScenario,
@@ -12,6 +12,39 @@ import {
 } from './authScenarioStore';
 
 export { clearAuthScenarioToken, enterAuthScenario };
+
+function isMaskedCredentialValue(value: string | undefined | null): boolean {
+  if (value == null) return true;
+  const v = value.trim();
+  if (!v) return true;
+  if (v === '********' || v === '••••••••' || v === '***') return true;
+  const upper = v.toUpperCase();
+  return upper.includes('[REDACTED') || upper === 'REDACTED';
+}
+
+/**
+ * Optional confidential-client secret from env or runtime credentials file.
+ * Masked / empty values are treated as absent (public client) — never sent as real secret.
+ */
+export function resolveKeycloakClientSecret(): string | undefined {
+  const fromEnv = process.env.API_TEST_CLIENT_SECRET;
+  if (fromEnv != null && !isMaskedCredentialValue(fromEnv)) {
+    return fromEnv;
+  }
+  const file = loadRuntimeCredentialsFile();
+  if (file?.type === 'KEYCLOAK') {
+    const fromFile = file.secrets?.clientSecret;
+    if (fromFile != null && !isMaskedCredentialValue(fromFile)) {
+      return fromFile;
+    }
+  }
+  return undefined;
+}
+
+function applyTokenEndpointFromKeycloakUrl(keycloakUrl: string): void {
+  const tokenUrl = keycloakTokenUri(keycloakUrl);
+  process.env.API_KEYCLOAK_TOKEN_URL = tokenUrl;
+}
 
 /**
  * Job/scenario-scoped auth helper. Tokens live in authScenarioStore (or job key),
@@ -36,27 +69,27 @@ export class AuthHelper {
     const envUsername = process.env.API_TEST_USERNAME?.trim();
     const envPassword = process.env.API_TEST_PASSWORD;
     const envKeycloak = process.env.API_KEYCLOAK_URL?.trim();
+    const clientSecret = resolveKeycloakClientSecret();
 
     if (envUsername && envPassword) {
       if (envKeycloak) {
-        try {
-          process.env.API_KEYCLOAK_BASE_URL = extractKeycloakBaseUrl(envKeycloak);
-        } catch {
-          process.env.API_KEYCLOAK_BASE_URL = envKeycloak;
-        }
+        applyTokenEndpointFromKeycloakUrl(envKeycloak);
       }
       logger.info(`Using API credentials from runtime environment for user: ${envUsername}`);
-      return {
+      const req: TokenRequest = {
         grant_type: 'password',
         client_id: process.env.API_TEST_CLIENT_ID?.trim() || 'orbitant-ui-client',
         username: envUsername,
         password: envPassword,
       };
+      if (clientSecret) {
+        req.client_secret = clientSecret;
+      }
+      return req;
     }
 
     const config = getApiProjectConfig();
-    const baseUrl = extractKeycloakBaseUrl(config.keycloakUrl);
-    process.env.API_KEYCLOAK_BASE_URL = baseUrl;
+    applyTokenEndpointFromKeycloakUrl(config.keycloakUrl);
 
     if (!config.password) {
       throw new Error(
@@ -66,12 +99,16 @@ export class AuthHelper {
     }
 
     logger.info(`Using API credentials from project config for user: ${config.username}`);
-    return {
+    const req: TokenRequest = {
       grant_type: 'password',
       client_id: config.clientId?.trim() || 'orbitant-ui-client',
       username: config.username,
       password: config.password,
     };
+    if (clientSecret) {
+      req.client_secret = clientSecret;
+    }
+    return req;
   }
 
   /** @deprecated Use getConfiguredCredentials(); kept for step text compatibility. */
@@ -118,12 +155,22 @@ export class AuthHelper {
   static async getToken(credentials: TokenRequest): Promise<any> {
     const service = await this.initializeAuthService();
 
-    logger.logRequest('POST', keycloakEndpoints.token, undefined, {
+    const logBody: Record<string, string> = {
       grant_type: credentials.grant_type,
       client_id: credentials.client_id,
       username: credentials.username,
       password: '***',
-    });
+    };
+    if (credentials.client_secret) {
+      logBody.client_secret = '***';
+    }
+
+    const tokenPathForLog =
+      process.env.API_KEYCLOAK_TOKEN_URL?.trim() ||
+      process.env.API_KEYCLOAK_URL?.trim() ||
+      '/protocol/openid-connect/token';
+
+    logger.logRequest('POST', tokenPathForLog, undefined, logBody);
 
     const response = await service.getToken(credentials);
     (global as any).response = response;

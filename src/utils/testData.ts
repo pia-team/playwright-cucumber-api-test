@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -11,6 +12,9 @@ type ManifestResource = {
   mimeType?: string;
   readOnly?: boolean;
   datasetPath?: string;
+  checksumSha256?: string;
+  consumerRef?: string;
+  resourceVersionId?: string;
 };
 
 export type DatasetRow = Record<string, string>;
@@ -143,15 +147,54 @@ function describeDataset(bindingKey: string, file: DatasetFile): Dataset {
   return dataset;
 }
 
+async function assertSafeManifestFile(
+  bindingKey: string,
+  entry: ManifestResource,
+): Promise<string> {
+  const localPath = entry.localPath;
+  if (!localPath || typeof localPath !== 'string') {
+    throw new Error(
+      `PREFLIGHT: Data Center file binding "${bindingKey}" has no localPath in the run manifest.`,
+    );
+  }
+  const resolved = path.resolve(localPath);
+  const manifestPath = process.env.COTESTER_RUN_DATA_MANIFEST_PATH;
+  if (manifestPath) {
+    const workRoot = path.resolve(path.dirname(manifestPath));
+    if (!resolved.startsWith(workRoot + path.sep) && resolved !== workRoot) {
+      throw new Error(
+        `PREFLIGHT: Data Center file binding "${bindingKey}" localPath is outside the run work directory.`,
+      );
+    }
+  }
+  try {
+    await fs.access(resolved);
+  } catch {
+    throw new Error(
+      `PREFLIGHT: Data Center file binding "${bindingKey}" is missing on disk (resource unavailable).`,
+    );
+  }
+  if (entry.checksumSha256) {
+    const buf = await fs.readFile(resolved);
+    const actual = crypto.createHash('sha256').update(buf).digest('hex');
+    if (actual.toLowerCase() !== String(entry.checksumSha256).toLowerCase()) {
+      throw new Error(
+        `PREFLIGHT: Data Center file binding "${bindingKey}" checksum mismatch (corrupted or stale materialization).`,
+      );
+    }
+  }
+  return resolved;
+}
+
 export const testData = {
   async getFile(bindingKey: string): Promise<string> {
     const manifest = await loadManifest();
     const entry = manifest?.resources?.[bindingKey];
     if (entry?.localPath) {
-      return entry.localPath;
+      return assertSafeManifestFile(bindingKey, entry);
     }
     throw new Error(
-      `Data Center file binding "${bindingKey}" is not available. Ensure the resource is bound and the test run manifest was prepared.`,
+      `PREFLIGHT: Data Center file binding "${bindingKey}" is not available. Bind the resource and re-run; this is not a test assertion failure.`,
     );
   },
 

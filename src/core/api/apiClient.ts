@@ -77,4 +77,19 @@ export class ApiClient {
       headers: options?.headers,
     });
   }
+
+  /**
+   * Multipart via FormData — required when the same field name is appended
+   * more than once (OpenAPI array of binary files).
+   */
+  postMultipartForm(
+    url: string,
+    form: FormData,
+    options?: { headers?: Record<string, string> },
+  ) {
+    return this.context.post(url, {
+      multipart: form,
+      headers: options?.headers,
+    });
+  }
 }

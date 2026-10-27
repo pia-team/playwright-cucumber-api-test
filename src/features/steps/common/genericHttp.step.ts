@@ -37,12 +37,17 @@ import {
   hasInvalidPlaceholder,
   missingPlaceholders,
   redactStoredValues,
+  resolveJsonPath,
   substituteTemplates,
 } from '../../../utils/scenarioTemplate';
 import { generateRuntimeValue } from '../../../utils/runtimeGenerate';
 import { resolveCredentialBodyPlaceholders } from '../../../utils/credentialBodyBinding';
 import { testData } from '../../../utils/testData';
-import { postMultipartFile } from '../../../utils/multipartUpload';
+import { postMultipartFile, postMultipartFiles } from '../../../utils/multipartUpload';
+import {
+  loadRequestBodyBufferFromBinding,
+  summarizeRequestBodyBytes,
+} from '../../../utils/requestBodyFile';
 import {
   beginAcquisition,
   mergeStoreValue,
@@ -70,7 +75,8 @@ type GenericHttpState = {
   embeddedSecretHeaders: string[];
   headers: Record<string, string>;
   query: Record<string, string>;
-  body: string | null;
+  /** Inline docstring body (string) or raw bytes from Data Center file (Buffer). */
+  body: string | Buffer | null;
   contentType: string | null;
   /** Token Request only: resolve {{username}}/{{password}}/… from Credential Profile into body. */
   resolveCredentialBody: boolean;
@@ -89,6 +95,8 @@ type GenericHttpState = {
   managedTokenRecipe?: TokenAcquisitionRecipe;
   /** Protected step: Bearer loaded from scenario variable name. */
   bearerFromScenarioVariable?: string;
+  /** Non-file multipart form fields accumulated before a multipart When send. */
+  multipartTextFields: Record<string, string>;
 };
 
 const SENSITIVE_HEADER_NAME =
@@ -113,6 +121,7 @@ function state(): GenericHttpState {
       query: {},
       body: null,
       contentType: null,
+      multipartTextFields: {},
       resolveCredentialBody: false,
       managedTokenFingerprint: undefined,
       managedTokenCacheHit: false,
@@ -267,16 +276,7 @@ function resolveRequestPath(
 }
 
 function getByJsonPath(obj: unknown, pathExpr: string): unknown {
-  if (!pathExpr || pathExpr === '$') return obj;
-  let expr = pathExpr.startsWith('$.') ? pathExpr.slice(2) : pathExpr.startsWith('$') ? pathExpr.slice(1) : pathExpr;
-  if (expr.startsWith('.')) expr = expr.slice(1);
-  const parts = expr.split(/\.|\[|\]/).filter(Boolean);
-  let cur: any = obj;
-  for (const part of parts) {
-    if (cur == null) return undefined;
-    cur = cur[part];
-  }
-  return cur;
+  return resolveJsonPath(obj, pathExpr);
 }
 
 /**
@@ -393,6 +393,7 @@ Given('the API request uses auth mode {string}', async function (mode: string) {
   state().query = {};
   state().body = null;
   state().contentType = null;
+  state().multipartTextFields = {};
   state().resolveCredentialBody = false;
   clearManagedTokenState();
   beginHttpEvidence({ authMode: normalized, method: 'GET', url: '' });
@@ -476,6 +477,43 @@ Given('the API request body is', async function (docString: string) {
   state().body = docString ?? '';
 });
 
+/**
+ * Loads request body bytes from a Data Center binding (run manifest localPath).
+ * Used for cURL `--data-binary @file` and equivalent authoring; never embeds a
+ * local path in the feature. Bytes are preserved (PDF/PNG/ZIP); text/JSON files
+ * remain valid UTF-8 on the wire when sent as Buffer.
+ */
+Given(
+  'the API multipart form field {string} is {string}',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    fieldName: string,
+    value: string,
+  ) {
+    const key = (fieldName || '').trim();
+    if (!key) {
+      throw new Error('Multipart form field name is required');
+    }
+    const resolved = substituteTemplates(value ?? '', this.scenarioVars, false);
+    state().multipartTextFields = {
+      ...(state().multipartTextFields || {}),
+      [key]: resolved,
+    };
+  },
+);
+
+Given(
+  'the API request body is loaded from Data Center file {string}',
+  async function (bindingKey: string) {
+    const key = (bindingKey || '').trim();
+    const buffer = await loadRequestBodyBufferFromBinding(key);
+    state().body = buffer;
+    logger.info(
+      `Generic HTTP request body loaded from Data Center file "${key}" (${buffer.length} bytes)`,
+    );
+  },
+);
+
 Given('the API request content type is {string}', async function (contentType: string) {
   state().contentType = contentType;
   if (contentType) {
@@ -487,7 +525,7 @@ function chainMode(): boolean {
   return Boolean((global as any).__cotesterChainMode);
 }
 
-/** Values that must never appear in logs/attachments (explicit secrets + pending extracts). */
+/** Values that must never appear in logs/attachments (tokens, credentials, sensitive stores). */
 function rememberRedaction(vars?: Record<string, string>): void {
   const current = ((global as any).__cotesterRedactValues || []) as string[];
   const next = new Set(current);
@@ -534,16 +572,12 @@ async function attachHttpEvidence(
   }
 }
 
-function redactPendingExtracts(body: unknown): void {
-  const paths = ((global as any).__cotesterPendingExtracts || []) as string[];
-  const values: Record<string, string> = {};
-  paths.forEach((jsonPath, index) => {
-    if (!SAFE_JSON_PATH.test(jsonPath)) return;
-    const value = getByJsonPath(body, jsonPath);
-    if (value == null || typeof value === 'object') return;
-    values[`pending${index}`] = String(value);
-  });
-  rememberRedaction(values);
+/**
+ * Clear chain "will store" paths after the response is received.
+ * Ordinary body extracts (e.g. order.id) are not redacted in evidence — only
+ * sensitive stores / tokens via {@link rememberSensitiveValue}.
+ */
+function clearPendingExtracts(): void {
   (global as any).__cotesterPendingExtracts = [];
 }
 
@@ -637,8 +671,14 @@ When(
     }
     const query = mergeQueryWithAuth(s.query, auth.query);
 
-    let bodyForSend = s.body;
-    if (s.resolveCredentialBody && bodyForSend != null && bodyForSend !== '') {
+    let bodyForSend: string | Buffer | null = s.body;
+    const bodyIsBinary = Buffer.isBuffer(bodyForSend);
+    if (
+      s.resolveCredentialBody &&
+      typeof bodyForSend === 'string' &&
+      bodyForSend != null &&
+      bodyForSend !== ''
+    ) {
       try {
         const bound = resolveCredentialBodyPlaceholders(
           bodyForSend,
@@ -656,7 +696,8 @@ When(
       }
     }
 
-    const sources = [path, bodyForSend || '', ...Object.values(headers), ...Object.values(query)];
+    const bodyAsPlaceholderSource = typeof bodyForSend === 'string' ? bodyForSend : '';
+    const sources = [path, bodyAsPlaceholderSource, ...Object.values(headers), ...Object.values(query)];
     const missing = [...new Set(sources.flatMap((text) => missingPlaceholders(text, this.scenarioVars)))];
     if (missing.length > 0 || sources.some((text) => hasInvalidPlaceholder(text))) {
       const names = missing.length > 0 ? missing.join(', ') : 'geçersiz ad';
@@ -680,19 +721,25 @@ When(
     for (const [key, value] of Object.entries(headers)) {
       resolvedHeaders[key] = substituteTemplates(value, this.scenarioVars, false);
     }
-    // Credential secrets already substituted; remaining {{vars}} are scenario variables only.
-    const resolvedBody =
-      bodyForSend == null ? null : substituteTemplates(bodyForSend, this.scenarioVars, false);
+    // Binary bodies skip template substitution so PDF/PNG/ZIP bytes stay intact.
+    // String bodies: credential secrets already substituted; remaining {{vars}} are scenario variables.
+    const resolvedBody: string | Buffer | null = bodyIsBinary
+      ? (bodyForSend as Buffer)
+      : bodyForSend == null
+        ? null
+        : substituteTemplates(bodyForSend as string, this.scenarioVars, false);
     const resolvedUrl = buildResolvedUrl(resolvedPath, params);
     const requestTs = new Date().toISOString();
-    const reqBodySanitized = sanitizeBody(resolvedBody);
+    const reqBodySanitized = Buffer.isBuffer(resolvedBody)
+      ? summarizeRequestBodyBytes(resolvedBody)
+      : sanitizeBody(resolvedBody);
 
     if (s.managedTokenFingerprint) {
       const pendingPaths = ((global as any).__cotesterPendingExtracts || []) as string[];
       s.managedTokenRecipe = {
         method: m,
         path: resolvedPath,
-        body: s.body,
+        body: typeof s.body === 'string' ? s.body : null,
         contentType: s.contentType,
         authMode: s.authMode,
         headers: { ...s.headers },
@@ -726,15 +773,18 @@ When(
     const client = new ApiClient(clientContext);
 
     let response: any;
-    const bodyPayload = resolvedBody
-      ? (() => {
-          try {
-            return JSON.parse(resolvedBody);
-          } catch {
-            return resolvedBody;
-          }
-        })()
-      : undefined;
+    // Buffer → Playwright data as bytes; string may still JSON-parse for object posts.
+    const bodyPayload = Buffer.isBuffer(resolvedBody)
+      ? resolvedBody
+      : resolvedBody
+        ? (() => {
+            try {
+              return JSON.parse(resolvedBody);
+            } catch {
+              return resolvedBody;
+            }
+          })()
+        : undefined;
 
     const isForm =
       (resolvedHeaders['Content-Type'] || resolvedHeaders['content-type'] || '')
@@ -835,7 +885,7 @@ When(
     } catch {
       (global as any).__cotesterResponseJson = undefined;
     }
-    redactPendingExtracts((global as any).__cotesterResponseJson);
+    clearPendingExtracts();
     const responseHeaders = response.headers() as Record<string, string>;
     recordResponseEvidence(response.status(), responseHeaders, bodyText, {
       durationMs: elapsedMs,
@@ -954,7 +1004,176 @@ When(
     const startedAt = Date.now();
     let response: any;
     try {
-      response = await postMultipartFile(client, resolvedPath, fieldName, filePath);
+      const extras = { ...(s.multipartTextFields || {}) };
+      response = await postMultipartFile(client, resolvedPath, fieldName, filePath, extras);
+      state().multipartTextFields = {};
+    } catch (error) {
+      const transportError = error instanceof Error ? error.message : 'İstek gönderilemedi.';
+      beginHttpEvidence({
+        transportError,
+        durationMs: Date.now() - startedAt,
+      });
+      recordEndpointHit({
+        method: m,
+        path: resolvedPath,
+        status: null,
+        transportError: true,
+      });
+      await attachHttpEvidence(this);
+      if (!chainMode()) throw error;
+      blockUnresolved(transportError);
+      return;
+    }
+
+    const elapsedMs = Date.now() - startedAt;
+    (global as any).__cotesterElapsedMs = elapsedMs;
+    (global as any).__cotesterSentJson = undefined;
+    (global as any).__cotesterSentQuery = params;
+    await ResponseHelper.logAndSetResponse(response, m, resolvedPath, params);
+    (global as any).currentResponse = response;
+
+    let bodyText: string | null = null;
+    try {
+      bodyText = await response.text();
+    } catch {
+      bodyText = null;
+    }
+    (global as any).__cotesterResponseBodyText = bodyText;
+    try {
+      (global as any).__cotesterResponseJson =
+        bodyText && (bodyText.trim().startsWith('{') || bodyText.trim().startsWith('['))
+          ? JSON.parse(bodyText)
+          : undefined;
+    } catch {
+      (global as any).__cotesterResponseJson = undefined;
+    }
+    const responseHeaders = response.headers() as Record<string, string>;
+    recordResponseEvidence(response.status(), responseHeaders, bodyText, {
+      durationMs: elapsedMs,
+      transportError: null,
+    });
+    recordEndpointHit({
+      method: m,
+      path: resolvedPath,
+      status: response.status(),
+      transportError: false,
+    });
+    (global as any).__cotesterStatusChecked = false;
+    (global as any).__cotesterExtractAllowed = false;
+    await attachHttpEvidence(this);
+  },
+);
+
+When(
+  'the user sends a multipart {word} request to {string} with Data Center files {string} as field {string}',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    method: string,
+    path: string,
+    bindingKeysCsv: string,
+    fieldName: string,
+  ) {
+    const m = (method || 'POST').toUpperCase();
+    const s = state();
+    (global as any).__cotesterStepBlocked = '';
+    if (s.authMode === 'NONE' && !s.bearerToken && s.embeddedSecretHeaders.length > 0) {
+      throw embeddedSecretConfigurationError(s.embeddedSecretHeaders);
+    }
+
+    const auth = await resolveRequestAuth(s.authMode, {
+      bearerToken: s.bearerToken,
+      apiKeyHeader: s.apiKeyHeader,
+      apiKeyQuery: s.apiKeyQuery,
+    });
+    const headers = mergeHeadersWithoutAuthConflict(s.headers, auth.headers);
+    delete headers['Content-Type'];
+    delete headers['content-type'];
+    const query = mergeQueryWithAuth(s.query, auth.query);
+
+    const sources = [path, ...Object.values(headers), ...Object.values(query)];
+    const missing = [...new Set(sources.flatMap((text) => missingPlaceholders(text, this.scenarioVars)))];
+    if (missing.length > 0 || sources.some((text) => hasInvalidPlaceholder(text))) {
+      const names = missing.length > 0 ? missing.join(', ') : 'geçersiz ad';
+      blockUnresolved(`Değişken çözümlenemedi: ${names}. İstek gönderilmedi.`);
+      return;
+    }
+
+    const urlPath = substituteTemplates(path, this.scenarioVars, true);
+    let resolvedPath = urlPath;
+    try {
+      resolvedPath = resolveRequestPath(urlPath, this.scenarioVars);
+    } catch (error) {
+      blockUnresolved(error instanceof Error ? error.message : 'Değişken çözümlenemedi. İstek gönderilmedi.');
+      return;
+    }
+    const params: Record<string, string> = {};
+    for (const [key, value] of Object.entries(query)) {
+      params[key] = substituteTemplates(value, this.scenarioVars, false);
+    }
+    const resolvedHeaders: Record<string, string> = {};
+    for (const [key, value] of Object.entries(headers)) {
+      resolvedHeaders[key] = substituteTemplates(value, this.scenarioVars, false);
+    }
+
+    const keys = (bindingKeysCsv || '')
+      .split(',')
+      .map((k) => k.trim())
+      .filter(Boolean);
+    if (keys.length === 0) {
+      blockUnresolved('Data Center files binding list is empty.');
+      return;
+    }
+
+    const filePaths: string[] = [];
+    try {
+      for (const key of keys) {
+        filePaths.push(await testData.getFile(key));
+      }
+    } catch (error) {
+      blockUnresolved(error instanceof Error ? error.message : 'Data Center file binding missing.');
+      return;
+    }
+
+    const resolvedUrl = buildResolvedUrl(resolvedPath, params);
+    const requestTs = new Date().toISOString();
+    beginHttpEvidence({
+      method: m,
+      url: resolvedUrl,
+      path: resolvedPath,
+      query: params,
+      requestHeaders: resolvedHeaders,
+      requestBody: `[multipart files field=${fieldName} bindings=${keys.join(',')}]`,
+      requestBodyKind: 'binary',
+      authMode: s.authMode,
+      requestTimestamp: requestTs,
+    });
+
+    const clientContext = await ApiContext.create(resolvedHeaders);
+    const client = new ApiClient(clientContext);
+    setLastHttpSendSnapshot({
+      method: m,
+      path,
+      resolvedPath,
+      resolvedUrl,
+      headers: { ...resolvedHeaders },
+      params: { ...params },
+      bodyPayload: undefined,
+      resolvedBody: null,
+      isForm: false,
+      authMode: s.authMode,
+      bearerFromScenarioVariable: s.bearerFromScenarioVariable,
+      managedFingerprint: undefined,
+      tokenGenerationUsed: undefined,
+      hadExplicitAuthorization: Object.keys(s.headers).some((k) => k.toLowerCase() === 'authorization'),
+      recoveryAttempted: false,
+    });
+
+    const startedAt = Date.now();
+    let response: any;
+    try {
+      const extras = { ...(s.multipartTextFields || {}) };
+      response = await postMultipartFiles(client, resolvedPath, fieldName, filePaths, extras);
+      state().multipartTextFields = {};
     } catch (error) {
       const transportError = error instanceof Error ? error.message : 'İstek gönderilemedi.';
       beginHttpEvidence({

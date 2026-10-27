@@ -1,6 +1,12 @@
 const NAMED = /\{\{([A-Za-z_][A-Za-z0-9_]*)\}\}/g;
 
-export const SAFE_JSON_PATH = /^\$(\.[A-Za-z_][A-Za-z0-9_]*|\[\d+\])+$/;
+/**
+ * User-facing extract paths are relative (`order.id`).
+ * Legacy absolute JSONPath (`$.order.id`, `$[0].order.id`) remains accepted.
+ */
+export const SAFE_JSON_PATH =
+  /^(?:\$(\.[A-Za-z_][A-Za-z0-9_]*|\[\d+\])+|[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*)$/;
+
 export const SAFE_VARIABLE = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
 export function placeholderNames(input: string): string[] {
@@ -51,4 +57,71 @@ export function redactStoredValues(text: string, values: string[]): string {
     out = out.split(value).join('[REDACTED]');
   }
   return out;
+}
+
+/** Split `order.id` / `$.order.id` / `$[0].order.id` into property/index segments. */
+export function jsonPathSegments(pathExpr: string): string[] {
+  const raw = (pathExpr || '').trim();
+  if (!raw || raw === '$') return [];
+  let expr = raw;
+  if (expr.startsWith('$.')) expr = expr.slice(2);
+  else if (expr.startsWith('$')) expr = expr.slice(1);
+  if (expr.startsWith('.')) expr = expr.slice(1);
+  return expr.split(/\.|\[|\]/).filter(Boolean);
+}
+
+function readAlong(root: unknown, segments: string[]): unknown {
+  let cur: any = root;
+  for (const part of segments) {
+    if (cur == null) return undefined;
+    cur = cur[part];
+  }
+  return cur;
+}
+
+function isSuccessItem(item: unknown): boolean {
+  if (!item || typeof item !== 'object' || Array.isArray(item)) return false;
+  const status = (item as { status?: unknown }).status;
+  return String(status ?? '').toUpperCase() === 'SUCCESS';
+}
+
+/**
+ * Resolve a response path for extract/assert.
+ * - `order.id` works on a single object body
+ * - On an array body (1..N items), walks items — SUCCESS first, then others — until a value is found
+ * - Explicit `$[0].order.id` still works without fallback
+ */
+export function resolveJsonPath(root: unknown, pathExpr: string): unknown {
+  const path = (pathExpr || '').trim();
+  if (!path) return undefined;
+  if (path === '$') return root;
+  if (!SAFE_JSON_PATH.test(path)) return undefined;
+
+  const segments = jsonPathSegments(path);
+  const direct = readAlong(root, segments);
+  if (direct !== undefined && direct !== null) {
+    return direct;
+  }
+
+  // Relative paths (no leading $): if body is a batch array, search each element.
+  const relative = !path.startsWith('$');
+  if (relative && Array.isArray(root) && root.length > 0) {
+    const successFirst = [
+      ...root.filter(isSuccessItem),
+      ...root.filter((item) => !isSuccessItem(item)),
+    ];
+    for (const item of successFirst) {
+      const value = readAlong(item, segments);
+      if (value !== undefined && value !== null) {
+        return value;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+/** @deprecated Prefer {@link resolveJsonPath} — kept as a thin alias for call sites. */
+export function getByJsonPath(root: unknown, pathExpr: string): unknown {
+  return resolveJsonPath(root, pathExpr);
 }

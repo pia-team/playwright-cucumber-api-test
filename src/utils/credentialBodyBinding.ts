@@ -12,19 +12,19 @@ export const CREDENTIAL_BODY_PLACEHOLDERS: Record<
 > = {
   username: {
     secretKey: 'username',
-    types: ['KEYCLOAK', 'BASIC_AUTH', 'WEB_LOGIN', 'MOBILE_LOGIN'],
+    types: ['KEYCLOAK', 'TOKEN_CURL', 'BASIC_AUTH', 'WEB_LOGIN', 'MOBILE_LOGIN'],
   },
   password: {
     secretKey: 'password',
-    types: ['KEYCLOAK', 'BASIC_AUTH', 'WEB_LOGIN', 'MOBILE_LOGIN'],
+    types: ['KEYCLOAK', 'TOKEN_CURL', 'BASIC_AUTH', 'WEB_LOGIN', 'MOBILE_LOGIN'],
   },
   client_id: {
     secretKey: 'clientId',
-    types: ['KEYCLOAK'],
+    types: ['KEYCLOAK', 'TOKEN_CURL'],
   },
   client_secret: {
     secretKey: 'clientSecret',
-    types: ['KEYCLOAK'],
+    types: ['KEYCLOAK', 'TOKEN_CURL'],
   },
 };
 

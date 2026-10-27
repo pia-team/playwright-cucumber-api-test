@@ -2,6 +2,7 @@ import { AuthHelper } from './authHelper';
 import { envConfig } from '../config/env.config';
 import { logger } from './logger';
 import { hydrateRuntimeCredentialEnv } from './runtimeCredentials';
+import { acquireTokenFromCurlCredential, isTokenCurlCredential } from './tokenCurlAuth';
 
 export type RuntimeAuthMode = 'NONE' | 'BEARER' | 'KEYCLOAK' | 'BASIC' | 'API_KEY';
 
@@ -53,14 +54,18 @@ export async function resolveRequestAuth(
   }
 
   if (normalized === 'BEARER') {
-    const raw =
+    let raw =
       options?.bearerToken?.trim() ||
       process.env.API_TOKEN?.trim() ||
       envConfig.token?.trim();
+    if (!normalizeBearerToken(raw) && isTokenCurlCredential()) {
+      logger.info('API auth mode BEARER — acquiring token via TOKEN_CURL credential (value not logged)');
+      raw = await acquireTokenFromCurlCredential();
+    }
     const token = normalizeBearerToken(raw);
     if (!token) {
       throw new Error(
-        `BEARER auth selected but no token is available. Set API_TOKEN via a CoTester BEARER_TOKEN Credential Profile. ${CONFIG_ERROR}`,
+        `BEARER auth selected but no token is available. Use a BEARER_TOKEN or TOKEN_CURL Credential Profile. ${CONFIG_ERROR}`,
       );
     }
     logger.info('API auth mode BEARER — token applied (value not logged)');

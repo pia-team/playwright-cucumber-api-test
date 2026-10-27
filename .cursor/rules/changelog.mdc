@@ -1,0 +1,10 @@
+---
+description: Bu projede her tamamlanan geliştirme için changelog kaydı ve minor/patch güncellemesi.
+alwaysApply: true
+---
+
+- Workspace kökündeki `../CHANGELOG.md` ortak rehberini uygula; komut `python3 ../scripts/changelog.py` (ortak kökten `python3 scripts/changelog.py`). Ortak kural zaten okunmuşsa tekrar okuma.
+- Her tamamlanan mantıksal ürün işini bu projenin `CHANGELOG.md` dosyasına `add` ile kaydet: yeni yetenek minor; düzeltme/iyileştirme/token-performans/refactor patch. Sabit iş id'si kullan, edit/test turlarında tekrar bump yapma. Her etkilenen projeyi ayrı kaydet.
+- Gerçek kullanıcı etkisi ve gerçek doğrulama kanıtı yaz; başkasının mevcut işini sahiplenme, sır veya hayali test/sürüm bilgisi ekleme. Yalnızca changelog altyapısı/dokümanı için ürün bump'ı yapma. Manifest sürümlerini açıkça istenmeden değiştirme.
+- Release note isteğinde yalnızca `draft` oluştur ve snapshot kanıtlarından What's New yaz. `publish` ve RELEASE marker ilerletme yalnızca açık yayımlandı talebiyle. Marker/snapshot elle düzenlenmez, yayımlanmış kayıt silinmez. Commit/tag/push/deploy kendiliğinden yapılmaz.
+- Rehber/script bulunamazsa veya erişim engelliyse bunu bildir; tamamlanmış gibi gösterme. Bitirmeden `check` çalıştır.

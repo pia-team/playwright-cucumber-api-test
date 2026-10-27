@@ -9,6 +9,46 @@ import { runGeneratedAfter, runGeneratedBefore } from '../lifecycle/lifecycleReg
 import { clearAuthScenarioToken, enterAuthScenario } from '../../utils/authHelper';
 import { resetApiHttpScenarioGlobals } from '../../utils/apiScenarioGlobals';
 
+/**
+ * Load Environment customVariables into scenarioVars for {{name}} substitution.
+ * Prefers COTESTER_ENV_VARIABLES_JSON (original keys). Falls back to COTESTER_VAR_* and BASE_URL.
+ * Secrets are never injected here.
+ */
+function hydrateEnvironmentVariables(world: { scenarioVars?: Record<string, string> }) {
+  const vars: Record<string, string> = {};
+  const json = process.env.COTESTER_ENV_VARIABLES_JSON?.trim();
+  if (json) {
+    try {
+      const parsed = JSON.parse(json) as unknown;
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
+          if (typeof value === 'string' && key && !key.startsWith('_')) {
+            vars[key] = value;
+          }
+        }
+      }
+    } catch {
+      // ignore malformed payload; COTESTER_VAR_* fallback still applies
+    }
+  }
+  for (const [envKey, value] of Object.entries(process.env)) {
+    if (!envKey.startsWith('COTESTER_VAR_') || value == null || value === '') {
+      continue;
+    }
+    const name = envKey.slice('COTESTER_VAR_'.length);
+    if (name && vars[name] === undefined) {
+      vars[name] = value;
+    }
+  }
+  const base =
+    process.env.COTESTER_API_BASE_URL?.trim() || process.env.BASE_URL?.trim() || '';
+  if (base) {
+    if (vars.BASE_URL === undefined) vars.BASE_URL = base;
+    if (vars.baseUrl === undefined) vars.baseUrl = base;
+  }
+  world.scenarioVars = { ...vars, ...(world.scenarioVars || {}) };
+}
+
 Before(async function (scenario) {
   enterAuthScenario();
   clearAuthScenarioToken();
@@ -16,6 +56,8 @@ Before(async function (scenario) {
   // Fresh scenario scope; optional Test Flow preload below.
   const world = this as { scenarioVars?: Record<string, string> };
   world.scenarioVars = {};
+  // Non-secret Environment customVariables from CoTester runtime (never secrets).
+  hydrateEnvironmentVariables(world);
   const flowContextPath = process.env.COTESTER_FLOW_CONTEXT_PATH;
   if (flowContextPath) {
     try {
@@ -23,7 +65,10 @@ Before(async function (scenario) {
       const raw = await fs.readFile(flowContextPath, 'utf8');
       const parsed = JSON.parse(raw || '{}');
       if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-        world.scenarioVars = { ...(parsed as Record<string, string>) };
+        world.scenarioVars = {
+          ...world.scenarioVars,
+          ...(parsed as Record<string, string>),
+        };
       }
     } catch (e: unknown) {
       if ((e as NodeJS.ErrnoException)?.code !== 'ENOENT') {

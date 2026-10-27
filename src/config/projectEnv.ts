@@ -91,6 +91,10 @@ export function getApiProjectConfig(projectKey?: string): ApiProjectConfig {
   return JSON.parse(raw) as ApiProjectConfig;
 }
 
+/**
+ * Origin-only helper (legacy). Prefer {@link keycloakTokenUri} for token acquisition —
+ * this strips `/realms/{realm}` and must not be used alone to build the token path.
+ */
 export function extractKeycloakBaseUrl(keycloakUrl: string): string {
   const trimmed = keycloakUrl.trim();
   try {
@@ -104,4 +108,55 @@ export function extractKeycloakBaseUrl(keycloakUrl: string): string {
     }
     return trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
   }
+}
+
+const DEFAULT_REALM_TOKEN_SUFFIX = '/realms/orbitant-realm/protocol/openid-connect/token';
+
+function assertHttpKeycloakUrl(raw: string): URL {
+  let uri: URL;
+  try {
+    uri = new URL(raw);
+  } catch {
+    throw new Error(
+      'Keycloak URL is invalid. Use an http(s) origin, a /realms/{realm} path, or a full token endpoint.',
+    );
+  }
+  if (uri.protocol !== 'http:' && uri.protocol !== 'https:') {
+    throw new Error('Keycloak URL must use http or https.');
+  }
+  if (!uri.hostname) {
+    throw new Error('Keycloak URL is missing a host.');
+  }
+  return uri;
+}
+
+/**
+ * Build the OpenID token endpoint URL. Parity with BE ResponsePreviewService.keycloakTokenUri:
+ * - full `.../protocol/openid-connect/token` → use as-is
+ * - contains `/realms/{realm}` → append token path once
+ * - origin only → default `orbitant-realm` (backward compatible)
+ */
+export function keycloakTokenUri(keycloakUrl: string): string {
+  const trimmed = (keycloakUrl || '').trim();
+  if (!trimmed) {
+    throw new Error(
+      'Keycloak URL is empty. Configure keycloakUrl on the KEYCLOAK Credential Profile.',
+    );
+  }
+
+  if (trimmed.includes('/protocol/openid-connect/token')) {
+    const normalized = trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
+    assertHttpKeycloakUrl(normalized);
+    return normalized;
+  }
+
+  if (trimmed.includes('/realms/')) {
+    const base = trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
+    assertHttpKeycloakUrl(base);
+    return `${base}/protocol/openid-connect/token`;
+  }
+
+  const uri = assertHttpKeycloakUrl(trimmed);
+  const port = uri.port ? `:${uri.port}` : '';
+  return `${uri.protocol}//${uri.hostname}${port}${DEFAULT_REALM_TOKEN_SUFFIX}`;
 }

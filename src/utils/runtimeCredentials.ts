@@ -5,6 +5,7 @@ export type RuntimeCredentialType =
   | 'MOBILE_LOGIN'
   | 'KEYCLOAK'
   | 'BEARER_TOKEN'
+  | 'TOKEN_CURL'
   | 'BASIC_AUTH'
   | 'API_KEY';
 
@@ -69,6 +70,10 @@ export function hydrateRuntimeCredentialEnv(): void {
   switch (file.type) {
     case 'BEARER_TOKEN':
       putIfBlank('API_TOKEN', s.token);
+      break;
+    case 'TOKEN_CURL':
+      // API_TOKEN is set by RuntimeConfigService acquire or tokenCurlAuth reacquire.
+      putIfBlank('COTESTER_TOKEN_CURL', '1');
       break;
     case 'BASIC_AUTH':
       putIfBlank('API_BASIC_USERNAME', s.username);

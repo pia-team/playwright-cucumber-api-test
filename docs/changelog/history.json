@@ -1,0 +1,66 @@
+{
+  "project": "api",
+  "source": "local Git history, non-merge commits",
+  "commits": [
+    {
+      "commit": "8b5ad7c2131364374931643051bb55197b1307c5",
+      "date": "2026-01-22T14:40:26+03:00",
+      "subject": "Initial commit with configured .gitignore",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "f5b1de6444363d738de18bb79656268e6bea45cc",
+      "date": "2026-06-05T17:13:19+03:00",
+      "subject": "Refactor GCU API test suite with per-feature bundles, shared helpers, and swagger fixtures.",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "8de673fca69f8eccf9d642528c5386d7773e4a5f",
+      "date": "2026-06-05T22:55:53+03:00",
+      "subject": "Add GCU shopping cart management API test bundle.",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "481617ac0cea64dc4b2204e7e1968b11633d76ba",
+      "date": "2026-06-25T11:03:25+03:00",
+      "subject": "feat: api test environments",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "3db1464a3f6303b4651c1816cbf708c34f5d0e52",
+      "date": "2026-10-07T01:16:52+03:00",
+      "subject": "feat: migration",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "906e65aac20749dc38faf81edf8503b936a3bb46",
+      "date": "2026-10-08T01:08:07+03:00",
+      "subject": "feat: api runner",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "101c5b822f36434bdbe9a9c4ab0f164598bebfde",
+      "date": "2026-10-08T12:58:31+03:00",
+      "subject": "feat: git",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "8c7f3bf2c50cbfbc9162d98894c80482013b628b",
+      "date": "2026-10-12T03:59:24+03:00",
+      "subject": "feat: api test",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "17ae7eb3fba43adc49a8b002650e1de97e9d6e19",
+      "date": "2026-10-12T13:27:20+03:00",
+      "subject": "feat: delete unused files",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    },
+    {
+      "commit": "4619d9f9ad383c8eab81a33d33f67c94455c60a1",
+      "date": "2026-10-13T16:10:52+03:00",
+      "subject": "feat: data center enhance",
+      "confidence": "git-subject-only; not a verified release or feature claim"
+    }
+  ]
+}

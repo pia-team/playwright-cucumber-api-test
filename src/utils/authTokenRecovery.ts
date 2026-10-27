@@ -33,7 +33,7 @@ export type LastHttpSendSnapshot = {
   headers: Record<string, string>;
   params: Record<string, string>;
   bodyPayload: unknown;
-  resolvedBody: string | null;
+  resolvedBody: string | Buffer | null;
   isForm: boolean;
   authMode: RuntimeAuthMode;
   /** Bearer loaded from scenario variable (managed chain). */
