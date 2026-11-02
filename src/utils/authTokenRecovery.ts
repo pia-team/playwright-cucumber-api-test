@@ -103,24 +103,33 @@ export function evaluateRecoveryEligibility(input: {
   if (actualStatus !== 401) {
     return { eligible: false, reason: 'actual_not_401', httpRetryAllowed: false };
   }
-  if (!snapshot.bearerFromScenarioVariable) {
-    return { eligible: false, reason: 'not_managed_bearer_from_variable', httpRetryAllowed: false };
-  }
-  if (!snapshot.managedFingerprint) {
-    return { eligible: false, reason: 'no_managed_token_fingerprint', httpRetryAllowed: false };
-  }
   if (snapshot.hadExplicitAuthorization) {
     return { eligible: false, reason: 'explicit_authorization_override', httpRetryAllowed: false };
   }
-  // Skip Bearer / NONE without bearer token: bearerFromScenarioVariable unset.
-  if (snapshot.authMode !== 'BEARER' && !snapshot.bearerFromScenarioVariable) {
-    return { eligible: false, reason: 'skip_bearer_or_no_bearer', httpRetryAllowed: false };
+  // Managed Token Request (chain) — fingerprint + scenario variable required.
+  if (snapshot.bearerFromScenarioVariable && snapshot.managedFingerprint) {
+    if (snapshot.authMode !== 'BEARER' && !snapshot.bearerFromScenarioVariable) {
+      return { eligible: false, reason: 'skip_bearer_or_no_bearer', httpRetryAllowed: false };
+    }
+    return {
+      eligible: true,
+      reason: 'unexpected_401_with_managed_bearer',
+      httpRetryAllowed: isSafeRetryMethod(snapshot.method),
+    };
   }
-  return {
-    eligible: true,
-    reason: 'unexpected_401_with_managed_bearer',
-    httpRetryAllowed: isSafeRetryMethod(snapshot.method),
-  };
+  // TOKEN_CURL profile Bearer: allow a single reacquire; HTTP replay only for safe methods.
+  if (
+    snapshot.authMode === 'BEARER' &&
+    !snapshot.bearerFromScenarioVariable &&
+    process.env.COTESTER_TOKEN_CURL === '1'
+  ) {
+    return {
+      eligible: true,
+      reason: 'unexpected_401_with_token_curl',
+      httpRetryAllowed: isSafeRetryMethod(snapshot.method),
+    };
+  }
+  return { eligible: false, reason: 'not_managed_bearer_from_variable', httpRetryAllowed: false };
 }
 
 export function registerManagedTokenVar(
@@ -440,6 +449,52 @@ export async function runAuthRecovery(input: {
 
   input.snapshot.recoveryAttempted = true;
   setLastHttpSendSnapshot(input.snapshot);
+
+  // TOKEN_CURL path: clear env token and reacquire once (no managed fingerprint).
+  if (eligibility.reason === 'unexpected_401_with_token_curl') {
+    try {
+      delete process.env.API_TOKEN;
+      const { acquireTokenFromCurlCredential } = await import('./tokenCurlAuth');
+      const token = await acquireTokenFromCurlCredential();
+      if (!token?.trim()) {
+        return {
+          attempted: true,
+          tokenRefreshed: false,
+          httpRetried: false,
+          failClosedMessage: 'TOKEN_CURL recovery produced an empty token (fail-closed).',
+          note: 'token_curl_empty',
+        };
+      }
+      process.env.API_TOKEN = token;
+      const values = { API_TOKEN: token };
+      if (!eligibility.httpRetryAllowed) {
+        return {
+          attempted: true,
+          tokenRefreshed: true,
+          httpRetried: false,
+          values,
+          note: `token_curl_refreshed_no_http_retry_for_${(input.snapshot.method || 'METHOD').toUpperCase()}`,
+        };
+      }
+      return {
+        attempted: true,
+        tokenRefreshed: true,
+        httpRetried: true,
+        values,
+        note: 'token_curl_refreshed_http_retry_pending',
+      };
+    } catch (error) {
+      return {
+        attempted: true,
+        tokenRefreshed: false,
+        httpRetried: false,
+        failClosedMessage: safeFailMessage(
+          error instanceof Error ? error.message : 'TOKEN_CURL recovery failed',
+        ),
+        note: 'token_curl_refresh_failed',
+      };
+    }
+  }
 
   const staleGeneration = input.snapshot.tokenGenerationUsed ?? 0;
   const fingerprint = input.snapshot.managedFingerprint!;

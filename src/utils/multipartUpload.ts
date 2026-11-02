@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { ApiClient } from '../core/api/apiClient';
+import { resolveMultipartMimeType } from './mimeType';
 
 export async function postMultipartFile(
   apiClient: ApiClient,
@@ -8,6 +9,7 @@ export async function postMultipartFile(
   fieldName: string,
   filePath: string,
   extraFields?: Record<string, string>,
+  explicitContentType?: string | null,
 ) {
   const buffer = await fs.readFile(filePath);
   const fileName = path.basename(filePath);
@@ -15,7 +17,7 @@ export async function postMultipartFile(
     ...(extraFields ?? {}),
     [fieldName]: {
       name: fileName,
-      mimeType: 'application/octet-stream',
+      mimeType: resolveMultipartMimeType(fileName, explicitContentType),
       buffer,
     },
   };
@@ -47,7 +49,8 @@ export async function postMultipartFiles(
   for (const filePath of filePaths) {
     const buffer = await fs.readFile(filePath);
     const fileName = path.basename(filePath);
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const mime = resolveMultipartMimeType(fileName);
+    const blob = new Blob([buffer], { type: mime });
     form.append(fieldName, blob, fileName);
   }
   return apiClient.postMultipartForm(url, form);

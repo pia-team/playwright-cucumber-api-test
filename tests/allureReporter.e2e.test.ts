@@ -124,7 +124,7 @@ Feature: Allure coverage against local mock API
     And the API request uses auth mode "NONE"
     And the API request body is
       """
-      {"name":"secret"}
+      {"name":"allure-demo"}
       """
     And the API chain will store response path "$.id"
     When the user sends a POST request to "/customers"
@@ -141,6 +141,12 @@ Feature: Allure coverage against local mock API
 
 function runCucumber(env: NodeJS.ProcessEnv, feature: string): Promise<number> {
   return new Promise((resolve, reject) => {
+    // Match package.json unit/e2e loaders: transpile-only so cucumber can require hooks
+    // without failing the run on non-runtime TypeScript narrowing diagnostics.
+    const childEnv = {
+      ...env,
+      TS_NODE_TRANSPILE_ONLY: env.TS_NODE_TRANSPILE_ONLY ?? 'true',
+    };
     // No shell: true — globs must reach cucumber-js unexpanded (same as BE API argv).
     const child = spawn(
       'npx',
@@ -156,7 +162,7 @@ function runCucumber(env: NodeJS.ProcessEnv, feature: string): Promise<number> {
         '--format',
         'allure-cucumberjs/reporter',
       ],
-      { cwd: ROOT, env, stdio: 'inherit', shell: false },
+      { cwd: ROOT, env: childEnv, stdio: 'inherit', shell: false },
     );
     child.on('error', reject);
     child.on('close', (code) => resolve(code ?? 1));

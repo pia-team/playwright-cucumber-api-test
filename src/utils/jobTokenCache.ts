@@ -10,12 +10,25 @@ import * as path from 'path';
 import { loadRuntimeCredentialsFile } from './runtimeCredentials';
 
 /**
- * Unknown lifetime: short conservative reuse only.
- * Rationale: without IdP expiry we must not claim ~1h validity; AUTH-SUITE-3 covers surprise 401.
+ * Unknown lifetime: short wall-clock ceiling within a single scenario only.
+ * Cross-scenario reuse of fallback tokens is forbidden (P5 Phase 2 / product rule).
+ * AUTH-SUITE-3 still covers surprise 401 for managed tokens.
  */
 export const CONSERVATIVE_FALLBACK_TTL_MS = 5 * 60 * 1000;
 /** @deprecated Use CONSERVATIVE_FALLBACK_TTL_MS — kept as alias for AUTH-SUITE-1 call sites. */
 export const DEFAULT_TTL_MS = CONSERVATIVE_FALLBACK_TTL_MS;
+
+/** Epoch ms of the current Cucumber scenario start (fallback cache isolation). */
+let authScenarioStartedAtMs = Date.now();
+
+/** Call from Before hooks so unknown-TTL tokens are not reused across scenarios. */
+export function markAuthScenarioBoundary(): void {
+  authScenarioStartedAtMs = Date.now();
+}
+
+export function getAuthScenarioStartedAtMs(): number {
+  return authScenarioStartedAtMs;
+}
 export const MAX_TTL_MS = 24 * 60 * 60 * 1000;
 export const MIN_VALID_EXPIRES_IN_SEC = 1;
 export const MAX_EXPIRES_IN_SEC = Math.floor(MAX_TTL_MS / 1000);
@@ -257,6 +270,10 @@ export function isUsable(entry: CachedTokenEntry, now = Date.now()): boolean {
   if (!entry.values || typeof entry.values !== 'object') return false;
   if (!Number.isFinite(entry.expiresAt) || !Number.isFinite(entry.acquiredAt)) return false;
   if (Object.keys(entry.values).length === 0) return false;
+  // Unknown TTL: never reuse across scenarios (per-test acquisition rule).
+  if (entry.expirationSource === 'fallback' && entry.acquiredAt < authScenarioStartedAtMs) {
+    return false;
+  }
   const margin = safetyMarginMs(entryLifetimeMs(entry));
   return entry.expiresAt - margin > now;
 }

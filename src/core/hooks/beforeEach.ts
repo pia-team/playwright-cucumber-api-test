@@ -8,6 +8,8 @@ import { resetTestDataCache } from '../../utils/testData';
 import { runGeneratedAfter, runGeneratedBefore } from '../lifecycle/lifecycleRegistry';
 import { clearAuthScenarioToken, enterAuthScenario } from '../../utils/authHelper';
 import { resetApiHttpScenarioGlobals } from '../../utils/apiScenarioGlobals';
+import { markAuthScenarioBoundary } from '../../utils/jobTokenCache';
+import { isTokenCurlCredential } from '../../utils/tokenCurlAuth';
 
 /**
  * Load Environment customVariables into scenarioVars for {{name}} substitution.
@@ -52,6 +54,16 @@ function hydrateEnvironmentVariables(world: { scenarioVars?: Record<string, stri
 Before(async function (scenario) {
   enterAuthScenario();
   clearAuthScenarioToken();
+  markAuthScenarioBoundary();
+  // Unknown TTL TOKEN_CURL: force per-scenario reacquire (do not keep job-start API_TOKEN).
+  // Known TTL is marked via COTESTER_TOKEN_CURL_EXPIRES_AT when available.
+  if (
+    process.env.COTESTER_TOKEN_CURL === '1' &&
+    isTokenCurlCredential() &&
+    !process.env.COTESTER_TOKEN_CURL_EXPIRES_AT?.trim()
+  ) {
+    delete process.env.API_TOKEN;
+  }
   resetTestDataCache();
   // Fresh scenario scope; optional Test Flow preload below.
   const world = this as { scenarioVars?: Record<string, string> };

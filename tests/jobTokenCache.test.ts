@@ -15,6 +15,7 @@ import {
   isUsable,
   jobAuthCacheEnabled,
   jwtExpMs,
+  markAuthScenarioBoundary,
   mergeStoreValue,
   releaseLock,
   resolveExpiration,
@@ -111,6 +112,57 @@ describe('jobTokenCache', () => {
     assert.notEqual(a, b);
   });
 
+  it('suite parallel features with distinct job+credential identities do not share usable tokens', async () => {
+    const fp = 'e'.repeat(32);
+    const credA = path.join(authDir, 'suite-cred-a.json');
+    const credB = path.join(authDir, 'suite-cred-b.json');
+    fs.writeFileSync(credA, JSON.stringify({ type: 'BEARER_TOKEN', secrets: { token: 'tok-a' } }));
+    fs.writeFileSync(credB, JSON.stringify({ type: 'BEARER_TOKEN', secrets: { token: 'tok-b' } }));
+
+    process.env.COTESTER_RUN_JOB_ID = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+    process.env.COTESTER_RUNTIME_CREDENTIALS_FILE = credA;
+    resetRuntimeCredentialsCacheForTests();
+    const acqA = await beginAcquisition(fp);
+    assert.equal(acqA.kind, 'acquire');
+    if (acqA.kind !== 'acquire') return;
+    const acquiredAt = Date.now();
+    storeEntry(
+      acqA.cacheKey,
+      {
+        values: { access_token: 'suite-token-A' },
+        expectedStatus: 200,
+        acquiredAt,
+        expiresAt: acquiredAt + 3_600_000,
+        lifetimeMs: 3_600_000,
+        expirationSource: 'expires_in',
+        generation: 1,
+      },
+      acqA.lockPath,
+    );
+
+    // Feature B: different job id + credential file (suite per-test isolation).
+    process.env.COTESTER_RUN_JOB_ID = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
+    process.env.COTESTER_RUNTIME_CREDENTIALS_FILE = credB;
+    resetRuntimeCredentialsCacheForTests();
+    const acqB = await beginAcquisition(fp);
+    assert.equal(acqB.kind, 'acquire');
+    if (acqB.kind !== 'acquire') return;
+    assert.notEqual(acqA.cacheKey, acqB.cacheKey);
+    // B must acquire (miss), not hit A's stored token.
+    assert.equal(acqB.kind, 'acquire');
+    releaseLock(acqB.lockPath);
+
+    // Switch back to A identity → still hits A's token, not B.
+    process.env.COTESTER_RUN_JOB_ID = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+    process.env.COTESTER_RUNTIME_CREDENTIALS_FILE = credA;
+    resetRuntimeCredentialsCacheForTests();
+    const hitA = await beginAcquisition(fp);
+    assert.equal(hitA.kind, 'hit');
+    if (hitA.kind === 'hit') {
+      assert.equal(hitA.entry.values.access_token, 'suite-token-A');
+    }
+  });
+
   it('treats expired entries as miss (not unlimited reuse)', async () => {
     const fp = 'd'.repeat(32);
     const first = await beginAcquisition(fp);
@@ -144,6 +196,25 @@ describe('jobTokenCache', () => {
     assert.equal(resolved.lifetimeMs, CONSERVATIVE_FALLBACK_TTL_MS);
     assert.equal(computeExpiresAt(at, null), at + CONSERVATIVE_FALLBACK_TTL_MS);
     assert.equal(computeExpiresAt(at, 60), at + 60_000);
+  });
+
+  it('fallback token is not reusable across scenario boundary', async () => {
+    markAuthScenarioBoundary();
+    const acquiredAt = Date.now();
+    const entry = {
+      values: { access_token: 'fallback-tok' },
+      expectedStatus: 200,
+      acquiredAt,
+      expiresAt: acquiredAt + CONSERVATIVE_FALLBACK_TTL_MS,
+      lifetimeMs: CONSERVATIVE_FALLBACK_TTL_MS,
+      generation: 1,
+      expirationSource: 'fallback' as const,
+    };
+    assert.equal(isUsable(entry), true);
+    // Ensure the next boundary timestamp is strictly after acquisition (same-ms race).
+    await new Promise((r) => setTimeout(r, 5));
+    markAuthScenarioBoundary();
+    assert.equal(isUsable(entry), false);
   });
 
   it('resolves expires_in over expires_at and JWT', () => {

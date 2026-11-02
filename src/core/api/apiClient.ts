@@ -26,6 +26,18 @@ export class ApiClient {
     return this.context.head(url, requestOptions);
   }
 
+  /** True HTTP OPTIONS — CORS/preflight probes; must not rewrite to GET. */
+  options(url: string, options?: { headers?: Record<string, string>; params?: Record<string, string | number> }) {
+    const requestOptions: any = {
+      method: 'OPTIONS',
+      headers: options?.headers,
+    };
+    if (options?.params) {
+      requestOptions.params = options.params;
+    }
+    return this.context.fetch(url, requestOptions);
+  }
+
   post(url: string, body?: unknown, options?: { headers?: Record<string, string>; form?: boolean }) {
     const requestOptions: any = {
       headers: options?.headers

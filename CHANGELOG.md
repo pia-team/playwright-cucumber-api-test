@@ -55,3 +55,59 @@ Kanıt / doğrulama: tests/tokenCurlAuth.test.ts → 3/3 pass (local mock HTTP).
 API KEYCLOAK password-grant artık confidential client_secret gönderir; token URL Credential realm’ini korur (Preview ile uyumlu).
 
 Kanıt / doğrulama: tests/keycloakAuth.test.ts + authResolution + tokenCurlAuth → 36/36 pass (local mock HTTP; no live IdP).
+
+<!-- CHANGELOG:ENTRY {"bump": "minor", "date": "2026-10-29T22:14:50+03:00", "evidence": "node --test tests/authTokenRecovery.test.ts tests/jobTokenCache.test.ts → 29/29 PASS; canlı IdP yok.", "id": "2026-10-29-pkg5-phase2-credentials-curl-token", "summary": "Bilinmeyen TTL token’ları senaryo sınırında yeniden kullanılmaz; beklenmeyen 401’de TOKEN_CURL tek reacquire (POST replay yok); beklenen 401/403 ve düz 403 refresh yok.", "title": "Paket 5 Faz 2: unknown-TTL senaryo sınırı ve TOKEN_CURL 401 recovery", "version": "0.4.0"} -->
+## 0.4.0 — Paket 5 Faz 2: unknown-TTL senaryo sınırı ve TOKEN_CURL 401 recovery
+
+Bilinmeyen TTL token’ları senaryo sınırında yeniden kullanılmaz; beklenmeyen 401’de TOKEN_CURL tek reacquire (POST replay yok); beklenen 401/403 ve düz 403 refresh yok.
+
+Kanıt / doğrulama: node --test tests/authTokenRecovery.test.ts tests/jobTokenCache.test.ts → 29/29 PASS; canlı IdP yok.
+
+<!-- CHANGELOG:ENTRY {"bump": "patch", "date": "2026-10-29T22:31:10+03:00", "evidence": "node --test tests/jobTokenCache.test.ts tests/authTokenRecovery.test.ts → 30/30 PASS.", "id": "2026-10-29-pkg5-phase2-final-verification", "summary": "Suite paralel feature’larda farklı job+credential kimliklerinin token cache’i paylaşmadığı hedefli testle doğrulandı.", "title": "Paket 5 Faz 2 final verification: suite paralel credential token izolasyonu", "version": "0.4.1"} -->
+## 0.4.1 — Paket 5 Faz 2 final verification: suite paralel credential token izolasyonu
+
+Suite paralel feature’larda farklı job+credential kimliklerinin token cache’i paylaşmadığı hedefli testle doğrulandı.
+
+Kanıt / doğrulama: node --test tests/jobTokenCache.test.ts tests/authTokenRecovery.test.ts → 30/30 PASS.
+
+<!-- CHANGELOG:ENTRY {"bump": "minor", "date": "2026-10-29T22:41:32+03:00", "evidence": "mimeType.test.ts 3/3 PASS; ApiClient.options + genericHttp OPTIONS; runner-templates/api mirror.", "id": "2026-10-29-pkg5-phase3-unified-api-generation", "summary": "API runner OPTIONS metodunu destekler; multipart dosyalarda explicit MIME korunur, bilinmeyenlerde güvenli fallback kullanılır.", "title": "OPTIONS + multipart MIME for unified API runner", "version": "0.5.0"} -->
+## 0.5.0 — OPTIONS + multipart MIME for unified API runner
+
+API runner OPTIONS metodunu destekler; multipart dosyalarda explicit MIME korunur, bilinmeyenlerde güvenli fallback kullanılır.
+
+Kanıt / doğrulama: mimeType.test.ts 3/3 PASS; ApiClient.options + genericHttp OPTIONS; runner-templates/api mirror.
+
+<!-- CHANGELOG:ENTRY {"bump": "patch", "date": "2026-10-29T22:52:24+03:00", "evidence": "assertionChecks.test.ts 20/20 PASS (Phase 3 final verification block dahil).", "id": "2026-10-29-pkg5-phase3-final-verification", "summary": "API runner assertion FAIL (JSONPath/body/header/status) ve scenario-blocking davranış hedefli testlerle doğrulandı; yanlış PASS iddiası yok.", "title": "Assertion FAIL reliability targeted tests", "version": "0.5.1"} -->
+## 0.5.1 — Assertion FAIL reliability targeted tests
+
+API runner assertion FAIL (JSONPath/body/header/status) ve scenario-blocking davranış hedefli testlerle doğrulandı; yanlış PASS iddiası yok.
+
+Kanıt / doğrulama: assertionChecks.test.ts 20/20 PASS (Phase 3 final verification block dahil).
+
+<!-- CHANGELOG:ENTRY {"bump": "minor", "date": "2026-10-29T23:44:58+03:00", "evidence": "flowResponseBuffer.ts,flow-capture.step.ts,genericHttp.step.ts", "id": "pkg6-phase2-schedule-flow-consistency", "summary": "HTTP responses buffered with method/URL; capture fail-closed on missing/ambiguous matches instead of last-body silent win.", "title": "Deterministic API Flow capture buffer", "version": "0.6.0"} -->
+## 0.6.0 — Deterministic API Flow capture buffer
+
+HTTP responses buffered with method/URL; capture fail-closed on missing/ambiguous matches instead of last-body silent win.
+
+Kanıt / doğrulama: flowResponseBuffer.ts,flow-capture.step.ts,genericHttp.step.ts
+
+<!-- CHANGELOG:ENTRY {"bump": "minor", "date": "2026-10-30T16:03:32+03:00", "evidence": "genericHttp.step.ts: loaded from Data Center config … key …; birim/E2E koşulmadı.", "id": "2026-10-30-dc-phase1-config", "summary": "API runner, Data Center CONFIG anahtarını senaryo değişkenine yükleyebilir.", "title": "CONFIG anahtarından senaryo değişkeni yükleme adımı", "version": "0.7.0"} -->
+## 0.7.0 — CONFIG anahtarından senaryo değişkeni yükleme adımı
+
+API runner, Data Center CONFIG anahtarını senaryo değişkenine yükleyebilir.
+
+Kanıt / doğrulama: genericHttp.step.ts: loaded from Data Center config … key …; birim/E2E koşulmadı.
+
+<!-- CHANGELOG:ENTRY {"bump": "minor", "date": "2026-10-30T18:20:16+03:00", "evidence": "tests/step-event.test.ts 1/1 PASS; canlı API E2E UNVERIFIED.", "id": "2026-10-30-pkg8-phase2-step-state-hybrid-preview", "summary": "API runner structured step event marker üretir; soft-fail UI FAILED reason taşır, Cucumber sonucu bozulmaz.", "title": "API structured step markers with soft-fail reason", "version": "0.8.0"} -->
+## 0.8.0 — API structured step markers with soft-fail reason
+
+API runner structured step event marker üretir; soft-fail UI FAILED reason taşır, Cucumber sonucu bozulmaz.
+
+Kanıt / doğrulama: tests/step-event.test.ts 1/1 PASS; canlı API E2E UNVERIFIED.
+
+<!-- CHANGELOG:ENTRY {"bump": "patch", "date": "2026-10-30T22:46:53+03:00", "evidence": "src/core/hooks/stepHooks.ts; tests/allureReporter.e2e.test.ts; node --test allureReporter.e2e.test.ts → 2 pass", "id": "pkg9-closure-allure-reporter", "summary": "API cucumber step hooks load under ts-node; allureReporter e2e creates allure-results and job HTML without typecheck abort.", "title": "Allure reporter e2e load and artifacts", "version": "0.8.1"} -->
+## 0.8.1 — Allure reporter e2e load and artifacts
+
+API cucumber step hooks load under ts-node; allureReporter e2e creates allure-results and job HTML without typecheck abort.
+
+Kanıt / doğrulama: src/core/hooks/stepHooks.ts; tests/allureReporter.e2e.test.ts; node --test allureReporter.e2e.test.ts → 2 pass

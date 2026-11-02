@@ -98,12 +98,40 @@ describe('authTokenRecovery eligibility', () => {
   });
 
   it('Skip Bearer / no managed bearer → no recovery', () => {
-    const r = evaluateRecoveryEligibility({
-      actualStatus: 401,
-      expectedStatus: 200,
-      snapshot: snap({ bearerFromScenarioVariable: undefined, managedFingerprint: undefined }),
-    });
-    assert.equal(r.eligible, false);
+    const prev = process.env.COTESTER_TOKEN_CURL;
+    delete process.env.COTESTER_TOKEN_CURL;
+    try {
+      const r = evaluateRecoveryEligibility({
+        actualStatus: 401,
+        expectedStatus: 200,
+        snapshot: snap({ bearerFromScenarioVariable: undefined, managedFingerprint: undefined }),
+      });
+      assert.equal(r.eligible, false);
+    } finally {
+      if (prev !== undefined) process.env.COTESTER_TOKEN_CURL = prev;
+    }
+  });
+
+  it('TOKEN_CURL unexpected 401 → eligible; POST no HTTP replay', () => {
+    const prev = process.env.COTESTER_TOKEN_CURL;
+    process.env.COTESTER_TOKEN_CURL = '1';
+    try {
+      const r = evaluateRecoveryEligibility({
+        actualStatus: 401,
+        expectedStatus: 200,
+        snapshot: snap({
+          method: 'POST',
+          bearerFromScenarioVariable: undefined,
+          managedFingerprint: undefined,
+        }),
+      });
+      assert.equal(r.eligible, true);
+      assert.equal(r.reason, 'unexpected_401_with_token_curl');
+      assert.equal(r.httpRetryAllowed, false);
+    } finally {
+      if (prev === undefined) delete process.env.COTESTER_TOKEN_CURL;
+      else process.env.COTESTER_TOKEN_CURL = prev;
+    }
   });
 
   it('Explicit Authorization override → no recovery', () => {

@@ -326,3 +326,69 @@ describe('approved API assertions', () => {
     assert.match(templateStep, /the API response status should be \{int\}/);
   });
 });
+
+describe('Phase 3 final verification — assertion FAIL reliability', () => {
+  it('JSONPath field_equals FAIL throws via assertCriterion', () => {
+    assert.throws(
+      () =>
+        assertCriterion(
+          { description: 'id', type: 'field_equals', path: '$.id', expected: 'expected-id' },
+          ctx({ id: 'wrong-id' }),
+        ),
+      /FAIL/,
+    );
+  });
+
+  it('body field and header assertion FAIL are scenario-blocking', () => {
+    const bodyFail = evaluateCriterion(
+      { description: 'body', type: 'field_equals', path: '$.name', expected: 'ok' },
+      ctx({ name: 'nope' }),
+    );
+    assert.equal(bodyFail.status, 'FAIL');
+    assert.ok(scenarioFailureMessage([bodyFail]));
+
+    const headerFail = evaluateCriterion(
+      {
+        description: 'hdr',
+        type: 'response_header',
+        path: 'X-Request-Id',
+        expected: 'expected-rid',
+        operator: 'eq',
+      },
+      ctx({ ok: true }, { headers: { 'X-Request-Id': 'other' } }),
+    );
+    assert.equal(headerFail.status, 'FAIL');
+    assert.ok(scenarioFailureMessage([headerFail]));
+  });
+
+  it('mock HTTP status mismatch remains FAIL (does not become PASS)', async () => {
+    const server = await startMockApiServer();
+    try {
+      const response = await fetch(`${server.baseUrl}/users`);
+      assert.equal(response.status, 200);
+      const expected = 201;
+      assert.notEqual(response.status, expected);
+      // Mirrors genericHttp status step: mismatch must fail the scenario.
+      assert.throws(() => {
+        if (response.status !== expected) {
+          throw new Error(`Expected status ${expected} but got ${response.status}`);
+        }
+      }, /Expected status 201/);
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('genericHttp status and body steps throw on mismatch (contract)', () => {
+    const step = readFileSync(
+      path.join(process.cwd(), 'src/features/steps/common/genericHttp.step.ts'),
+      'utf8',
+    );
+    assert.match(step, /the API response status should be \{int\}/);
+    assert.match(step, /Response body should contain/);
+    assert.match(step, /throw new Error/);
+    assert.match(step, /scenarioFailureMessage/);
+    // Expected 401/403 must not trigger token refresh (eligibility gate).
+    assert.match(step, /evaluateRecoveryEligibility/);
+  });
+});

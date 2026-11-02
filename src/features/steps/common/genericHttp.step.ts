@@ -25,6 +25,7 @@ import {
   RuntimeAuthMode,
 } from '../../../utils/authResolution';
 import { flowContext } from '../../../utils/flowContext';
+import { recordFlowHttpResponse } from '../../../utils/flowResponseBuffer';
 import {
   evaluateCriterion,
   formatCriterionFailure,
@@ -186,6 +187,26 @@ function applyResponseToGlobals(
   (global as any).__cotesterResponseBodyText = bodyText;
   (global as any).__cotesterResponseJson = bodyJson;
   (global as any).__cotesterElapsedMs = elapsedMs;
+}
+
+/** Record method/URL/body for Flow capture (fail-closed matcher in flow-capture.step). */
+function rememberHttpForFlow(
+  method: string,
+  url: string,
+  status: number,
+  bodyJson: unknown,
+  bodyText: string | null,
+): void {
+  try {
+    recordFlowHttpResponse({
+      method,
+      url,
+      status,
+      body: bodyJson !== undefined ? bodyJson : bodyText,
+    });
+  } catch {
+    // non-fatal outside Flow runs
+  }
 }
 
 async function attachAuthCacheHitNote(world: unknown): Promise<void> {
@@ -375,6 +396,32 @@ Given(
       throw new Error(`Dataset row number must be a positive integer (got ${rowNumber})`);
     }
     await loadDatasetCellIntoScenarioVar(this, varName, bindingKey, column, rowNumber - 1, sheet);
+  },
+);
+
+Given(
+  'the scenario variable {string} is loaded from Data Center config {string} key {string}',
+  async function (
+    this: { scenarioVars?: Record<string, string> },
+    varName: string,
+    bindingKey: string,
+    configKey: string,
+  ) {
+    if (!SAFE_VARIABLE.test(varName)) {
+      throw new Error(`Invalid scenario variable name "${varName}"`);
+    }
+    const entries = await testData.getConfig(bindingKey);
+    const value = entries?.[configKey];
+    if (value === undefined || value === null || String(value).trim() === '') {
+      throw new Error(
+        `Data Center config "${bindingKey}" key "${configKey}" is missing or empty.`,
+      );
+    }
+    this.scenarioVars = this.scenarioVars || {};
+    this.scenarioVars[varName] = String(value);
+    logger.info(
+      `Scenario variable "${varName}" loaded from Data Center config "${bindingKey}" key "${configKey}"`,
+    );
   },
 );
 
@@ -820,6 +867,9 @@ When(
         case 'HEAD':
           response = await client.head(resolvedPath, { headers: resolvedHeaders, params });
           break;
+        case 'OPTIONS':
+          response = await client.options(resolvedPath, { headers: resolvedHeaders, params });
+          break;
         case 'POST':
           response = await client.post(resolvedPath, bodyPayload, { headers: resolvedHeaders, form: isForm });
           break;
@@ -869,7 +919,7 @@ When(
     (global as any).currentResponse = response;
 
     let bodyText: string | null = null;
-    if (m !== 'HEAD') {
+    if (m !== 'HEAD' && m !== 'OPTIONS') {
       try {
         bodyText = await response.text();
       } catch {
@@ -877,14 +927,18 @@ When(
       }
     }
     (global as any).__cotesterResponseBodyText = bodyText;
+    let __flowBodyJson: unknown;
     try {
-      (global as any).__cotesterResponseJson =
+      __flowBodyJson =
         bodyText && (bodyText.trim().startsWith('{') || bodyText.trim().startsWith('['))
           ? JSON.parse(bodyText)
           : undefined;
+      (global as any).__cotesterResponseJson = __flowBodyJson;
     } catch {
+      __flowBodyJson = undefined;
       (global as any).__cotesterResponseJson = undefined;
     }
+    rememberHttpForFlow(m, resolvedUrl || resolvedPath, response.status(), __flowBodyJson, bodyText);
     clearPendingExtracts();
     const responseHeaders = response.headers() as Record<string, string>;
     recordResponseEvidence(response.status(), responseHeaders, bodyText, {
@@ -1039,14 +1093,18 @@ When(
       bodyText = null;
     }
     (global as any).__cotesterResponseBodyText = bodyText;
+    let __flowBodyJson: unknown;
     try {
-      (global as any).__cotesterResponseJson =
+      __flowBodyJson =
         bodyText && (bodyText.trim().startsWith('{') || bodyText.trim().startsWith('['))
           ? JSON.parse(bodyText)
           : undefined;
+      (global as any).__cotesterResponseJson = __flowBodyJson;
     } catch {
+      __flowBodyJson = undefined;
       (global as any).__cotesterResponseJson = undefined;
     }
+    rememberHttpForFlow(m, resolvedUrl || resolvedPath, response.status(), __flowBodyJson, bodyText);
     const responseHeaders = response.headers() as Record<string, string>;
     recordResponseEvidence(response.status(), responseHeaders, bodyText, {
       durationMs: elapsedMs,
@@ -1206,14 +1264,18 @@ When(
       bodyText = null;
     }
     (global as any).__cotesterResponseBodyText = bodyText;
+    let __flowBodyJson: unknown;
     try {
-      (global as any).__cotesterResponseJson =
+      __flowBodyJson =
         bodyText && (bodyText.trim().startsWith('{') || bodyText.trim().startsWith('['))
           ? JSON.parse(bodyText)
           : undefined;
+      (global as any).__cotesterResponseJson = __flowBodyJson;
     } catch {
+      __flowBodyJson = undefined;
       (global as any).__cotesterResponseJson = undefined;
     }
+    rememberHttpForFlow(m, resolvedUrl || resolvedPath, response.status(), __flowBodyJson, bodyText);
     const responseHeaders = response.headers() as Record<string, string>;
     recordResponseEvidence(response.status(), responseHeaders, bodyText, {
       durationMs: elapsedMs,
@@ -1287,6 +1349,13 @@ Then('the API response status should be {int}', async function (
         const newToken = recovery.values[bearerVar] || Object.values(recovery.values)[0];
         const retried = await retrySafeHttpWithBearer(snapshot, newToken);
         applyResponseToGlobals(retried.response, retried.bodyText, retried.bodyJson, retried.elapsedMs);
+        rememberHttpForFlow(
+          snapshot.method,
+          snapshot.resolvedUrl || snapshot.resolvedPath,
+          retried.status,
+          retried.bodyJson,
+          retried.bodyText,
+        );
         recordResponseEvidence(retried.status, retried.response.headers() as Record<string, string>, retried.bodyText, {
           durationMs: retried.elapsedMs,
         });
@@ -1595,6 +1664,13 @@ Then('API step {string} {string} expects status {int}', async function (
               transportError: null,
             });
             applyResponseToGlobals(retried.response, retried.bodyText, retried.bodyJson, retried.elapsedMs);
+            rememberHttpForFlow(
+              snapshot.method,
+              snapshot.resolvedUrl || snapshot.resolvedPath,
+              retried.status,
+              retried.bodyJson,
+              retried.bodyText,
+            );
             await attachHttpEvidence(this);
             await attachAuthRecoveryNote(
               this,
