@@ -55,6 +55,10 @@ export function redactStoredValues(text: string, values: string[]): string {
     .sort((left, right) => right.length - left.length);
   for (const value of sorted) {
     out = out.split(value).join('[REDACTED]');
+    const encoded = encodeURIComponent(value);
+    if (encoded !== value) {
+      out = out.split(encoded).join('[REDACTED]');
+    }
   }
   return out;
 }

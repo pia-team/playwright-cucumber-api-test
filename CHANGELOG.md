@@ -111,3 +111,10 @@ Kanıt / doğrulama: tests/step-event.test.ts 1/1 PASS; canlı API E2E UNVERIFIE
 API cucumber step hooks load under ts-node; allureReporter e2e creates allure-results and job HTML without typecheck abort.
 
 Kanıt / doğrulama: src/core/hooks/stepHooks.ts; tests/allureReporter.e2e.test.ts; node --test allureReporter.e2e.test.ts → 2 pass
+
+<!-- CHANGELOG:ENTRY {"bump": "patch", "date": "2026-11-04T20:47:49+03:00", "evidence": "api-runner.unit 196/196 ve api-runner.mock-e2e 1/1 PASS (2026-11-04T17-47-31-049Z).", "id": "2026-11-04-api-secret-redaction", "summary": "Zincirde saklanan gizli değer istek URL'sinde, sorguda ve gövdede gerçek haliyle gitmeye devam eder; Allure ve cucumber eklerinde maskelenir. CRUD fixture testi DATA-3 reddi ile çakışmayan bir kullanıcı kullanır.", "title": "Saklanan gizli değer rapordan maskeleniyor", "version": "0.8.2"} -->
+## 0.8.2 — Saklanan gizli değer rapordan maskeleniyor
+
+Zincirde saklanan gizli değer istek URL'sinde, sorguda ve gövdede gerçek haliyle gitmeye devam eder; Allure ve cucumber eklerinde maskelenir. CRUD fixture testi DATA-3 reddi ile çakışmayan bir kullanıcı kullanır.
+
+Kanıt / doğrulama: api-runner.unit 196/196 ve api-runner.mock-e2e 1/1 PASS (2026-11-04T17-47-31-049Z).

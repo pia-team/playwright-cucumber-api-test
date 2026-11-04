@@ -48,7 +48,7 @@ describe('local mock API server + OpenAPI fixtures', () => {
     const create = await fetch(`${baseUrl}/users`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name: 'Bob', email: 'bob@example.com' }),
+      body: JSON.stringify({ name: 'Carol', email: 'carol@example.com' }),
     });
     assert.equal(create.status, 201);
     const created = (await create.json()) as { id: string };
@@ -57,7 +57,7 @@ describe('local mock API server + OpenAPI fixtures', () => {
     const patch = await fetch(`${baseUrl}/users/${created.id}`, {
       method: 'PATCH',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name: 'Bob II' }),
+      body: JSON.stringify({ name: 'Carol II' }),
     });
     assert.equal(patch.status, 200);
 

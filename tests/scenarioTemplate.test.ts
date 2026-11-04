@@ -32,6 +32,19 @@ describe('scenario templates', () => {
     assert.equal(substituteTemplates('{{customerId}}', { customerId: 'a"b' }, false), 'a\\"b');
   });
 
+  it('masks a stored secret in the path, query, and body', () => {
+    const secret = 'super-secret-token-value';
+    const path = redactStoredValues(`/customers/${secret}`, [secret]);
+    const query = redactStoredValues(`/customers?token=${encodeURIComponent(secret)}`, [secret]);
+    const body = redactStoredValues(JSON.stringify({ id: secret, name: 'Ada' }), [secret]);
+    assert.equal(path.includes(secret), false);
+    assert.equal(query.includes(secret), false);
+    assert.equal(query.includes(encodeURIComponent(secret)), false);
+    assert.equal(body.includes(secret), false);
+    assert.match(path, /\/customers\/\[REDACTED\]/);
+    assert.match(body, /"name":"Ada"/);
+  });
+
   it('accepts relative order.id paths', () => {
     assert.equal(SAFE_JSON_PATH.test('order.id'), true);
     assert.equal(SAFE_JSON_PATH.test('$.order.id'), true);

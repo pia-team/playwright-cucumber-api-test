@@ -587,6 +587,30 @@ function rememberSensitiveValue(value: string): void {
   rememberRedaction({ secret: value });
 }
 
+function looksSensitiveStoredValue(value: string): boolean {
+  return value.length >= 8 && SENSITIVE_NAME.test(value);
+}
+
+function rememberIfSensitiveStore(varName: string, jsonPath: string, value: string): void {
+  const leaf = jsonPath.split(/[.[\]]/).filter(Boolean).pop() || '';
+  if (
+    SENSITIVE_NAME.test(varName)
+    || SENSITIVE_NAME.test(leaf)
+    || looksSensitiveStoredValue(value)
+  ) {
+    rememberSensitiveValue(value);
+  }
+}
+
+function rememberSensitivePendingExtracts(body: unknown): void {
+  const paths = ((global as any).__cotesterPendingExtracts || []) as string[];
+  for (const jsonPath of paths) {
+    const value = getByJsonPath(body, jsonPath);
+    if (value == null || typeof value === 'object') continue;
+    rememberIfSensitiveStore('', jsonPath, String(value));
+  }
+}
+
 function redactText(text: string | null | undefined): string {
   if (text == null) return '';
   return redactStoredValues(text, ((global as any).__cotesterRedactValues || []) as string[]);
@@ -939,6 +963,7 @@ When(
       (global as any).__cotesterResponseJson = undefined;
     }
     rememberHttpForFlow(m, resolvedUrl || resolvedPath, response.status(), __flowBodyJson, bodyText);
+    rememberSensitivePendingExtracts(__flowBodyJson);
     clearPendingExtracts();
     const responseHeaders = response.headers() as Record<string, string>;
     recordResponseEvidence(response.status(), responseHeaders, bodyText, {
@@ -1815,14 +1840,16 @@ Then(
       return;
     }
     this.scenarioVars = this.scenarioVars || {};
-    this.scenarioVars[varName] = String(value);
+    const stored = String(value);
+    this.scenarioVars[varName] = stored;
+    rememberIfSensitiveStore(varName, jsonPath, stored);
     await recordCriterionOutcome(this, {
       id: `store:${stepId}:${varName}`,
       description: `${varName} ← ${jsonPath}`,
       type: 'extract',
       status: 'PASS',
       expected: jsonPath,
-      actual: String(value),
+        actual: stored,
       path: jsonPath,
       stepId,
       stepLabel,

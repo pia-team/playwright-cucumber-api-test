@@ -3,6 +3,8 @@
  * Attached to Cucumber steps as named Allure attachments on every HTTP send.
  */
 
+import { redactStoredValues } from './scenarioTemplate';
+
 const SENSITIVE_HEADER =
   /^(authorization|cookie|set-cookie|x-api-key|api-key|apikey|x-auth-token|token|access-token|x-access-token|proxy-authorization)$/i;
 const SENSITIVE_BODY_KEYS =
@@ -435,7 +437,7 @@ export function sanitizeBody(body: string | null | undefined): {
     }
   }
 
-  const knownSecrets = ((global as any).__cotesterRedactValues || []) as string[];
+  const knownSecrets = knownSecretValues();
   if (knownSecrets.length > 0) {
     text = applySensitiveValueRedaction(text, knownSecrets);
   }
@@ -513,23 +515,18 @@ export function redactUrl(url: string): string {
     }
     const q = u.searchParams.toString();
     const path = u.pathname + (q ? `?${q}` : '');
-    if (url.startsWith('http')) {
-      return `${u.protocol}//${u.host}${path}`;
-    }
-    return path;
+    const shown = url.startsWith('http') ? `${u.protocol}//${u.host}${path}` : path;
+    return redactStoredValues(shown, knownSecretValues());
   } catch {
-    return url;
+    return redactStoredValues(url, knownSecretValues());
   }
+}
+
+function knownSecretValues(): string[] {
+  return ((global as any).__cotesterRedactValues || []) as string[];
 }
 
 /** Apply extra sensitive value redaction (explicit secrets) onto a string. */
 export function applySensitiveValueRedaction(text: string, values: string[]): string {
-  let out = text;
-  const sorted = [...values]
-    .filter((value) => value && value.length >= 3)
-    .sort((left, right) => right.length - left.length);
-  for (const value of sorted) {
-    out = out.split(value).join('[REDACTED]');
-  }
-  return out;
+  return redactStoredValues(text, values);
 }
