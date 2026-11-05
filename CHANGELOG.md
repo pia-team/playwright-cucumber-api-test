@@ -118,3 +118,10 @@ Kanıt / doğrulama: src/core/hooks/stepHooks.ts; tests/allureReporter.e2e.test.
 Zincirde saklanan gizli değer istek URL'sinde, sorguda ve gövdede gerçek haliyle gitmeye devam eder; Allure ve cucumber eklerinde maskelenir. CRUD fixture testi DATA-3 reddi ile çakışmayan bir kullanıcı kullanır.
 
 Kanıt / doğrulama: api-runner.unit 196/196 ve api-runner.mock-e2e 1/1 PASS (2026-11-04T17-47-31-049Z).
+
+<!-- CHANGELOG:ENTRY {"bump": "patch", "date": "2026-11-05T13:03:59+03:00", "evidence": "tests/multipartContentType.test.ts 3/3 geçti (yerel HTTP). API-DC-04 bu kabukta koşulmadı.", "id": "2026-11-05-api-multipart-content-type", "summary": "API multipart gönderimi varsayılan application/json başlığını taşımaz; sunucu multipart/form-data ve boundary görür. JSON, form-urlencoded ve raw gövde isteklerinde varsayılan JSON başlığı durur.", "title": "Multipart istek JSON Content-Type ile gitmez", "version": "0.8.3"} -->
+## 0.8.3 — Multipart istek JSON Content-Type ile gitmez
+
+API multipart gönderimi varsayılan application/json başlığını taşımaz; sunucu multipart/form-data ve boundary görür. JSON, form-urlencoded ve raw gövde isteklerinde varsayılan JSON başlığı durur.
+
+Kanıt / doğrulama: tests/multipartContentType.test.ts 3/3 geçti (yerel HTTP). API-DC-04 bu kabukta koşulmadı.

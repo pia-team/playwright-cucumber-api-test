@@ -1060,7 +1060,7 @@ When(
       requestTimestamp: requestTs,
     });
 
-    const clientContext = await ApiContext.create(resolvedHeaders);
+    const clientContext = await ApiContext.create(resolvedHeaders, { omitContentType: true });
     const client = new ApiClient(clientContext);
     setLastHttpSendSnapshot({
       method: m,
@@ -1231,7 +1231,7 @@ When(
       requestTimestamp: requestTs,
     });
 
-    const clientContext = await ApiContext.create(resolvedHeaders);
+    const clientContext = await ApiContext.create(resolvedHeaders, { omitContentType: true });
     const client = new ApiClient(clientContext);
     setLastHttpSendSnapshot({
       method: m,
